@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
+	<!-- Application Loggers -->
+	<logger name="com.project.myver">
+		<level value="info" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+
+	<!-- 2021.01.10
+		 - 수정사항 : priority value 값 변경. warn -> info 
+		 - 이유 : MyBatis 로그를 자세히 보기위해 (관련 설정을 다 하고나면 프로젝트 실행시 쿼리와 쿼리결과가 로그에 나타남.)
+		 - 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
+	<!-- Root Logger -->
+	<root>
+		<priority value="info" />
+		<appender-ref ref="console" />
+	</root>
+	
+</log4j:configuration>

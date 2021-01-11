@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 웹과 관련되지 않은 자원들에 대한 설정을 입력하는 곳 -->
+	
+	
+	<!-- 2021.01.10
+		- 수정사항 : XML태그의 폭을 넓혀주기 위한 설정
+		          Namespaces에서 aop,context,jdbc,mybatis 체크 
+	    - 참고사이트 : https://all-record.tistory.com/175?category=733072 -->
+	    
+	    
+    <!-- 2021.01.10
+		- 추가사항 : MySQL, MyBatis 에 대한 설정
+	    		  dataSource, sqlSessionFactory
+        - 참고사이트 : https://all-record.tistory.com/175?category=733072 -->
+	
+	<!-- MySQL dataSource -->
+	<!-- dataSource : MySQL과 연결을 담당. JDBC커넥션을 처리하는 기능을 가지고 있기에 DB연동작업에 필요 -->
+	<!-- 2021.01.10
+		 - 수정사항 : driverClassName의 value 변경. com.mysql.cj.jdbc.Driver -> net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+		 - 이유 : SQL이 잘못되어 에러발생하는 경우를 대비해 더 자세히 로그를 조사할 수 있도록 로그 설정 변경
+		 - 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
+    <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+        <property name="url"
+            value="jdbc:mysql://127.0.0.1:3307/myver?useSSL=false&amp;serverTimezone=UTC">
+        <!--value="jdbc:mysql://데이터베이스 주소:포트번호/스키마이름?useSSL=false&amp;serverTimezone=UTC">-->
+        </property>
+        <property name="username" value="jiyoung"></property> <!-- value="MySQL 계정" -->
+        <property name="password" value="1234"></property> <!-- value="비밀번호" -->
+    </bean>
+
+	<!-- mybatis SqlSessionFactoryBean -->
+	<!-- SqlSessionFactoryBean : DB와의 연결과 SQL의 실행에 대한 모든 것을 가진 객체 -->
+	<!-- 2021.01.10
+		 - 수정사항 : MyBatis 설정 기능을 활용할 수 있도록 설정 파일을 읽어오는 부분과 SQL문을 작성해둘 mapper.xml 파일을 읽어오는 부분 추가 
+		 - 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"></property>
+        <!-- <property name="mapperLocations" value="classpath:/com/project/myver/sql/*SQL.xml"></property>-->
+    </bean>
+
+	<!-- 2021.01.10
+		- 추가사항 : SqlSessionTemplate 추가
+		- 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
+	<!-- mybatis -->
+	<!-- SqlSessionTemplate : 기본적인 트랜잭션 관리나 쓰레드 처리의 안정성 등을 보장하고, DB의 연결과 종료를 관리하는 부분. 
+							 	이걸 등록해두면 개발자가 직접 트랜잭션 관리나 DB 연결, 종료를 해야하는 작업을 줄일 수 있음. -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
+        destroy-method="clearCache">
+        <constructor-arg ref="sqlSessionFactory"></constructor-arg>
+    </bean>
+
+	
+	<!-- member -->
+	<bean id="memDAO" class="com.project.myver.dao.MemberDAO">
+		<property name="sqlSessionTemplate" ref="sqlSession"/>
+	</bean>
+	<bean id="memSVC" class="com.project.myver.service.MemberService"/>
+</beans>
