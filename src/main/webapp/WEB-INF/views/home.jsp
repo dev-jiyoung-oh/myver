@@ -10,5 +10,7 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<a href="${pageContext.request.contextPath}/join"
+						class="join-panel">join</a>
 </body>
 </html>
