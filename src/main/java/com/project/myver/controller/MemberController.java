@@ -1,19 +1,24 @@
 package com.project.myver.controller;
+/*https://sjh836.tistory.com/165 [빨간색코딩]*/
 
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Map;
-//
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 //import javax.inject.Inject;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpSession;
 //
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 //import org.springframework.web.bind.annotation.RequestMethod;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,26 +29,32 @@ import com.project.myver.dto.MemberDTO;
 import com.project.myver.service.MemberService;
 
 @Controller
-public class MemberController {
+public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private MemberService memSVC;
 
-	//메인화면에서 회원가입폼 이동
-	@RequestMapping("/join")
+	// 회원가입폼
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "/member/join/joinFrm";
 	}
 	
-	//회원가입
-	@RequestMapping("/joinTry")
+	// 회원가입
+	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
 		memSVC.join(memdto);
-		RedirectView rv=new RedirectView("./joinSuccess.com");
+		RedirectView rv=new RedirectView("./joinSuccess");
 		mv.setView(rv);
 		return mv;
 	}
 	
-	//아이디 중복확인
+	// 로그인폼
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		return "/login";
+	}
+	
+	// 아이디 중복확인
 	@ResponseBody
 	@RequestMapping("/idChk")
 	public String idChk(MemberDTO memdto) {
@@ -60,4 +71,14 @@ public class MemberController {
 		}
 		return data;
 	}
+	
+//	@Override 
+//	public void onAuthenticationSuccess(
+//			HttpServletRequest request, HttpServletResponse response, 
+//			Authentication auth) throws IOException, ServletException { 
+//		request.getSession().setMaxInactiveInterval(60*60); //세셔타입아웃 수정 //1시간 
+//		memSVC.login(((MemberDTO) auth.getPrincipal())); 
+//		super.onAuthenticationSuccess(request, response, auth); 
+//	}
+
 }

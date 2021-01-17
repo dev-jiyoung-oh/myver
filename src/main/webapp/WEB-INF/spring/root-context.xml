@@ -71,4 +71,5 @@
 		<property name="sqlSessionTemplate" ref="sqlSession"/>
 	</bean>
 	<bean id="memSVC" class="com.project.myver.service.MemberService"/>
+	
 </beans>

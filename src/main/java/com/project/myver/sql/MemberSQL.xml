@@ -16,14 +16,19 @@
 	</insert>
 	
 	<!-- 아이디 중복 확인 -->
-	<select id="getMemberID" parameterType="memDTO" resultType="int">
+	<select id="getMemberID" resultType="int" parameterType="memDTO">
 		select count(id) from member
 		where id = #{id}
 	</select>
 	
-	<!-- 회원 정보 출력 -->
-	<select id="memInfo" resultType="memDTO" parameterType="memDTO">
+	<!-- 회원 번호로 회원 정보 출력 -->
+	<select id="getByNo" resultType="memDTO" parameterType="memDTO">
 	select * from member where member_no = #{member_no}
+	</select>
+	
+	<!-- 아이디로 회원 정보 출력 -->
+	<select id="getById" resultType="memDTO" parameterType="String">
+	select * from member where id = #{value}
 	</select>
 	
 	<!-- 최근 접속일 갱신 -->

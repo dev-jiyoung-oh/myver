@@ -17,7 +17,7 @@ public class MemberDTO {
 	private int phone;		//전화번호
 	private Date date;		//가입일
 	private Date log_date;	//최근접속일
-	private String auth;	//권한 : 일반 0, 관리자 1 
+	private String auth;	//권한 : 일반 "Member" , 관리자 "ADMIN" 
 	
 	public int getMemeber_no() {
 		return memeber_no;
