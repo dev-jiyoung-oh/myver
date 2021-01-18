@@ -14,8 +14,8 @@ import com.project.myver.dto.MemberDTO;
 public class MemberService {
 	@Autowired
 	private MemberDAO memDAO;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	
+	//private PasswordEncoder passwordEncoder;
 	
 //	//일반로그인
 //	public MemberDTO login(MemberDTO memdto, HttpSession session, int cnt) {
@@ -36,10 +36,10 @@ public class MemberService {
 	}
 
 	// 회원가입. 2021.01.14
-	public void join(MemberDTO memdto) {
-		memdto.setPw(passwordEncoder.encode(memdto.getPw()));
-		memDAO.join(memdto);
-	}
+//	public void join(MemberDTO memdto) {
+//		memdto.setPw(passwordEncoder.encode(memdto.getPw()));
+//		memDAO.join(memdto);
+//	}
 	
 	//아이디 중복확인
 	public int getMemberID(MemberDTO memdto) {

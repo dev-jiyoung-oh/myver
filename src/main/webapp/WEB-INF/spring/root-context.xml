@@ -72,4 +72,6 @@
 	</bean>
 	<bean id="memSVC" class="com.project.myver.service.MemberService"/>
 	
+	
+	
 </beans>

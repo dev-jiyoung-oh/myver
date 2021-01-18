@@ -10,6 +10,14 @@ package com.project.myver.security;
  * 참고사이트
  * https://jungeunlee95.github.io/java/2019/07/17/2-Spring-Security/ 
  * https://victorydntmd.tistory.com/328
+ * 
+ * 
+ * 
+ * 2021.01.17
+ * "org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'springSecurityFilterChain' is defined"
+ * 오류 해결을 못하겠다. Java Configuration 사용하는 방식 포기. XML 파일 사용하는 방식으로 하겠음.
+ * 오류 원인 못찾음.
+ * 
  * */
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +34,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
-//@Configuration
-//@ComponentScan("com.project.myver.security")  
-@EnableWebSecurity // Spring Security를 활성화한다는 의미의 어노테이션
-public class SecurityConfig extends WebSecurityConfigurerAdapter{ 
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// WebSecurityConfigurerAdapter : Spring Security의 설정파일로서의 역할을 하기 위해 상속해야 하는 클래스.
 
 	//private MemberService memSVC;

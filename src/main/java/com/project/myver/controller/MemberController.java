@@ -40,13 +40,13 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	}
 	
 	// 회원가입
-	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
-		memSVC.join(memdto);
-		RedirectView rv=new RedirectView("./joinSuccess");
-		mv.setView(rv);
-		return mv;
-	}
+//	@RequestMapping(value = "/join", method = RequestMethod.POST)
+//	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
+//		memSVC.join(memdto);
+//		RedirectView rv=new RedirectView("./joinSuccess");
+//		mv.setView(rv);
+//		return mv;
+//	}
 	
 	// 로그인폼
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
