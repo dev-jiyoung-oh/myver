@@ -214,11 +214,6 @@
 		    <version>${org.springframework-version}</version>
 		</dependency>
 
-		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-acl</artifactId>
-		    <version>${org.springframework-version}</version>
-		</dependency>	
 		<!-- 2021.01.14 추가. 
 			 - 참고사이트 : https://bravenamme.github.io/2019/08/01/spring-security-start/ -->
 		<dependency>
@@ -226,10 +221,6 @@
 		    <artifactId>spring-security-web</artifactId>
 		    <version>${org.springframework-version}</version>
 	    </dependency>
-		
-		
-		
-		
 		
 		
 	</dependencies>

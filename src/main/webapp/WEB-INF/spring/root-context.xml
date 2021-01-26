@@ -64,7 +64,6 @@
         destroy-method="clearCache">
         <constructor-arg ref="sqlSessionFactory"></constructor-arg>
     </bean>
-
 	
 	<!-- member -->
 	<bean id="memDAO" class="com.project.myver.dao.MemberDAO">

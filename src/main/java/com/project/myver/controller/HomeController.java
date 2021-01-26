@@ -1,4 +1,4 @@
-package com.project.myver;
+package com.project.myver.controller;
 
 import java.text.DateFormat;
 import java.util.Date;

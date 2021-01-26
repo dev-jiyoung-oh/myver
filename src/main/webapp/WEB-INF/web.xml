@@ -3,17 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	
-	
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-    
-	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
-	</context-param>
 
 	<!-- Processes application requests -->
 	<servlet>
@@ -31,6 +20,19 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml
+					 /WEB-INF/spring/security-config.xml</param-value>
+	</context-param>
+	
+	
 	<!-- 2021.01.10 
 		추가한 내용 : 한글 인코딩 필터
 		참고사이트 : https://melonpeach.tistory.com/8?category=806570 -->
@@ -54,6 +56,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- 한글 인코딩 End -->
+	
 	
 	<!-- 2021.01.13
 		 - 추가한 내용 : DelegatingFilterProxy 설정
