@@ -49,8 +49,8 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 //	}
 	
 	// 로그인폼
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
+	@RequestMapping(value = "/loginPage")
+	public String loginPage() throws Exception{
 		return "/login";
 	}
 	
@@ -66,7 +66,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		} else if(isUsed == 1) {
 			data="fail";
 		} else {
-			System.out.println("동일한 아이디가 여러개 존재합니다. id="+memdto.getId()+", cnt="+isUsed);
+			System.out.println("동일한 아이디가 여러개 존재합니다. id="+memdto.getUsername()+", cnt="+isUsed);
 			data = "fail";
 		}
 		return data;

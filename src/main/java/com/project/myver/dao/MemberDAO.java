@@ -7,18 +7,19 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.myver.dto.MemberDTO;
+import com.project.myver.security.SecurityUser;
 
 public class MemberDAO extends SqlSessionDaoSupport {
 	@Autowired
 	SqlSessionTemplate session;
 
-	// 21.01.12 로그인
+	/* 21.01.12 로그인
 	public MemberDTO login(MemberDTO memdto) {
 		System.out.println("id:" + memdto.getId() + ", pw:" + memdto.getPw());
 		MemberDTO result = session.selectOne("member.login", memdto);
 		return result;
 	}
-	
+	*/
 	// 21.01.12 회원가입
 	public void join(MemberDTO memdto) {
 		System.out.println("MemberDAO - join");
@@ -43,5 +44,6 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		MemberDTO memdto = session.selectOne("member.getById", id);
 		return memdto;
 	}
+
 
 }

@@ -1,30 +1,53 @@
 package com.project.myver.security;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class SecurityUser implements UserDetails{
 	
-	// domain fields(principal: 보호할 사용자 중요 데이터)
-	private int no;
-	
 	// security fields
-	private Collection<? extends GrantedAuthority> authorities;
-	private String id;  // credential
-	private String pw;  // credential
+	private int memeber_no;	//회원번호
+	private String id;		//아이디
+	private String pw;		//비밀번호
+	private String name;	//이름
+	private String nick;	//닉네임
+	private int phone;		//전화번호
+	private Date date;		//가입일
+	private Date log_date;	//최근접속일
+	private String auth;	//권한 : 일반 "MEMBER" , 관리자 "ADMIN" 
 	
 	
+	// 기본적인 오버라이딩 메소드들 오버라이딩
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// ROLE
-		return authorities;
+		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority(auth));
+        return authorities;
 	}
 
 	@Override
-	public String getPassword() {
-		return pw;
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 	@Override
@@ -32,45 +55,69 @@ public class SecurityUser implements UserDetails{
 		return id;
 	}
 	
-	public int getNo() {
-		return no;
-	}
-
-	public void setNo(int no) {
-		this.no = no;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setPw(String pw) {
-		this.pw = pw;
-	}
-
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
-
-	// 계정에 대한 디테일한 설정 -----------------------------------
 	@Override
-	public boolean isAccountNonExpired() {
-		return false;
+	public String getPassword() {
+		return pw;
 	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return false;
+	
+	// 추가적인 회원 정보 컬럼의 getter, setter
+	public int getMemeber_no() {
+		return memeber_no;
 	}
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
+	public void setMemeber_no(int memeber_no) {
+		this.memeber_no = memeber_no;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return false;
+	public String getName() {
+		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public int getPhone() {
+		return phone;
+	}
+
+	public void setPhone(int phone) {
+		this.phone = phone;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Date getLog_date() {
+		return log_date;
+	}
+
+	public void setLog_date(Date log_date) {
+		this.log_date = log_date;
+	}
+
+	//있어야하는건가 아닌건가???
+	public String getAuth() {
+		return auth;
+	}
+
+	public void setAuth(String auth) {
+		this.auth = auth;
+	}
+	
+	
 }

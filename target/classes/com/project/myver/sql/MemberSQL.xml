@@ -28,7 +28,7 @@
 	
 	<!-- 아이디로 회원 정보 출력 -->
 	<select id="getById" resultType="memDTO" parameterType="String">
-	select * from member where id = #{value}
+	select * from member where id = #{loginId}
 	</select>
 	
 	<!-- 최근 접속일 갱신 -->

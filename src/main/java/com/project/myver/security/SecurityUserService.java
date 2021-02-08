@@ -1,22 +1,25 @@
 package com.project.myver.security;
 
-import java.util.Arrays;
-
-/* 2021.01.16
- * 
- * 참고사이트 : https://jungeunlee95.github.io/java/2019/07/17/2-Spring-Security/
- */
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.project.myver.dao.MemberDAO;
 import com.project.myver.dto.MemberDTO;
 
-@Repository
+/* 21.01.16
+ * 참고사이트 : https://jungeunlee95.github.io/java/2019/07/17/2-Spring-Security/
+ * 
+ * 21.02.08
+ * 참고사이트 : https://velog.io/@hellas4/2019-11-12-0811-%EC%9E%91%EC%84%B1%EB%90%A8
+ */
+
+/* DB에서 유저 정보를 가져오는 역할을 한다.
+ * UserDetailsService 인터페이스에서 DB에서 유저정보를 불러오는 중요한 메소드는 loadUserByUsername() 메소드.
+ * loadUserByUsername()메소드에서 CustomUserDetails형(내 경우 MemberDTO)으로 사용자의 정보를 받아오면 된다. */
+@Service
 public class SecurityUserService implements UserDetailsService {
 
 	@Autowired
@@ -25,19 +28,14 @@ public class SecurityUserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		MemberDTO memDTO = memDAO.getById(username);
+		MemberDTO user = memDAO.getById(username);
 		
-		SecurityUser securityUser = new SecurityUser();
-		
-		if(memDTO != null) {
-			securityUser.setNo(memDTO.getMemeber_no());
-			securityUser.setId(memDTO.getId());
-			securityUser.setPw(memDTO.getPw());
-			securityUser.setAuthorities(Arrays.asList(new SimpleGrantedAuthority(memDTO.getAuth())));
+		if(user == null) {
+			throw new UsernameNotFoundException(username);
 		}
 		
-		// 여기서 return된 SecurityUser는 SecurityContext의 Authentication에 등록되어 인증 정보를 갖고 있는다
-		return securityUser; 
+		// 여기서 return된 user는 SecurityContext의 Authentication에 등록되어 인증 정보를 갖고 있는다
+		return user; 
 	}
 
 }

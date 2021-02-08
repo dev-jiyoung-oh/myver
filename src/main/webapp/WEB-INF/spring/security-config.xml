@@ -13,41 +13,72 @@
           		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
        
        
-       <!-- <bean class="com.project.myver.security.SecurityConfig" /> -->
-       <!--  -->
+       <!--
        <http pattern="/resources/**" security="none" />
        <http auto-config="true" access-denied-page="denied" use-expressions="true">
        		<intercept-url pattern="/*/**" access="isAuthenticated()"/>
        		
-       		<!-- 로그인 설정 -->
+       		 로그인 설정 
        		<form-login 
        			login-page="/login" 
        			authentication-failure-url="/login" 
        		/>
        		
-       		<!-- 로그아웃 설정 -->
+       		로그아웃 설정 
        </http>
        
-       <!-- AuthenticationManager 설정 -->
+        AuthenticationManager 설정 
        <authentication-manager>
-       		<!-- authentication-provider ref : Provider(스프링상의 Service에 해당하는 파일)를 참조. -->
+       		 authentication-provider ref : Provider(스프링상의 Service에 해당하는 파일)를 참조. 
        		<authentication-provider ref="userAuthProvider"/>
        		
-       		<!-- authentication-provider user-service-ref : db커넥션하고 조회한 정보를 시큐리티에서만 사용하는 bean에 담음 -->
+       		 authentication-provider user-service-ref : db커넥션하고 조회한 정보를 시큐리티에서만 사용하는 bean에 담음 
        		<authentication-provider user-service-ref="jdbcUserService">
-       			<!-- password-encoder ref : 패스워드를 암호화할 때 참조할 파일 설정 -->
+       			 password-encoder ref : 패스워드를 암호화할 때 참조할 파일 설정 
        			<password-encoder ref="passwordEncoder"/>
        		</authentication-provider>
        </authentication-manager>
        
-       <!-- 패스워드 인증시 SHA256적용여부. sha256를 적용. 로직은 스프링시큐리티에서 제공. ShaPasswordEncoder클래스. -->
+        패스워드 인증시 SHA256적용여부. sha256를 적용. 로직은 스프링시큐리티에서 제공. ShaPasswordEncoder클래스. 
        <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
        		<beans:constructor-arg value="256"/>
        		<beans:property name="encodeHashAsBase64" value="true" />
        </beans:bean>
        
-       <!-- jdbcUserService
+        jdbcUserService
        		- db커넥션하고 조회한 정보를 bean에 주입하는 역할.
-       		- usersByU -->
-       	
+       		- usersByU 
+    		-->
+       
+       <!-- 21.02.08 추가 
+       		참고사이트 : https://velog.io/@hellas4/%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%953-bcrypt-%EC%95%94%ED%98%B8%ED%99%94-%ED%95%98%EA%B8%B0 -->
+       <http auto-config="true" use-expressions="true">
+       		<intercept-url pattern="/my/**" access="hasRole('MEMBER')" />
+       		
+       		<!-- 로그인 -->
+       		<form-login
+       			username-parameter="loginId"
+       			password-parameter="loginPwd"
+       			login-processing-url="/login"
+       			login-page="/login"
+       			default-target-url="/"
+       			/>
+     		
+   			<!-- 로그아웃 -->
+   			<logout logout-url="/logout" logout-success-url="/" />
+       </http>
+       
+       
+       <!-- 21.02.08 추가 
+      	        참고사이트 : https://velog.io/@hellas4/2019-11-12-0811-%EC%9E%91%EC%84%B1%EB%90%A8 -->
+       <authentication-manager>
+       		<authentication-provider ref="userAuthProvider" />
+       		<authentication-provider user-service-ref="userService"></authentication-provider>
+       </authentication-manager>
+       
+       <beans:bean id="userService" class="com.project.myver.security.SecurityUserService" />
+       <beans:bean id="userAuthProvider" class="com.project.myver.security.SecurityAuthenticationProvider" />
+       
+       <!--  -->
+       
 </beans:beans>
