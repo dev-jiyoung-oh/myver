@@ -19,19 +19,21 @@ import com.project.myver.dto.MemberDTO;
 /* DB에서 유저 정보를 가져오는 역할을 한다.
  * UserDetailsService 인터페이스에서 DB에서 유저정보를 불러오는 중요한 메소드는 loadUserByUsername() 메소드.
  * loadUserByUsername()메소드에서 CustomUserDetails형(내 경우 MemberDTO)으로 사용자의 정보를 받아오면 된다. */
-@Service
 public class SecurityUserService implements UserDetailsService {
 
 	@Autowired
 	private MemberDAO memDAO;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		MemberDTO user = memDAO.getById(username);
+	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+		System.out.println("id="+id);
+		MemberDTO user = memDAO.getById(id);
 		
 		if(user == null) {
-			throw new UsernameNotFoundException(username);
+			System.out.println("user==null");
+			throw new UsernameNotFoundException(id);
+		}else {
+			System.out.println(user.toString());
 		}
 		
 		// 여기서 return된 user는 SecurityContext의 Authentication에 등록되어 인증 정보를 갖고 있는다
