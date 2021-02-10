@@ -16,7 +16,7 @@
    		
    		<!-- SQL 설정 -->
    		<mappers>
-	   		<mapper resource="/com/project/myver/sql/MemberSQL.xml"/>
+	   		<mapper resource="/com/project/myver/sql/memberSQL.xml"/>
    		</mappers>
   		
     </configuration>

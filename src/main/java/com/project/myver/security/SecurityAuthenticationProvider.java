@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.project.myver.dto.MemberDTO;
 
@@ -18,7 +19,7 @@ import com.project.myver.dto.MemberDTO;
 public class SecurityAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
-	private SecurityUserService securityUserSVC;
+	private UserDetailsService userDetailsSVC;
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -26,7 +27,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 		String id = (String)authentication.getPrincipal();
 		String pw = (String)authentication.getCredentials();
 		System.out.println("id="+id+", pw="+pw);
-		MemberDTO user = (MemberDTO)securityUserSVC.loadUserByUsername(id);
+		MemberDTO user = (MemberDTO)userDetailsSVC.loadUserByUsername(id);
 		
 		System.out.println("id="+id+", pw="+pw);
 		if(!matchPassword(pw,user.getPassword())) {
