@@ -36,11 +36,11 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
         <property name="url"
-            value="jdbc:mysql://127.0.0.1:3307/myver?useSSL=false&amp;serverTimezone=UTC">
+            value="jdbc:mysql://localhost:3307/myver?useSSL=false&amp;serverTimezone=UTC">
         <!--value="jdbc:mysql://데이터베이스 주소:포트번호/스키마이름?useSSL=false&amp;serverTimezone=UTC">-->
         </property>
-        <property name="username" value="jiyoung"></property> <!-- value="MySQL 계정" -->
-        <property name="password" value="1234"></property> <!-- value="비밀번호" -->
+        <property name="username" value="jiyoung"/> <!-- value="MySQL 계정" -->
+        <property name="password" value="1234"/> <!-- value="비밀번호" -->
     </bean>
 
 	<!-- mybatis SqlSessionFactoryBean -->
@@ -49,8 +49,9 @@
 		 - 수정사항 : MyBatis 설정 기능을 활용할 수 있도록 설정 파일을 읽어오는 부분과 SQL문을 작성해둘 mapper.xml 파일을 읽어오는 부분 추가 
 		 - 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"></property>
-        <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"></property>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:/com/project/myver/sql/memberSQL.xml"/>
         <!-- <property name="mapperLocations" value="classpath*:/com/project/myver/sql/*SQL.xml"></property>-->
     </bean>
 

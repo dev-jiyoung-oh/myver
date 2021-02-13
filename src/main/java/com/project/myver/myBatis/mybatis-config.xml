@@ -14,10 +14,10 @@
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
    		</typeAliases>
    		
-   		<!-- SQL 설정 -->
+   		<!-- SQL 설정 
    		<mappers>
 	   		<mapper resource="/com/project/myver/sql/memberSQL.xml"/>
    		</mappers>
-  		
+  		-->
     </configuration>
 
