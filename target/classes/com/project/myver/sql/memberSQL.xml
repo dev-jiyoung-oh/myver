@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+	<!-- 로그인 처리 -->
+	<select id="login" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select * from member 
+		where id = #{id} and pw = #{pw}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="join" parameterType="memDTO">
+		insert into member
+		values ((select NVL(MAX(member_no),1)+1 from member), #{id}, #{pw},
+		#{name}, #{nick}, #{phone},sysdate,sysdate,0)
+	</insert>
+	
+	<!-- 아이디 중복 확인 -->
+	<select id="getMemberID" resultType="int" parameterType="memDTO">
+		select count(id) from member
+		where id = #{id}
+	</select>
+	
+	<!-- 회원 번호로 회원 정보 출력 -->
+	<select id="getByNo" resultType="memDTO" parameterType="memDTO">
+	select * from member where member_no = #{member_no}
+	</select>
+	
+	<!-- 아이디로 회원 정보 출력 -->
+	<select id="getById" resultType="memDTO">
+		select * from member where id = #{id}
+	</select>
+	
+	<!-- 최근 접속일 갱신 -->
+	<update id="logDate" parameterType="java.util.HashMap">
+		UPDATE member SET log_date = sysdate where member_no = #{member_no}
+	</update>
+	
+	<!-- 
+	<update id="memUpdate" parameterType="memDTO">
+		UPDATE member 
+		SET mid='${mid}', mpw='${mpw}', memail='${memail}', mname='${mname}', mnick='${mnick}', mbirth='${mbirth}', mtel='${mtel}', mtel2='${mtel2}', mtype=${mtype}
+		where mno=#{mno}
+	</update>
+	
+	<delete id="memDelete" parameterType="Integer">
+		delete member where mno=#{mno}
+	</delete> -->
+	
+	<!-- 회원 검색 및 리스트 출력--> <!-- 회원 번호가 아닌 ROWNUM()순서로 정렬하여 출력한다 -->
+	<!-- 오라클의 검색쿼리문 -> 
+	1.  like '%'||#{searchWord}||'%' =>  String은 ' '으로 감싸져서 쿼리문에 입력되기 때문에 문자열 합치기 메소드를 활용해야함 
+	2.  like '%${searchWord}%'  => 파라미터를 단일 String으로 할 경우 #{value} 활용
+	
+	<select id="searchList" resultType="java.util.HashMap" parameterType="PageUtil">
+		select * from(
+				select row_number() over (order by mno) num,
+					A.* from member A 
+						where mid like '%'||#{searchWord}||'%' 
+						order by mno desc
+				)
+		where num between #{startNo} and #{endNo}
+	</select>
+	-->
+</mapper>
+	

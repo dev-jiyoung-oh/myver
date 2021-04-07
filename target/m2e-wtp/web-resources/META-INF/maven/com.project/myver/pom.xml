@@ -18,11 +18,17 @@
 	 	 		 org.springframework.asm.ClassReader.<init>(Unknown Source) 에러 발생
 	 	 		 JDK 1.7 - Spring 3.xx   /// JDK 1.8 - Spring 4.xx
 	 	 - 참고사이트 : https://m.blog.naver.com/PostView.nhn?blogId=reinstate10&logNo=220617881102&proxyReferer=https:%2F%2Fwww.google.com%2F -->
-	<!-- 21.02.14
-		 - 수정사항 : ja-->
+	<!-- 21.02.14에 자바 버전 변경(1.7->1.8) 및 스프링 버전 변경(3.2.0->4.3.4)
+		 -> 오류발생
+			: The container 'Maven Dependencies' references non existing library 
+			 'C:\Users\User\.m2\repository\org\springframework\security\spring-security-core\4.3.4.RELEASE\spring-security-core-4.3.4.RELEASE.jar'
+			 Build Path Problem
+		 -->
+	 <!-- 21.04.07 자바 버전 원상복귀(1.8 ->1.7) 스프링 버전 원상복귀 (4.3.4 -> 3.2.0) -->
+	 
 	<properties>
-		<java-version>1.8</java-version>
-		<org.springframework-version>4.3.4.RELEASE</org.springframework-version>
+		<java-version>1.7</java-version>
+		<org.springframework-version>3.2.0.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
@@ -111,12 +117,10 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- 21.02.14
-			 - 수정사항 :  -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>2.2</version>
+			<version>2.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -133,7 +137,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>  
 		
@@ -253,10 +257,8 @@
 					 	 - 수정사항 : java 버전변경에 따라 메이븐 플러그인에서의 JDK 버전 변경. 1.8 -> 1.7
 					 	 - 이유 : 미일치시 dynamic web module x.x requires java x.x or newer 에러 발생
 					 	 - 참고사이트 : https://blog.naver.com/PostView.nhn?blogId=ajdkfl6445&logNo=221549536647&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView -->
-                    <!-- 21.02.14 
-                    	 - 수정사항 : -->
-                    <source>1.8</source>
-                    <target>1.8</target> 
+                    <source>1.7</source>
+                    <target>1.7</target> 
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

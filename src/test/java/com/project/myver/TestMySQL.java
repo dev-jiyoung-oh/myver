@@ -16,7 +16,7 @@ public class TestMySQL {
 		Connection conn;
 		
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/myver","jiyoung","1234");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/myver?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","jiyoung","1234");
 			System.out.println("데이터베이스 연결 성공");
 			conn.close();
 		}catch(Exception e) {
