@@ -15,7 +15,7 @@
 	 <!-- 21.01.17
 	 	 - 수정사항 : java 버전변경 1.8 -> 1.7
 	 	 - 이유 : JDK랑 Spring Framework 버전을 맞추지 않아서
-	 	 		 org.springframework.asm.ClassReader.<init>(Unknown Source) 에러 발생
+	 	 		 "org.springframework.asm.ClassReader.<init>(Unknown Source)" 에러 발생
 	 	 		 JDK 1.7 - Spring 3.xx   /// JDK 1.8 - Spring 4.xx
 	 	 - 참고사이트 : https://m.blog.naver.com/PostView.nhn?blogId=reinstate10&logNo=220617881102&proxyReferer=https:%2F%2Fwww.google.com%2F -->
 	<!-- 21.02.14에 자바 버전 변경(1.7->1.8) 및 스프링 버전 변경(3.2.0->4.3.4)
@@ -24,8 +24,7 @@
 			 'C:\Users\User\.m2\repository\org\springframework\security\spring-security-core\4.3.4.RELEASE\spring-security-core-4.3.4.RELEASE.jar'
 			 Build Path Problem
 		 -->
-	 <!-- 21.04.07 자바 버전 원상복귀(1.8 ->1.7) 스프링 버전 원상복귀 (4.3.4 -> 3.2.0) -->
-	 
+	<!-- 21.04.07 자바 버전 원상복귀(1.8 ->1.7) 스프링 버전 원상복귀 (4.3.4 -> 3.2.0) -->
 	<properties>
 		<java-version>1.7</java-version>
 		<org.springframework-version>3.2.0.RELEASE</org.springframework-version>
@@ -132,12 +131,13 @@
 		<!-- 21.01.10
 			수정사항 : 버전변경  4.7 -> 4.12 -> 4.7
 			참고사이트 : https://all-record.tistory.com/175?category=733072 -->
+		<!-- 21.04.08 junit 버전 변경 (4.7 -> 4.12) -->
 		<!-- Test -->
 		<!-- junit은 MySQL, MyBatis가 정상적으로 연동되었는지 테스트하기 위해 필요 -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>  
 		
@@ -149,10 +149,14 @@
 			- 수정사항 : mysql 버전 변경. 6.0.5 -> 8.0.11
 			- 이유 : junit테스트 중 오류 발생. Unkown system variable 'query_cache_size' 
 			- 참고사이트 : https://soo-vely-dev.tistory.com/59 -->
+		<!-- 21.04.08
+			- 수정사항 : mysql 버전 변경 (8.0.11 -> 5.1.47)
+			- 이유 : mysql 5.5 이상은 java 8 버전을 이용해야함. 그러나 현 프로젝트의 버전은 7이라서.
+			- 참고사이트 : https://xinet.kr/?p=1591 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.11</version>
+            <version>5.1.47</version>
         </dependency>
  
         <!-- MyBatis 3.4.1 -->
