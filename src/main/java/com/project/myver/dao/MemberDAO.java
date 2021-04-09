@@ -41,12 +41,12 @@ public class MemberDAO extends SqlSessionDaoSupport {
 
 	// 21.01.16 아이디로 회원 정보 가져오기
 	public MemberDTO getById(String id) {
-		System.out.println("getById");
 		MemberDTO memdto = session.selectOne("member.getById", id);
+		
 		if(memdto==null) { 
-			System.out.println("비었다~");
+			System.out.println("MemberDAO.getbyId - 해당 아이디 없음.");
 		}else {
-			System.out.println(memdto.toString());
+			System.out.println("MemberDAO.getbyId - " + memdto.toString());
 		}
 		return memdto;
 	}

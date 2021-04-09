@@ -8,7 +8,8 @@
 </head>
 <body>
 <form action="${pageContext.request.contextPath}/login" method="post">
-	<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}"/>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<input type="hidden" name="loginRedirect" value="${loginRedirect}" />
 	<table>
 		<tr>
 			<td><input type="text" name="id" autofocus="autofocus" placeholder="아이디 입력" required="required"/></td>

@@ -26,12 +26,12 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 
 		String id = (String)authentication.getPrincipal();
 		String pw = (String)authentication.getCredentials();
-		System.out.println("id="+id+", pw="+pw);
+		System.out.println("SecurityAuthenticationProvider.authenticate - id="+id+", pw="+pw);
 		MemberDTO user = (MemberDTO)userDetailsSVC.loadUserByUsername(id);
 		
-		System.out.println("id="+id+", pw="+pw);
+		System.out.println("SecurityAuthenticationProvider.authenticate - " + user.toString());
 		if(!matchPassword(pw,user.getPassword())) {
-			System.out.println("비밀번호 틀림~");
+			System.out.println("SecurityAuthenticationProvider.authenticate - 비밀번호 틀림~");
 			throw new BadCredentialsException(id);
 		}
 		

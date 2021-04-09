@@ -26,14 +26,14 @@ public class SecurityUserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		System.out.println("id="+id);
+		System.out.println("SecurityUserService.loadUserByUsername - id="+id);
 		MemberDTO memDTO = memDAO.getById(id);
 		
 		if(memDTO == null) {
-			System.out.println("memDTO==null");
+			System.out.println("SecurityUserService.loadUserByUsername - memDTO==null");
 			throw new UsernameNotFoundException(id);
 		}else {
-			System.out.println(memDTO.toString());
+			System.out.println("SecurityUserService.loadUserByUsername - "+memDTO.toString());
 		}
 		
 		// 여기서 return된 user는 SecurityContext의 Authentication에 등록되어 인증 정보를 갖고 있는다
