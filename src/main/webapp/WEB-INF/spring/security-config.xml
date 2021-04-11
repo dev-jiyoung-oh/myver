@@ -64,7 +64,7 @@
        			login-page="/loginPage"
        			default-target-url="/"
        			authentication-success-handler-ref="customAuthenticationSuccessHandler"
-       			authentication-failure-url="/loginPage?fail=true"
+       			authentication-failure-handler-ref="customAuthenticationFailureHandler"
        			/>
      		
    			<!-- 로그아웃 -->
@@ -89,6 +89,17 @@
        		<beans:property name="targetUrlParameter" value="loginRedirect"/>
        		<beans:property name="useReferer" value="false" />
        		<beans:property name="defaultUrl" value="/" />
+       </beans:bean>
+       
+       <!--  2104.11 추가
+       		- 로그인 실패 후 처리 핸들러
+       		- 참고사이트 : https://zgundam.tistory.com/53?category=430446 -->
+       <beans:bean id="customAuthenticationFailureHandler" class="com.project.myver.security.CustomAuthenticationFailureHandler">
+       		<beans:property name="loginIdName" value="id" />
+       		<beans:property name="loginPwName" value="pw" />
+       		<beans:property name="loginRedirectName" value="loginRedirect" />
+       		<beans:property name="exceptionMsgName" value="exceptionMsgName" />
+       		<beans:property name="defaultFailureUrl" value="/login?fail=true" />
        </beans:bean>
        
 </beans:beans>
