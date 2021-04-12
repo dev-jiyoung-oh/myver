@@ -27,6 +27,13 @@
 		<tr>
 			<td><input type="submit" value="로그인"/></td>
 		</tr>
+		<tr>
+			<td>
+				<a href="">아이디 찾기</a>
+				<a href="">비밀번호 찾기</a>
+				<a href="">회원가입</a>
+			</td>
+		</tr>
 	</table>
 </form>
 </body>

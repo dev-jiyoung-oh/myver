@@ -49,7 +49,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 //	}
 	
 	// 로그인폼
-	@RequestMapping(value = "/loginPage")
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage() throws Exception{
 		return "/login";
 	}
