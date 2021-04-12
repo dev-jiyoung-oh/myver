@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -27,7 +29,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		this.loginPwName = "pw";
 		this.loginRedirectName = "loginRedirect";
 		this.exceptionMsgName = "securityExceptionMsg";
-		this.defaultFailureUrl = "/login";
+		this.defaultFailureUrl = "/loginPage?fail=true";
 	}
 	
 	public String getLoginIdName() {

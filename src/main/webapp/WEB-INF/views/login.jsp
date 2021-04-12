@@ -9,13 +9,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/login" method="post">
+<form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	<input type="hidden" name="loginRedirect" value="${loginRedirect}" />
 	<table>
 		<c:if test="${not empty exceptionMsgName}">
 			<tr>
-				<td><a>로그인 실패</a><a>${exceptionMsgName}</a></td>
+				<td><a style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</a></td>
 			</tr>
 		</c:if>
 		<tr>

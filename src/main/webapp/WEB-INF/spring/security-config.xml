@@ -60,7 +60,6 @@
        		<form-login
        			username-parameter="id"
        			password-parameter="pw"
-       			login-processing-url="/login"
        			login-page="/loginPage"
        			default-target-url="/"
        			authentication-success-handler-ref="customAuthenticationSuccessHandler"
@@ -99,7 +98,7 @@
        		<beans:property name="loginPwName" value="pw" />
        		<beans:property name="loginRedirectName" value="loginRedirect" />
        		<beans:property name="exceptionMsgName" value="exceptionMsgName" />
-       		<beans:property name="defaultFailureUrl" value="/login?fail=true" />
+       		<beans:property name="defaultFailureUrl" value="/loginPage?fail=true" />
        </beans:bean>
        
 </beans:beans>
