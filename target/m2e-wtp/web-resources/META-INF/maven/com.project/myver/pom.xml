@@ -25,11 +25,14 @@
 			 Build Path Problem
 		 -->
 	<!-- 21.04.07 자바 버전 원상복귀(1.8 ->1.7) 스프링 버전 원상복귀 (4.3.4 -> 3.2.0) -->
+	<!-- 21.04.14 tiles 버전 추가
+		 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-적용 [우공공] -->
 	<properties>
 		<java-version>1.7</java-version>
 		<org.springframework-version>3.2.0.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.apache.tiles-version>2.2.2</org.apache.tiles-version>
 	</properties>
 	<dependencies>
 		
@@ -234,7 +237,36 @@
 		    <version>${org.springframework-version}</version>
 	    </dependency>
 		
-		
+		<!-- 21.04.14 추가
+			 - Tiles : 웹 페이지의 상하단 메뉴와 같이 반복적으로 사용되는 부분들에 대한 코드를 분리해 
+			 		      한 곳에서 관리를 가능하게 해주는 프레임워크
+			 - 참고사이트 : https://kecmok.tistory.com/16
+			 			 https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-적용 [우공공] -->
+		<dependency> 
+			<groupId>org.apache.tiles</groupId> 
+			<artifactId>tiles-servlet</artifactId> 
+			<version>${org.apache.tiles-version}</version> 
+		</dependency> 
+		<dependency> 
+			<groupId>org.apache.tiles</groupId> 
+			<artifactId>tiles-api</artifactId> 
+			<version>${org.apache.tiles-version}</version> 
+		</dependency> 
+		<dependency> 
+			<groupId>org.apache.tiles</groupId> 
+			<artifactId>tiles-jsp</artifactId> 
+			<version>${org.apache.tiles-version}</version> 
+		</dependency> 
+		<dependency> 
+			<groupId>org.apache.tiles</groupId> 
+			<artifactId>tiles-core</artifactId> 
+			<version>${org.apache.tiles-version}</version> 
+		</dependency> <dependency> 
+			<groupId>org.apache.tiles</groupId> 
+			<artifactId>tiles-template</artifactId> 
+			<version>${org.apache.tiles-version}</version> 
+		</dependency>
+
 	</dependencies>
     <build>
         <plugins>

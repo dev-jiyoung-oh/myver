@@ -1,0 +1,37 @@
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+ <!-- 21.04.14 생성 
+ 	 - tiles 관련 설정
+ 	 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
+ 
+<tiles-definitions>
+
+	<!-- 21.04.14 추가 
+		 - base tiles layout
+		 - 1. 기본적인 템플릿
+		 - header, body, footer를 가진 template.jsp라는 기본 레이아웃을 정의.
+		 - 이 정의된 레이아웃의 name속성인 base를 상속하여 추가적으로 여러 tiles를 만들 수 있음. -->
+	<definition name="base" template="/WEB-INF/views/common/layout/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/common/layout/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />
+	</definition>
+	
+	<!-- 2. base를 상속받은것. 
+		 - 즉, body부분만 설정한 경로대로 갈아 끼우고, 나머지 header, footer는 base의 형식대로 상속받아 오는 것 --> 
+	<definition name="*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/index.jsp" /> 
+	</definition>
+
+	<!-- 메뉴 미표시
+		 : 페이지 중 로그인페이지 같은건 보통 header, footer모두를 레이아웃으로 가지지 않을 것이다. 
+		      다만, header에 js라이브러리등을 포함하고 있을 것이므로 
+		      이런 특정경로의 jsp파일들은 header만 상속받고 footer는 사용하지 않는 방식으로 할 수 있다. --> 
+    <definition name="baseEmpty" template="/WEB-INF/tiles/templateEmpty.jsp"> 
+    </definition> 
+    
+    <definition name="*.part" extends="baseEmpty"> 
+    	<put-attribute name="body" value="/WEB-INF/views/login.jsp" /> 
+    </definition>
+
+</tiles-definitions>

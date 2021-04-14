@@ -22,8 +22,30 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<!-- 21.04.14 추가
+			 - 기존 view resolver의 우선순위를 2로 해줌. (tiles 설정을 위해)
+			 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
+			 <beans:property name="order" value="2" />
 	</beans:bean>
 	
+	<!-- 21.04.14 추가
+		 - tiles 관련 설정 파일
+		 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <beans:property name="definitions">
+            <beans:list>
+                <beans:value>/resources/tiles/tiles.xml</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    
+    <!-- 21.04.14 -->
+    <!-- tiles viewResolver 를 사용해 화면을 표시 -->
+    <beans:bean id="tilesViewResolver"
+        class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+        <beans:property name="order" value="1" /> <!-- tiles의 우선순위를 1로 해줌 -->
+    </beans:bean>
 	
 	<context:component-scan base-package="com.project.myver" />
 	
