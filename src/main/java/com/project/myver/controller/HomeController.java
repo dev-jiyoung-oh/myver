@@ -38,7 +38,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String join() {
-		return "body/index";
+		return "/index";
 	}
 	
 	@RequestMapping(value = "/denied")

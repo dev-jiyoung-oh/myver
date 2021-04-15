@@ -10,7 +10,9 @@
 </head>
 	<body>
 	   <tiles:insertAttribute name="header"/> <%--  value="/WEB-INF/common/layout/header.jsp" --%>
+	   <hr/>
 	   <tiles:insertAttribute name="body"/>
+	   <hr/>
 	   <tiles:insertAttribute name="footer"/> <%--  value="/WEB-INF/views/common/layout/footer.jsp" --%>
 	</body>
 </html>
