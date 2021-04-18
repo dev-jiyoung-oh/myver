@@ -60,26 +60,35 @@
        		<form-login
        			username-parameter="id"
        			password-parameter="pw"
-       			login-page="/loginPage"
+       			login-page="/login"
        			default-target-url="/"
        			authentication-success-handler-ref="customAuthenticationSuccessHandler"
        			authentication-failure-handler-ref="customAuthenticationFailureHandler"
        			/>
      		
    			<!-- 로그아웃 -->
-   			<logout logout-url="/logout" logout-success-url="/" />
+   			<logout logout-url="/logout" logout-success-url="/" invalidate-session="true" delete-cookies="JSESSIONID" />
        </http>
        
        
        <!-- 21.02.08 추가 
-      	        참고사이트 : https://velog.io/@hellas4/2019-11-12-0811-%EC%9E%91%EC%84%B1%EB%90%A8 -->
+      	    - 참고사이트 : https://velog.io/@hellas4/2019-11-12-0811-%EC%9E%91%EC%84%B1%EB%90%A8 -->
+       <!-- 21.04.17 수정
+       		- 패스워드 암호화
+       		- 참고사이트 : https://zgundam.tistory.com/54?category=430446 -->
        <authentication-manager>
        		<authentication-provider ref="userAuthProvider" />
-       		<authentication-provider user-service-ref="userService"></authentication-provider>
+       		<authentication-provider user-service-ref="userService">
+       			<password-encoder ref="bcryptPasswordEncoder" />
+       		</authentication-provider>
        </authentication-manager>
        
        <beans:bean id="userService" class="com.project.myver.security.SecurityUserService" />
        <beans:bean id="userAuthProvider" class="com.project.myver.security.SecurityAuthenticationProvider" />
+       <!-- 21.04.17 추가
+       		- 패스워드 암호화
+       		- 참고사이트 : https://zgundam.tistory.com/54?category=430446 -->
+       <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
        
        <!-- 21.04.09 추가 
        		- 로그인 성공 후 처리 핸들러
@@ -98,7 +107,8 @@
        		<beans:property name="loginPwName" value="pw" />
        		<beans:property name="loginRedirectName" value="loginRedirect" />
        		<beans:property name="exceptionMsgName" value="exceptionMsgName" />
-       		<beans:property name="defaultFailureUrl" value="/loginPage?fail=true" />
+       		<beans:property name="defaultFailureUrl" value="/login?fail=true" />
        </beans:bean>
+       
        
 </beans:beans>

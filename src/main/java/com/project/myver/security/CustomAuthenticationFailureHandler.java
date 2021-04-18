@@ -29,7 +29,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		this.loginPwName = "pw";
 		this.loginRedirectName = "loginRedirect";
 		this.exceptionMsgName = "securityExceptionMsg";
-		this.defaultFailureUrl = "/loginPage?fail=true";
+		this.defaultFailureUrl = "/login?fail=true";
 	}
 	
 	public String getLoginIdName() {

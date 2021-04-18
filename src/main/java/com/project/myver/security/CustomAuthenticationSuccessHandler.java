@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -18,6 +19,8 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
+
+import com.project.myver.service.MemberService;
 
 /* 21.04.09 생성
  * 로그인 성공 후 어떻게 처리할지 관리하는 Handler
@@ -32,6 +35,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	private boolean useReferer;
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	
+	@Autowired
+	private MemberService memSVC;
 	
 	public CustomAuthenticationSuccessHandler() {
 		targetUrlParameter = "";
@@ -67,6 +72,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		clearAuthenticationAttributes(request);
+		
+		// 21.04.17 최근 접속일 갱신
+		memSVC.logDate(request.getParameter("id"));
 		
 		int intRedirectStrategy = decideRedirectStrategy(request, response);
 		switch(intRedirectStrategy) {
@@ -140,6 +148,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	 *         0 : default url 
 	 */
 	private int decideRedirectStrategy(HttpServletRequest request, HttpServletResponse response) {
+	
 		int result = 0;
 		
 		SavedRequest savedRequest = requestCache.getRequest(request, response);

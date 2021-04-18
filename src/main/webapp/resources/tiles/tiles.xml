@@ -39,8 +39,10 @@
 		<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />
     </definition> 
     
-    <definition name="/login" extends="noHeader"> 
+    <definition name="/login.noHead" extends="noHeader"> 
     	<put-attribute name="body" value="/WEB-INF/views/login.jsp" /> 
     </definition>
-
+	<definition name="/join.noHead" extends="noHeader"> 
+    	<put-attribute name="body" value="/WEB-INF/views/member/join/join.jsp" /> 
+    </definition>
 </tiles-definitions>

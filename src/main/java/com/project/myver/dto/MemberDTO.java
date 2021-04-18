@@ -27,7 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class MemberDTO implements UserDetails{
 	
 	// security fields
-	private int memeber_no;	//회원번호
+	private int member_no;	//회원번호
 	private String id;		//아이디
 	private String pw;		//비밀번호
 	private String name;	//이름
@@ -78,12 +78,12 @@ public class MemberDTO implements UserDetails{
 
 	
 	// 추가적인 회원 정보 컬럼의 getter, setter
-	public int getMemeber_no() {
-		return memeber_no;
+	public int getMember_no() {
+		return member_no;
 	}
 
-	public void setMemeber_no(int memeber_no) {
-		this.memeber_no = memeber_no;
+	public void setMemeber_no(int member_no) {
+		this.member_no = member_no;
 	}
 
 	public String getName() {
@@ -134,11 +134,18 @@ public class MemberDTO implements UserDetails{
 		this.auth = auth;
 	}
 
-	
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+
 	// toString 메소드
 	@Override
 	public String toString() {
-		return "MemberDTO [memeber_no=" + memeber_no + ", id=" + id + ", pw=" + pw + ", name=" + name + ", nick=" + nick
+		return "MemberDTO [member_no=" + member_no + ", id=" + id + ", pw=" + pw + ", name=" + name + ", nick=" + nick
 				+ ", phone=" + phone + ", date=" + date + ", log_date=" + log_date + ", auth=" + auth + "]";
 	}
 	

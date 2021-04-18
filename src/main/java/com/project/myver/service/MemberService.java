@@ -1,10 +1,8 @@
 ﻿package com.project.myver.service;
 
-import javax.servlet.http.HttpSession;
-
 //import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.myver.dao.MemberDAO;
@@ -12,46 +10,30 @@ import com.project.myver.dto.MemberDTO;
 
 @Service
 public class MemberService {
+	
 	@Autowired
 	private MemberDAO memDAO;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
-	//private PasswordEncoder passwordEncoder;
-	
-//	//일반로그인
-//	public MemberDTO login(MemberDTO memdto, HttpSession session, int cnt) {
-//		System.out.println("로그인");
-//		memDAO.logDate(memdto);
-//	
-//		return result;
-//	}
-	
-	//로그아웃
-	public void logout(HttpSession session) {
-		if(session.getAttribute("MID")!=null) {
-			System.out.println(session.getAttribute("MID") + " logout");
-			session.invalidate();
-		}else {
-			System.out.println("null logout");
-		}
+	// 21.04.18 암호화
+	public String encode(String pw) {
+		return passwordEncoder.encode(pw);
 	}
-
-	// 회원가입. 2021.01.14
-//	public void join(MemberDTO memdto) {
-//		memdto.setPw(passwordEncoder.encode(memdto.getPw()));
-//		memDAO.join(memdto);
-//	}
+	
+	// 21.04.18 회원가입
+	public void join(MemberDTO memdto) {
+		memdto.setPw(encode(memdto.getPassword()));
+		memDAO.join(memdto);
+	}
 	
 	//아이디 중복확인
 	public int getMemberID(MemberDTO memdto) {
 		return memDAO.getMemberID(memdto);
 	}
-
-	// 아이디
-	public void login(MemberDTO memberDTO) {
-		// TODO Auto-generated method stub
 		
+	// 21.04.17 최근 접속일 갱신
+	public void logDate(String id) {
+		memDAO.logDate(id);
 	}
-		
-
-
 }

@@ -33,25 +33,26 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private MemberService memSVC;
 
-	// 회원가입폼
+	// 21.04.17 회원가입폼
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
-		return "/member/join/joinFrm";
+		return "/join.noHead";
 	}
 	
-	// 회원가입
-//	@RequestMapping(value = "/join", method = RequestMethod.POST)
-//	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
-//		memSVC.join(memdto);
-//		RedirectView rv=new RedirectView("./joinSuccess");
-//		mv.setView(rv);
-//		return mv;
-//	}
+	// 21.04.18 회원가입
+	@RequestMapping(value = "/join", method = RequestMethod.POST)
+	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
+		System.out.println("join - " + memdto.toString());
+		memSVC.join(memdto);
+		RedirectView rv = new RedirectView("./joinSuccess");
+		mv.setView(rv);
+		return mv;
+	}
 	
-	// 로그인폼
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	// 21.02.12 로그인폼
+	@RequestMapping(value = "/login")
 	public String loginPage() throws Exception{
-		return "/login";
+		return "/login.noHead";
 	}
 	
 	// 아이디 중복확인

@@ -8,8 +8,8 @@
  		
  		<!-- SQL에서 사용할 별칭 -->
  		<typeAliases>
-	        <typeAlias type="java.lang.Integer" alias="int"/>
-		   	<typeAlias type="java.lang.String" alias="string"/>
+	        <typeAlias type="java.lang.Integer" alias="Int"/>
+		   	<typeAlias type="java.lang.String" alias="String"/>
 	   		<!-- <typeAlias type="com.project.myver.util.PageUtil" alias="PageUtil"/>  -->
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
    		</typeAliases>

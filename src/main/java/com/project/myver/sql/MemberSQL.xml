@@ -3,38 +3,34 @@
 "HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
 
-	<!-- 로그인 처리 -->
-	<select id="login" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-		select * from member 
-		where id = #{id} and pw = #{pw}
-	</select>
-	
-	<!-- 회원가입 -->
+	<!-- 21.04.18 회원가입 -->
 	<insert id="join" parameterType="memDTO">
-		insert into member
-		values ((select NVL(MAX(member_no),1)+1 from member), #{id}, #{pw},
-		#{name}, #{nick}, #{phone},sysdate,sysdate,0)
+		<selectKey resultType="Int" keyProperty="member_no" order="BEFORE">
+			SELECT LAST_INSERT_ID()+1 from member
+		</selectKey>
+		insert into member (member_no, id, pw, name, nick, phone, date, auth)
+		values (#{member_no}, #{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
 	</insert>
 	
 	<!-- 아이디 중복 확인 -->
-	<select id="getMemberID" resultType="int" parameterType="memDTO">
+	<select id="getMemberID" resultType="Int" parameterType="memDTO">
 		select count(id) from member
 		where id = #{id}
 	</select>
 	
 	<!-- 회원 번호로 회원 정보 출력 -->
 	<select id="getByNo" resultType="memDTO" parameterType="memDTO">
-	select * from member where member_no = #{member_no}
+		select * from member where member_no = #{member_no}
 	</select>
 	
-	<!-- 아이디로 회원 정보 출력 -->
-	<select id="getById" resultType="memDTO" parameterType="string">
+	<!-- 21.01.16 아이디로 회원 정보 출력 -->
+	<select id="getById" resultType="memDTO" parameterType="String">
 		select * from member where id = #{id}
 	</select>
 	
-	<!-- 최근 접속일 갱신 -->
-	<update id="logDate" parameterType="java.util.HashMap">
-		UPDATE member SET log_date = sysdate where member_no = #{member_no}
+	<!-- 21.04.17 최근 접속일 갱신 -->
+	<update id="logDate" parameterType="String">
+		update member SET log_date = SYSDATE() where id = #{id}
 	</update>
 	
 	<!-- 
