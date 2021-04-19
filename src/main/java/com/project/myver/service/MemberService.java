@@ -36,4 +36,10 @@ public class MemberService {
 	public void logDate(String id) {
 		memDAO.logDate(id);
 	}
+	
+	// 21.04.18 전화번호로 아이디 찾기
+	public String findIdByPhone(int phone) {
+		String id = memDAO.findIdByPhone(phone);
+		return id;
+	}
 }

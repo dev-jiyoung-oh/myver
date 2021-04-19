@@ -6,7 +6,7 @@
 	<!-- 21.04.18 회원가입 -->
 	<insert id="join" parameterType="memDTO">
 		<selectKey resultType="Int" keyProperty="member_no" order="BEFORE">
-			SELECT LAST_INSERT_ID()+1 from member
+			select LAST_INSERT_ID()+1 from member
 		</selectKey>
 		insert into member (member_no, id, pw, name, nick, phone, date, auth)
 		values (#{member_no}, #{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
@@ -32,6 +32,12 @@
 	<update id="logDate" parameterType="String">
 		update member SET log_date = SYSDATE() where id = #{id}
 	</update>
+	
+	<!-- 21.04.18 전화번호로 아이디 찾기 -->
+	<select id="getIdByPhone" parameterType="Int" resultType="String">
+		select id from member
+		where phone = #{phone}
+	</select>
 	
 	<!-- 
 	<update id="memUpdate" parameterType="memDTO">

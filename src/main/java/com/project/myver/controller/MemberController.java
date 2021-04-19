@@ -33,7 +33,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private MemberService memSVC;
 
-	// 21.04.17 회원가입폼
+	// 21.04.17 회원가입 폼
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "/join.noHead";
@@ -41,7 +41,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	
 	// 21.04.18 회원가입
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public ModelAndView join(MemberDTO memdto,ModelAndView mv) {
+	public ModelAndView join(MemberDTO memdto, ModelAndView mv) {
 		System.out.println("join - " + memdto.toString());
 		memSVC.join(memdto);
 		RedirectView rv = new RedirectView("./joinSuccess");
@@ -72,6 +72,32 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		}
 		return data;
 	}
+	
+	// 21.04.18 전화번호로 아이디 찾기 폼
+	@RequestMapping(value = "/findId", method = RequestMethod.GET)
+	public String findId() {
+		return "/common/find/findIdFrm";
+	}
+	
+	// 21.04.18 전화번호로 아이디 찾기
+	@RequestMapping(value = "/findId", method = RequestMethod.POST)
+	public ModelAndView findId(MemberDTO memdto, ModelAndView mv, HttpSession session) {
+		String id = memSVC.findIdByPhone(memdto.getPhone());
+		
+		session.setAttribute("ID", id);
+		
+		mv.setViewName("/common/find/foundId");
+		
+		return mv;
+	}
+	
+	// 21.04.19 비밀번호 찾기 
+	/* 1. 아이디 입력 폼
+	 * 2. 아이디 검색 기능 -> 비동기통신 (성공: 3으로 / 실패: alert)
+	 * 3. 본인인증(전화번호 입력) 폼 -> 비동기통신 (성공: 4로 / 실패: alert)
+	 * 4. 비밀번호 재설정 폼
+	 * --> 로그인 폼으로
+	 */
 	
 //	@Override 
 //	public void onAuthenticationSuccess(

@@ -49,6 +49,12 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		}
 		return memdto;
 	}
+	
+	// 21.04.18 전화번호로 아이디 찾기
+	public String findIdByPhone(int phone) {
+		String id = session.selectOne("member.getIdByPhone", phone);
+		return id;
+	}
 
 
 }
