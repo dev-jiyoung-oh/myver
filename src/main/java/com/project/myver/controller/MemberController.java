@@ -94,10 +94,28 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.04.19 비밀번호 찾기 
 	/* 1. 아이디 입력 폼
 	 * 2. 아이디 검색 기능 -> 비동기통신 (성공: 3으로 / 실패: alert)
-	 * 3. 본인인증(전화번호 입력) 폼 -> 비동기통신 (성공: 4로 / 실패: alert)
-	 * 4. 비밀번호 재설정 폼
-	 * --> 로그인 폼으로
+	 * 3. 본인인증(전화번호 입력) 폼 -> 
+	 * 4. 본인 인증 확인 기능 -> 비동기통신 (성공: 4로 / 실패: alert)
+	 * 5. 비밀번호 재설정 폼
+	 * 6. 비밀번호 재설정 기능 -> (성공: 완료 페이지 / 실패: 에러 페이지)
 	 */
+	// 21.04.19 비밀번호 찾기 - 1. 아이디 입력 폼
+	@RequestMapping(value = "/findPw", method = RequestMethod.GET)
+	public String findPw() {
+		return "/common/find/findPwFrm";
+	}
+	
+	// 21.04.19 비밀번호 찾기 - 3. 본인인증(전화번호 입력) 폼
+	@RequestMapping(value = "/findPwAuth", method = RequestMethod.GET)
+	public String findPwAuth() {
+		return "/common/find/findPwFrm_auth";
+	}
+	
+	// 21.04.20 비밀번호 찾기 - 5. 비밀번호 재설정 폼
+	@RequestMapping(value = "/findPwChange", method = RequestMethod.GET)
+	public String findPwChange() {
+		return "/common/find/findPwFrm_change";
+	}
 	
 //	@Override 
 //	public void onAuthenticationSuccess(
