@@ -9,20 +9,25 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/findId" method="POST">
+<form action="${pageContext.request.contextPath}/findPwChange" method="POST">
 	<table>
 		<tr>
 			<td>비밀번호 찾기</td>
 		</tr>
 		<tr>
-			<td>회원정보에 등록한 휴대전화로 인증</td>
+			<td>비밀번호 재설정</td>
 		</tr>
 		<tr>
-			<td>회원정보에 등록한 휴대전화 번호를 정확히 입력하시면 아이디를 찾으실 수 있습니다.</td>
+			<td>비밀번호를 변경해 주세요.</td>
 		</tr>
 		<tr>
 			<td>
-				<input type="number" name="phone"/>
+				<input type="password" name="pw" placeholder="새 비밀번호"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="password" name="pwChk" placeholder="새 비밀번호 확인"/>
 			</td>
 		</tr>
 		<tr>

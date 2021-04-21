@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td>
-				<input type="submit" value="확인" />
+				<input type="submit" value="다음" />
 			</td>
 		</tr>
 	</table>

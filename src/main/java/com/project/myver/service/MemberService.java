@@ -27,9 +27,9 @@ public class MemberService {
 		memDAO.join(memdto);
 	}
 	
-	//아이디 중복확인
-	public int getMemberID(MemberDTO memdto) {
-		return memDAO.getMemberID(memdto);
+	// 21.04.21 아이디 존재 확인
+	public int getIDCnt(MemberDTO memdto) {
+		return memDAO.getIDCnt(memdto);
 	}
 		
 	// 21.04.17 최근 접속일 갱신

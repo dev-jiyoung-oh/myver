@@ -9,16 +9,17 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/findId" method="POST">
+<form action="${pageContext.request.contextPath}/findPwAuth" method="POST">
+	<input type="hidden" name="id" value="${ID}"/>
 	<table>
 		<tr>
 			<td>비밀번호 찾기</td>
 		</tr>
 		<tr>
-			<td>회원정보에 등록한 휴대전화로 인증</td>
+			<td>본인 확인</td>
 		</tr>
 		<tr>
-			<td>회원정보에 등록한 휴대전화 번호를 정확히 입력하시면 아이디를 찾으실 수 있습니다.</td>
+			<td>회원정보에 등록한 휴대전화 번호를 정확히 입력해주세요.</td>
 		</tr>
 		<tr>
 			<td>
@@ -27,7 +28,7 @@
 		</tr>
 		<tr>
 			<td>
-				<input type="submit" value="확인" />
+				<input type="submit" value="다음" />
 			</td>
 		</tr>
 	</table>

@@ -22,9 +22,17 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		}
 	}
 	
-	// 21.01.12 아이디 중복확인
-	public int getMemberID(MemberDTO memdto) {
-		return session.selectOne("member.getMemberID", memdto);
+	// 21.04.21 아이디 존재 확인
+	public int getIDCnt(MemberDTO memdto) {
+		int result = session.selectOne("member.getIDCnt", memdto);
+		
+		if(result==1) {
+			System.out.println("MemberDAO.getIDCnt() - " + memdto.getUsername()+" 유저 존재함");
+		}else {
+			System.out.println("MemberDAO.getIDCnt() - " + memdto.getUsername()+" 유저 " + result + "명");
+		}
+		
+		return result;
 	}
 	
 	// 21.04.17 최근 접속일 갱신

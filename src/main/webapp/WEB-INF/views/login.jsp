@@ -30,7 +30,7 @@
 		<tr>
 			<td>
 				<a href="${pageContext.request.contextPath}/findId">아이디 찾기</a>
-				<a href="">비밀번호 찾기</a>
+				<a href="${pageContext.request.contextPath}/findPw">비밀번호 찾기</a>
 				<a href="${pageContext.request.contextPath}/join">회원가입</a>
 			</td>
 		</tr>
