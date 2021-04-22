@@ -10,6 +10,7 @@
 </head>
 <body>
 <form action="${pageContext.request.contextPath}/findPwChange" method="POST">
+	<input type="hidden" name="id" value="${ID}"/>
 	<table>
 		<tr>
 			<td>비밀번호 찾기</td>

@@ -7,9 +7,42 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		//id => $('#아이디밸류')
+		//class => $('.클래스밸류')
+		//name => $('[name="네임밸류"]')
+		$('#frm').submit(function(event){
+			var isok;
+			
+			$.ajax({ 
+				type: "POST", 
+				url : "${pageContext.request.contextPath}/findPwAuth", 
+				data: { id : ${ID}, phone : $('[name="phone"]').val() }, 
+				async: false, // 동기 방식으로 처리(아작스 처리 후 return isok;)
+				success : function(result){
+					if(result == "success"){
+						isok = true;
+					}else {
+						alert('실패');
+						isok = false;
+					}
+				}, 
+				error: function(request,status,error) { 
+					alert("????"+"code = "+ request.status + " message = " + request.responseText + " error = " + error); 
+					isok = false;
+				} 
+			})
+			
+			return isok;
+		})
+		
+	})
+</script>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/findPwAuth" method="POST">
+<form action="${pageContext.request.contextPath}/findPwChangeFrm" id="frm" method="POST">
 	<input type="hidden" name="id" value="${ID}"/>
 	<table>
 		<tr>

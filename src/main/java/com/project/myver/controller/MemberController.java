@@ -109,7 +109,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@RequestMapping(value = "/findPw", method = RequestMethod.POST)
 	@ResponseBody
 	public String findPw(MemberDTO memDTO) {
-		System.out.println("id="+memDTO.getUsername());
+		System.out.println("findPw-id:"+memDTO.getUsername());
 		
 		String result = "";
 		int cnt = memSVC.getIDCnt(memDTO);
@@ -126,7 +126,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.04.19 비밀번호 찾기 - 3. 본인인증(전화번호 입력) 폼
 	@RequestMapping(value = "/findPwAuthFrm", method = RequestMethod.POST)
 	public ModelAndView findPwAuth(MemberDTO memDTO, ModelAndView mv) {
-		System.out.println("findPwAuthFrm");
+		System.out.println("findPwAuthFrm-id:" + memDTO.getUsername());
 		mv.addObject("ID", memDTO.getUsername());
 		
 		mv.setViewName("/common/find/findPwFrm_auth");
@@ -134,10 +134,33 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		return mv;
 	}
 	
+	// 21.04.22 비밀번호 찾기 - 4. 본인 인증 확인 -> 비동기통신 (성공: 4로 / 실패: alert)
+	@RequestMapping(value = "/findPwAuth", method = RequestMethod.POST)
+	@ResponseBody
+	public String findPwAuth(MemberDTO memDTO) {
+		System.out.println("findPwAuth-id:"+memDTO.getUsername());
+		
+		String result = "";
+		String id = memSVC.findIdByPhone(memDTO.getPhone());
+		
+		if(memDTO.getUsername().equals(id)) {
+			result = "success";
+		}else {
+			result = "fail";
+		}
+		
+		return result;
+	}
+	
 	// 21.04.20 비밀번호 찾기 - 5. 비밀번호 재설정 폼
 	@RequestMapping(value = "/findPwChangeFrm", method = RequestMethod.POST)
-	public String findPwChange() {
-		return "/common/find/findPwFrm_change";
+	public ModelAndView findPwChangeFrm(MemberDTO memDTO, ModelAndView mv) {
+		System.out.println("findPwChangeFrm-id:" + memDTO.getUsername());
+		mv.addObject("ID", memDTO.getUsername());
+		
+		mv.setViewName("/common/find/findPwFrm_change");
+		
+		return mv;
 	}
 	
 	// 21.04.20 비밀번호 찾기 - 6. 비밀번호 재설정 -> (성공: 완료 페이지 / 실패: 에러 페이지)

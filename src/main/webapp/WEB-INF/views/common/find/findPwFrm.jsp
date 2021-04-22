@@ -14,18 +14,15 @@
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
 		$('#frm').submit(function(event){
-			event.preventDefault();
 			var isok;
-			
+
 			$.ajax({ 
 				type: "POST", 
 				url : "${pageContext.request.contextPath}/findPw", 
 				data: { id : $('[name="id"]').val() }, 
-				async: true, 
+				async: false, // 동기 방식으로 처리(아작스 처리 후 return isok;)
 				success : function(result){
 					if(result == "success"){
-						alert($('#frm').serialize());
-						//$('#frm').submit();
 						isok = true;
 					}else {
 						alert(result+'실패');
@@ -38,7 +35,7 @@
 				} 
 			})
 			
-			if(isok) { event.currentTarget.submit(); }
+			return isok;
 		})
 		
 	})
