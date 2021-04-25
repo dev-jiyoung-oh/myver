@@ -22,9 +22,9 @@ public class MemberService {
 	}
 	
 	// 21.04.18 회원가입
-	public void join(MemberDTO memdto) {
-		memdto.setPw(encode(memdto.getPassword()));
-		memDAO.join(memdto);
+	public void join(MemberDTO memDTO) {
+		memDTO.setPw(encode(memDTO.getPassword()));
+		memDAO.join(memDTO);
 	}
 	
 	// 21.04.21 아이디 존재 확인
@@ -41,5 +41,12 @@ public class MemberService {
 	public String findIdByPhone(int phone) {
 		String id = memDAO.findIdByPhone(phone);
 		return id;
+	}
+	
+	// 21.04.25 비밀번호 변경
+	public int changePw(MemberDTO memDTO) {
+		memDTO.setPw(encode(memDTO.getPassword()));
+		int i = memDAO.changePw(memDTO);
+		return i;
 	}
 }

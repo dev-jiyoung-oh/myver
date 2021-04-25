@@ -165,13 +165,17 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	
 	// 21.04.20 비밀번호 찾기 - 6. 비밀번호 재설정 -> (성공: 완료 페이지 / 실패: 에러 페이지)
 	@RequestMapping(value = "/findPwChange", method = RequestMethod.POST)
-	public ModelAndView findPwChange(MemberDTO memdto, ModelAndView mv) {
-//		String id = memSVC.findIdByPhone(memdto.getPhone());
-//		
-//		mv.addObject("ID",id);
-//		
-//		mv.setViewName("/common/find/foundId");
-//		
+	public ModelAndView findPwChange(MemberDTO memDTO, ModelAndView mv) {
+		int i = memSVC.changePw(memDTO);
+		
+		if(i==1) {
+			System.out.println(memDTO.getUsername()+" 비밀번호 변경 성공");
+			mv.setViewName("/common/find/findPw_change_success");
+		}else {
+			System.out.println(memDTO.getUsername()+" 비밀번호 변경 실패");
+			mv.setViewName("/common/find/findPw_change_fail");
+		}
+		
 		return mv;
 	}
 	

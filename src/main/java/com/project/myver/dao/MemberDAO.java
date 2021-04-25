@@ -64,5 +64,11 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		return id;
 	}
 
+	// 21.04.25 비밀번호 변경
+	public int changePw(MemberDTO memDTO) {
+		int i = session.update("member.changePw", memDTO);
+		return i;
+	}
+
 
 }

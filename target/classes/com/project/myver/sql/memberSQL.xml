@@ -39,6 +39,11 @@
 		where phone = #{phone}
 	</select>
 	
+	<!-- 21.04.25 비밀번호 변경 -->
+	<update id="changePw" parameterType="memDTO" >
+		update member SET pw = #{pw} where id = #{id}
+	</update>
+	
 	<!-- 
 	<update id="memUpdate" parameterType="memDTO">
 		UPDATE member 
