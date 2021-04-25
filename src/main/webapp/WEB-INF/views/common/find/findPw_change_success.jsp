@@ -13,19 +13,13 @@
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
-		$('#frm').submit(function(event){
-			var isok;
-			
-			
-			
-			return isok;
-		})
+		
 		
 	})
 </script>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/" id="frm">
+<form action="${pageContext.request.contextPath}/login" id="frm" >
 	<table>
 		<tr>
 			<td>비밀번호 찾기</td>
