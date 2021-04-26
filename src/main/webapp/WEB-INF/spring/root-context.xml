@@ -65,7 +65,7 @@
 							 	이걸 등록해두면 개발자가 직접 트랜잭션 관리나 DB 연결, 종료를 해야하는 작업을 줄일 수 있음. -->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
           destroy-method="clearCache">
-        <constructor-arg ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
     </bean>
 	
 	
@@ -74,14 +74,13 @@
 		<property name="sqlSessionTemplate" ref="sqlSession"/>
 	</bean>
 	<bean id="memSVC" class="com.project.myver.service.MemberService"/>
+	<!-- memo -->
+	<bean id="memoDAO" class="com.project.myver.dao.MemoDAO">
+		<property name="sqlSessionTemplate" ref="sqlSession"/>
+	</bean>
+	<bean id="memoSVC" class="com.project.myver.service.MemoService"/>
 	
 	
-	<!-- Security --> 
-	<!-- Bcrypt 암호화를 위해 BCryptPasswordEncoder 빈 객체 생성.
-		 - 출처: https://hongku.tistory.com/247 [IT에 취.하.개.] 
-		 <bean id="bcryptPasswordEncoder" 
-		  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-		  -->
 	
 	
 	<context:component-scan base-package="com.project.myver" />

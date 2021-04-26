@@ -4,6 +4,10 @@
 
 <!DOCTYPE html>
 <html>
+<head>
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.min.js"></script>
+</head>
+
 <body>
 
 <%-- 로그인중이 아닐 때에만 로그인,회원가입 버튼이 보임  -> taglib ( security/tags ) 때문에 가능 --%>

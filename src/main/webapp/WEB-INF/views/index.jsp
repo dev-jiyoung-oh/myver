@@ -20,7 +20,9 @@
 
 <a class="hanSansYello">MY</a><a class="hanSansGreen">VER</a>
 <br/><input type="search"><br/>
-<img src="${pageContext.request.contextPath}/resources/img/icons/mail-green.png"/>
+<a href="${pageContext.request.contextPath}/memo/list">
+	<img src="${pageContext.request.contextPath}/resources/img/icons/mail-green.png"/>
+</a>
 <a class="hanSansGreen">B</a><a class="hanSansYello">log</a>
 <a class="hanSansGreen">C</a><a class="hanSansYello">afe</a>
 </body>
