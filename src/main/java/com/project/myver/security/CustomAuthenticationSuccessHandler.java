@@ -41,7 +41,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public CustomAuthenticationSuccessHandler() {
 		targetUrlParameter = "";
 		defaultUrl = "/";
-		useReferer = false;
+		useReferer = true;
 	}
 	
 	public String getTargetUrlParameter() {

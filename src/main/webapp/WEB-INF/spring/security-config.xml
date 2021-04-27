@@ -54,8 +54,8 @@
        		참고사이트 : https://velog.io/@hellas4/%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%953-bcrypt-%EC%95%94%ED%98%B8%ED%99%94-%ED%95%98%EA%B8%B0 -->
        <http auto-config="true" use-expressions="true">
        		<!-- <intercept-url pattern="/my/**" access="hasRole('MEMBER')" /> -->
-       		<intercept-url pattern="/**" access="permitAll"/>
        		<intercept-url pattern="/memo/**" access="hasRole('MEMBER')" /> <!-- 21.04.26 -->
+       		<!-- <intercept-url pattern="/**" access="permitAll"/> -->
        		
        		<!-- 로그인 -->
        		<form-login
