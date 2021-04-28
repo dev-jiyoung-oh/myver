@@ -6,6 +6,9 @@
 <html>
 <head>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
+	
+	<link rel="${pageContext.request.contextPath}/resources/css/bootstrap.bundle.css">
 </head>
 
 <body>
