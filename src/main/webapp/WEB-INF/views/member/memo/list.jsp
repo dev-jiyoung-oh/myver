@@ -12,7 +12,7 @@
 <div id="nav_snb" class="" style="width: 251px;">
 			
 			<div class="btn_workset">
-				<a href="#" class="">
+				<a href="${pageContext.request.contextPath}/memo/write" class="">
 					<strong class=""><span>쪽지쓰기</span></strong>
 				</a>
 				<a href="#" class="">

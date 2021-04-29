@@ -9,7 +9,7 @@
 <title>title</title>
 </head>
 	<body>
-	   <tiles:insertAttribute name="body"/>
+	   <tiles:insertAttribute name="body" ignore="true"/>
 	   <hr/>
 	   <tiles:insertAttribute name="footer"/> <%--  value="/WEB-INF/views/common/layout/footer.jsp" --%>
 	</body>

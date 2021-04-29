@@ -36,7 +36,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.04.17 회원가입 폼
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
-		return "/join.noHead";
+		return "/common/join/join";
 	}
 	
 	// 21.04.18 회원가입
@@ -52,10 +52,10 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.02.12 로그인폼
 	@RequestMapping(value = "/login")
 	public String loginPage() throws Exception{
-		return "/login.noHead";
+		return "/common/login";
 	}
 	
-	// 아이디 중복확인
+	/* 아이디 중복확인
 	@ResponseBody
 	@RequestMapping("/idChk")
 	public String idChk(MemberDTO memdto) {
@@ -71,7 +71,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 			data = "fail";
 		}
 		return data;
-	}
+	}*/
 	
 	// 21.04.18 전화번호로 아이디 찾기 폼
 	@RequestMapping(value = "/findId", method = RequestMethod.GET)

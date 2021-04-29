@@ -18,7 +18,7 @@ public class MemoController {
 	
 	// 21.04.26 메일 리스트
 	@RequestMapping(value = "/list")
-	public ModelAndView findId(MemberDTO memdto, ModelAndView mv) {
+	public ModelAndView memoList(MemberDTO memdto, ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		
 		//mv.addObject("ID",id);
@@ -27,4 +27,16 @@ public class MemoController {
 		
 		return mv;
 	}
+	
+	// 21.04.26 메일 리스트
+		@RequestMapping(value = "/write")
+		public ModelAndView memoWrite(ModelAndView mv) {
+			//String id = memSVC.findIdByPhone(memdto.getPhone());
+			
+			//mv.addObject("ID",id);
+			
+			mv.setViewName("member/memo/write");
+			
+			return mv;
+		}
 }

@@ -5,7 +5,24 @@
  	 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
  
 <tiles-definitions>
-
+	
+	<!-- 메뉴 미표시
+		 : 페이지 중 로그인페이지 같은건 보통 header, footer모두를 레이아웃으로 가지지 않을 것이다. 
+		      다만, header에 js라이브러리등을 포함하고 있을 것이므로 
+		      이런 특정경로의 jsp파일들은 header만 상속받고 footer는 사용하지 않는 방식으로 할 수 있다.
+    <definition name="noHeader" template="/WEB-INF/views/common/layout/noHeaderLayout.jsp"> 
+    	<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />
+    </definition> 
+    
+    <definition name="/login.noHead" extends="noHeader"> 
+    	<put-attribute name="body" value="/WEB-INF/views/login.jsp" /> 
+    </definition>
+	<definition name="/join.noHead" extends="noHeader"> 
+    	<put-attribute name="body" value="/WEB-INF/views/member/common/join/join.jsp" /> 
+    </definition>
+     --> 
+     
 	<!-- 21.04.14 추가 
 		 - base tiles layout
 		 - 1. 기본적인 템플릿
@@ -29,20 +46,9 @@
 	<definition name="*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
 	</definition>
-
-	<!-- 메뉴 미표시
-		 : 페이지 중 로그인페이지 같은건 보통 header, footer모두를 레이아웃으로 가지지 않을 것이다. 
-		      다만, header에 js라이브러리등을 포함하고 있을 것이므로 
-		      이런 특정경로의 jsp파일들은 header만 상속받고 footer는 사용하지 않는 방식으로 할 수 있다. --> 
-    <definition name="noHeader" template="/WEB-INF/views/common/layout/noHeaderLayout.jsp"> 
-    	<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />
-    </definition> 
-    
-    <definition name="/login.noHead" extends="noHeader"> 
-    	<put-attribute name="body" value="/WEB-INF/views/login.jsp" /> 
-    </definition>
-	<definition name="/join.noHead" extends="noHeader"> 
-    	<put-attribute name="body" value="/WEB-INF/views/member/join/join.jsp" /> 
-    </definition>
+	<definition name="*/*/*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" /> 
+	</definition>
+	
+	
 </tiles-definitions>
