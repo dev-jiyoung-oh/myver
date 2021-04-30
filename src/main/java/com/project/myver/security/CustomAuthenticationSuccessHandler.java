@@ -159,12 +159,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			if(StringUtils.hasText(targetUrl)) {
 				result = 1;
 			}else {
-				String refererUrl = request.getHeader("REFERER");
-				
-				if(useReferer && StringUtils.hasText(refererUrl)) {
-					result = 3;
+				if(savedRequest != null) {
+					result =2;
 				}else {
-					result = 0;
+					String refererUrl = request.getHeader("REFERER");
+					
+					if(useReferer && StringUtils.hasText(refererUrl)) {
+						result = 3;
+					}else {
+						result = 0;
+					}
 				}
 			}
 			
@@ -181,7 +185,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		if(useReferer && StringUtils.hasText(refererUrl)) {
 			result = 3;
 		}else {
-			result = 3;
+			result = 0;
 		}
 		
 		return result;

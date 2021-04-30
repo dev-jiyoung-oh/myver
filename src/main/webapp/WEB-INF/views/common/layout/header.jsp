@@ -13,6 +13,8 @@
 
 <body>
 
+<a href="${pageContext.request.contextPath}/">MYVER</a>
+
 <%-- 로그인중이 아닐 때에만 로그인,회원가입 버튼이 보임  -> taglib ( security/tags ) 때문에 가능 --%>
 <sec:authorize access="isAnonymous()">
 	<a href="${pageContext.request.contextPath}/login">로그인</a>
