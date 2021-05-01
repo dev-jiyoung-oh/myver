@@ -5,11 +5,8 @@
 
 	<!-- 21.04.18 회원가입 -->
 	<insert id="join" parameterType="memDTO">
-		<selectKey resultType="Int" keyProperty="member_no" order="BEFORE">
-			select LAST_INSERT_ID()+1 from member
-		</selectKey>
-		insert into member (member_no, id, pw, name, nick, phone, date, auth)
-		values (#{member_no}, #{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
+		insert into member (id, pw, name, nick, phone, date, auth)
+		values (#{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
 	</insert>
 	
 	<!-- 21.04.21 아이디 존재 확인 -->

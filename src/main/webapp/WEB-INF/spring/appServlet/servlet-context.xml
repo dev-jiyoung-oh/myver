@@ -29,6 +29,7 @@
 			 <beans:property name="order" value="2" />
 	</beans:bean>
 	
+	
 	<!-- 21.04.14 추가
 		 - tiles 관련 설정 파일
 		 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
@@ -40,6 +41,7 @@
         </beans:property>
     </beans:bean>
     
+    
     <!-- 21.04.14 -->
     <!-- tiles viewResolver 를 사용해 화면을 표시 -->
     <beans:bean id="tilesViewResolver"
@@ -48,6 +50,20 @@
         <beans:property name="order" value="1" /> <!-- tiles의 우선순위를 1로 해줌 -->
     </beans:bean>
 	
+	
+	<!-- 21.05.01 
+		 - 다중 파일 업로드 관련
+		 - 출처: https://ktko.tistory.com/entry/Spring-단일파일-다중파일-업로드하기 [KTKO 개발 블로그와 여행 일기] -->
+	<!-- file Upload -->
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 최대 업로드 가능한 바이트 크리 설정... deault(-1)는 무제한 -->
+        <!-- max upload size in bytes -->
+        <!-- <beans:property name="maxUploadSize" value="5242880" /> --> <!-- 5MB -->
+        <!-- max size of file in memory (in bytes) -->
+        <!-- <beans:property name="maxInMemorySize" value="1048576" /> --> <!-- 1MB -->
+    </beans:bean>
+
+
 	<context:component-scan base-package="com.project.myver" />
 	
 
