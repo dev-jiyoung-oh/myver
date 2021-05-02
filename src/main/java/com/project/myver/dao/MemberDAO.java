@@ -23,13 +23,13 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	}
 	
 	// 21.04.21 아이디 존재 확인
-	public int getIDCnt(MemberDTO memdto) {
-		int result = session.selectOne("member.getIDCnt", memdto);
+	public int getIDCnt(String id) {
+		int result = session.selectOne("member.getIDCnt", id);
 		
 		if(result==1) {
-			System.out.println("MemberDAO.getIDCnt() - " + memdto.getUsername()+" 유저 존재함");
+			System.out.println("MemberDAO.getIDCnt() - " + id+" 유저 존재함");
 		}else {
-			System.out.println("MemberDAO.getIDCnt() - " + memdto.getUsername()+" 유저 " + result + "명");
+			System.out.println("MemberDAO.getIDCnt() - " + id+" 유저 " + result + "명");
 		}
 		
 		return result;

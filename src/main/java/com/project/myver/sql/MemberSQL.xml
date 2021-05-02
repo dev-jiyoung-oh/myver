@@ -10,7 +10,7 @@
 	</insert>
 	
 	<!-- 21.04.21 아이디 존재 확인 -->
-	<select id="getIDCnt" resultType="Int" parameterType="memDTO">
+	<select id="getIDCnt" resultType="Integer" parameterType="String">
 		select count(id) from member
 		where id = #{id}
 	</select>
@@ -31,7 +31,7 @@
 	</update>
 	
 	<!-- 21.04.18 전화번호로 아이디 찾기 -->
-	<select id="getIdByPhone" parameterType="Int" resultType="String">
+	<select id="getIdByPhone" parameterType="Integer" resultType="String">
 		select id from member
 		where phone = #{phone}
 	</select>

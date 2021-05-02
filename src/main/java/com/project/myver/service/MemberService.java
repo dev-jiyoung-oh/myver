@@ -28,8 +28,8 @@ public class MemberService {
 	}
 	
 	// 21.04.21 아이디 존재 확인
-	public int getIDCnt(MemberDTO memdto) {
-		return memDAO.getIDCnt(memdto);
+	public int getIDCnt(String id) {
+		return memDAO.getIDCnt(id);
 	}
 		
 	// 21.04.17 최근 접속일 갱신
