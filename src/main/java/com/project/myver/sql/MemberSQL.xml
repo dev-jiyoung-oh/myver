@@ -17,17 +17,20 @@
 	
 	<!-- 회원 번호로 회원 정보 출력 -->
 	<select id="getByNo" resultType="memDTO" parameterType="memDTO">
-		select * from member where member_no = #{member_no}
+		select * from member 
+		where member_no = #{member_no}
 	</select>
 	
 	<!-- 21.01.16 아이디로 회원 정보 출력 -->
 	<select id="getById" resultType="memDTO" parameterType="String">
-		select * from member where id = #{id}
+		select * from member 
+		where id = #{id}
 	</select>
 	
 	<!-- 21.04.17 최근 접속일 갱신 -->
 	<update id="logDate" parameterType="String">
-		update member SET log_date = SYSDATE() where id = #{id}
+		update member SET log_date = SYSDATE() 
+		where id = #{id}
 	</update>
 	
 	<!-- 21.04.18 전화번호로 아이디 찾기 -->
@@ -41,6 +44,11 @@
 		update member SET pw = #{pw} where id = #{id}
 	</update>
 	
+	<!-- // 21.05.03 회원 아이디로 회원 번호 가져오기 -->
+	<select id="selectNoById" parameterType="Integer" >
+		select member_no from member
+		where id = #{id}
+	</select>
 	<!-- 
 	<update id="memUpdate" parameterType="memDTO">
 		UPDATE member 

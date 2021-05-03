@@ -70,5 +70,11 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		return i;
 	}
 
+	// 21.05.03 회원 아이디로 회원 번호 가져오기
+	public int selectNoById(String id) {
+		int member_no = session.selectOne("member.selectNoById", id);
+		return member_no;
+	}
+
 
 }

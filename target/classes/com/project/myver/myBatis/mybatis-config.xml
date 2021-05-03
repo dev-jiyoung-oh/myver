@@ -13,6 +13,7 @@
 	   		<!-- <typeAlias type="com.project.myver.util.PageUtil" alias="PageUtil"/>  -->
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
 	   		<typeAlias type="com.project.myver.dto.MemoDTO" alias="memoDTO"/>
+	   		<typeAlias type="com.project.myver.dto.FileDTO" alias="fileDTO"/>
    		</typeAliases>
    		
    		<!-- SQL 설정 
