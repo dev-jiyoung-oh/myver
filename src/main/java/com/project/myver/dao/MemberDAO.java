@@ -23,21 +23,21 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	}
 	
 	// 21.04.21 아이디 존재 확인
-	public int getIDCnt(String id) {
-		int result = session.selectOne("member.getIDCnt", id);
+	public int getIdCnt(String id) {
+		int result = session.selectOne("member.getIdCnt", id);
 		
 		if(result==1) {
-			System.out.println("MemberDAO.getIDCnt() - " + id+" 유저 존재함");
+			System.out.println("MemberDAO.getIdCnt() - " + id+" 유저 존재함");
 		}else {
-			System.out.println("MemberDAO.getIDCnt() - " + id+" 유저 " + result + "명");
+			System.out.println("MemberDAO.getIdCnt() - " + id+" 유저 " + result + "명");
 		}
 		
 		return result;
 	}
 	
 	// 21.04.17 최근 접속일 갱신
-	public void logDate(String id) {
-		int i = session.update("member.logDate", id);
+	public void updateLog_date(String id) {
+		int i = session.update("member.updateLog_date", id);
 		
 		if(i==0) {
 			System.out.println(id+" - 최근 접속일 갱신 실패");
@@ -51,9 +51,9 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		MemberDTO memdto = session.selectOne("member.getById", id);
 		
 		if(memdto==null) { 
-			System.out.println("MemberDAO.getbyId - 해당 아이디 없음.");
+			System.out.println("MemberDAO.getById - 해당 아이디 없음.");
 		}else {
-			System.out.println("MemberDAO.getbyId - " + memdto.toString());
+			System.out.println("MemberDAO.getById - " + memdto.toString());
 		}
 		return memdto;
 	}
@@ -71,8 +71,8 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	}
 
 	// 21.05.03 회원 아이디로 회원 번호 가져오기
-	public int selectNoById(String id) {
-		int member_no = session.selectOne("member.selectNoById", id);
+	public int selectMember_noById(String id) {
+		int member_no = session.selectOne("member.selectMember_noById", id);
 		return member_no;
 	}
 

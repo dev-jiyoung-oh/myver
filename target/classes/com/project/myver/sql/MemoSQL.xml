@@ -3,28 +3,48 @@
 "HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="memo">
 
-	<!-- 21.05.03 쪽지 table에 데이터 삽입 -->
+	<!-- 'memo' table =============================================================== -->
+	<!-- 21.05.03 데이터 삽입 -->
 	<insert id="insertMemo" parameterType="memoDTO" 
 		useGeneratedKeys="true" keyProperty="memo_no">
-		insert into member (writer_id, writer_name, receiver_id, receiver_name, title, content, date, has_file)
+		insert into memo (writer_id, writer_name, receiver_id, receiver_name, title, content, date, has_file)
 		values (#{writer_id}, #{writer_name}, #{receiver_id}, #{receiver_name}, #{title}, #{content}, SYSDATE(), #{has_file})
 	</insert>
 	
-	<!-- 21.05.03 쪽지 첨부파일 table에 데이터 삽입 -->
-	<insert id="insertMemoFile" parameterType="memoDTO" 
+	<!-- 21.05.04 'memo_no'에 해당하는 레코드 크기 가져오기 -->
+	<select id="selectRecordSizeFromMemo" parameterType="Integer" resultType="Integer">
+		select ifnull(MAX(LENGTH(memo_no)+LENGTH(writer_id)+LENGTH(writer_name)+LENGTH(receiver_id)+LENGTH(receiver_name)+LENGTH(title)+LENGTH(content)+LENGTH(DATE)+LENGTH(has_file)+LENGTH(memo_size)),0) from memo 
+		where memo_no = #{memo_no}
+	</select>
+
+	<update id="updateMemo_size" parameterType="memoDTO">
+		update memo SET memo_size = #{memo_size} 
+		where id = #{memo_no}
+	</update>
+
+
+	<!-- 'memo_file' table =============================================================== -->
+	<!-- 21.05.03 데이터 삽입 -->
+	<insert id="insertMemo_file" parameterType="memoDTO" 
 		useGeneratedKeys="true" keyProperty="memo_file_no">
-		insert into member (memo_no, file_seq, file_no)
+		insert into memo_file (memo_no, file_seq, file_no)
 		values (#{memo_no}, #{file_seq}, #{file_no})
 	</insert>
 	
-	<!-- 21.04.21 아이디 존재 확인
-	<select id="getIDCnt" resultType="Integer" parameterType="String">
-		select count(id) from member
-		where id = #{id}
+	<!-- 21.05.04 'memo_file_no'에 해당하는 레코드 크기 가져오기 -->
+	<select id="selectRecordSizeFromMemo_file" parameterType="Integer" resultType="Integer">
+		select ifnull(MAX(LENGTH(memo_file_no)+LENGTH(memo_no)+LENGTH(file_seq)+LENGTH(file_no)),0) from memo_file
+		where memo_file_no = #{memo_file_no}
 	</select>
-	21.04.17 최근 접속일 갱신
-	<update id="logDate" parameterType="String">
-		update member SET log_date = SYSDATE() where id = #{id}
-	</update> -->
+	
+	
+	<!-- 'my_memo' table =============================================================== -->
+	<!-- 21.05.04 데이터 삽입 -->
+	<insert id="insertMy_memo">
+		insert into my_memo (member_no, memo_no, is_read, box)
+		values (#{member_no}, #{memo_no}, #{is_read}, #{box})
+	</insert>
+	
+	
 </mapper>
 	

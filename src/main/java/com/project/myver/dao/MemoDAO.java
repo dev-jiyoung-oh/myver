@@ -10,53 +10,58 @@ public class MemoDAO extends SqlSessionDaoSupport {
 	@Autowired
 	SqlSessionTemplate session;
 
-	// 21.05.03 memo table에 데이터 삽입하고 쪽지 번호 가져오기 
+	// 'memo' table =================================================
+	// 21.05.03 데이터 삽입하고 'memo_no' 가져오기 
 	public int insertMemo(MemoDTO memoDTO) {
-		int memoNo = session.insert("memo.insertMemo", memoDTO);
-		return memoNo;
+		int memo_no = session.insert("memo.insertMemo", memoDTO);
+		return memo_no;
 	}
 
-	// 21.05.03 해당 쪽지 번호 레코드의 크기 가져오기 from memo table(미완)
-	public int selectRecordSizeFromMemo(int memoNo) {
-		int recordSize = session.selectOne("memo.selectRecordSizeFromMemo", memoNo);
+	// 21.05.03 'memo_no'에 해당하는 레코드의 크기 가져오기 
+	public int selectRecordSizeFromMemo(int memo_no) {
+		int recordSize = session.selectOne("memo.selectRecordSizeFromMemo", memo_no);
 		return recordSize;
 	}
 
-	// 21.05.03 쪽지 첨부파일 table에 데이터 삽입하고 쪽지 첨부파일 번호 가져오기
-	public int insertMemoFile(MemoDTO memoDTO) {
-		int memoFileNo = session.insert("memo.insertMemoFile", memoDTO);
-		return memoFileNo;
-	}
-
-	// 21.05.03 해당 쪽지 파일 번호 레코드의 크기 가져오기 from memo_file table(미완)
-	public int selectRecordSizeFromMemoFile(int memoFileNo) {
-		int recordSize = session.selectOne("memo.selectRecordSizeFromMemoFile", memoFileNo);
-		return recordSize;
-	}
-
-	// 21.05.03 쪽지 번호에 해당하는 레코드의 쪽지 크기 수정
-	public void updateMemoSize(MemoDTO memoDTO) {
-		int ok = session.update("memo.updateMemoSize", memoDTO);
+	// 21.05.03 'memo_no'에 해당하는 레코드의 'memo_size' 수정
+	public void updateMemo_size(MemoDTO memoDTO) {
+		int ok = session.update("memo.updateMemo_size", memoDTO);
 		
 		if(ok==0) {
-			System.out.println("MemoDAO-updateMemoSize 실패");
+			System.out.println("MemoDAO-updateMemo_size 실패");
 		}else if(ok==1) {
-			System.out.println("MemoDAO-updateMemoSize 성공");
+			System.out.println("MemoDAO-updateMemo_size 성공");
 		}else {
-			System.out.println("MemoDAO-updateMemoSize 예상치 못한 오류");
+			System.out.println("MemoDAO-updateMemo_size 예상치 못한 오류");
 		}
 	}
+	
+	
+	// 'memo_file' table =================================================
+	// 21.05.03 데이터 삽입하고 'memo_file_no' 가져오기
+	public int insertMemo_file(MemoDTO memoDTO) {
+		int memo_file_no = session.insert("memo.insertMemo_file", memoDTO);
+		return memo_file_no;
+	}
 
-	// 21.05.03 my_memo table에 데이터 추가
-	public void insertMyMemo(MemoDTO memoDTO) {
-		int ok = session.insert("memo.insertMyMemo", memoDTO);
+	// 21.05.03 'memo_file_no'에 해당하는 레코드의 크기 가져오기
+	public int selectRecordSizeFromMemo_file(int memo_file_no) {
+		int recordSize = session.selectOne("memo.selectRecordSizeFromMemo_file", memo_file_no);
+		return recordSize;
+	}
+	
+
+	// 'my_memo' table =================================================
+	// 21.05.03 데이터 추가
+	public void insertMy_memo(MemoDTO memoDTO) {
+		int ok = session.insert("memo.insertMy_memo", memoDTO);
 		
 		if(ok==0) {
-			System.out.println("MemoDAO-insertMyMemo 실패");
+			System.out.println("MemoDAO-insertMy_memo 실패");
 		}else if(ok==1) {
-			System.out.println("MemoDAO-insertMyMemo 성공");
+			System.out.println("MemoDAO-insertMy_memo 성공");
 		}else {
-			System.out.println("MemoDAO-insertMyMemo 예상치 못한 오류");
+			System.out.println("MemoDAO-insertMy_memo 예상치 못한 오류");
 		}
 	}
 }

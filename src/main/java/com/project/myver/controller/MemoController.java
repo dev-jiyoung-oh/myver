@@ -61,37 +61,37 @@ public class MemoController {
 				MemoDTO memoDTO) {
 		
 		List<MultipartFile> fileList = mtfRequest.getFiles("file");
-		Double memoSize = 0D;
-		int memoNo =-1;
+		Double memo_size = 0D;
+		int memo_no =-1;
 		
 		if(fileList != null) { // 파일 첨부한 경우
 			memoDTO.setHas_file(1); // 1 : 첨부파일 있음
 			
-			int fileSeq = 1; // 첨부순서
+			int file_seq = 1; // 첨부순서
 			
-			// 21.05.02 1. memo table에 데이터 삽입하고 쪽지 번호 가져오기 
-			memoNo = memoSVC.insertMemo(memoDTO);	
+			// 21.05.02 1. 'memo' table에 데이터 삽입하고 쪽지 번호 가져오기 
+			memo_no = memoSVC.insertMemo(memoDTO);	
 			
-			memoSize += memoSVC.selectRecordSizeFromMemo(memoNo); // 해당 레코드의 크기 가져와 memoSize에 추가
+			memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 			
 			for (MultipartFile mf : fileList) {
-				String saveName = "";
+				String saved_name = "";
 				
 				// 21.05.02 2. 첨부파일 upload 폴더에 저장 
 				try {
-					memoSize += mf.getSize(); // memoSize에 파일 크기 더하기
+					memo_size += mf.getSize(); // memo_size에 파일 크기 더하기
 					
-					saveName = fileSVC.upload(mf,0,memoDTO.getWriter_id()); // 0: 쪽지 영역
+					saved_name = fileSVC.upload(mf,0,memoDTO.getWriter_id()); // 0: 쪽지 영역
 					
-					// 21.05.02 3. 첨부파일 테이블에 데이터 삽입하고 파일번호 가져오기 (종류 0:쪽지) 
-					int fileNo = fileSVC.insert(new FileDTO(0,mf.getOriginalFilename(),saveName,(double)mf.getSize()));
-					memoSize += fileSVC.selectRecordSize(fileNo); // 해당 레코드의 크기 가져와 memoSize에 추가
+					// 21.05.02 3. 'file' table에 데이터 삽입하고 파일번호 가져오기 (종류 0:쪽지) 
+					int file_no = fileSVC.insert(new FileDTO(0,mf.getOriginalFilename(),saved_name,mf.getSize()));
+					memo_size += fileSVC.selectRecordSize(file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 					
-					// 21.05.02 4. 쪽지첨부파일 table에 데이터 삽입 (첨부순서:fileSeq) 후 쪽지 첨부파일 번호 가져오기
-					int memoFileNo = memoSVC.insertMemoFile(memoNo,fileSeq,fileNo);
-					memoSize += memoSVC.selectRecordSizeFromMemoFile(memoFileNo); // 해당 레코드의 크기 가져와 memoSize에 추가
+					// 21.05.02 4. 'memo_file' table에 데이터 삽입 (첨부순서:file_seq) 후 쪽지 첨부파일 번호 가져오기
+					int memo_file_no = memoSVC.insertMemo_file(memo_no,file_seq,file_no);
+					memo_size += memoSVC.selectRecordSizeFromMemo_file(memo_file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 					
-					fileSeq++;
+					file_seq++;
 				} catch(IllegalStateException e) {
 					e.printStackTrace();
 	            } catch (IOException e) {
@@ -102,29 +102,29 @@ public class MemoController {
 		}else {
 			memoDTO.setHas_file(0); // 0 : 첨부파일 없음
 			
-			// memo table에 데이터 삽입 / 쪽지 번호 가져오기 
-			memoNo = memoSVC.insertMemo(memoDTO);
+			// 'memo' table에 데이터 삽입 / 쪽지 번호 가져오기 
+			memo_no = memoSVC.insertMemo(memoDTO);
 			
-			// 해당 레코드의 크기 가져오기 및 memoSize에 추가
-			memoSize += memoSVC.selectRecordSizeFromMemo(memoNo); 
+			// 'memo' table에서 해당 레코드의 크기 가져오기 및 memo_size에 추가
+			memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); 
 		}
 		
-		// 21.05.03 쪽지 번호에 해당하는 레코드의 쪽지 크기 수정
-		memoSVC.updateMemoSize(memoNo, memoSize);
+		// 21.05.03 memo_no에 해당하는 레코드의 쪽지 크기 수정
+		memoSVC.updateMemo_size(memo_no, memo_size);
 		
 		
-		// 21.05.03 발신자의 my_memo table에 추가 (보관함:2)
-		memoSVC.insertMyMemo(memSVC.selectNoById(memoDTO.getWriter_id()),memoNo,2); // insertMyMemo(member_no,memo_no,box);
+		// 21.05.03 발신자의 'my_memo' table에 추가 (발신자 - 읽음:1 / 보관함:2)
+		memoSVC.insertMy_memo(memSVC.selectMember_noById(memoDTO.getWriter_id()), memo_no, 1, 2); // insertMyMemo(member_no,memo_no,is_read,box);
 		
 		// 수신자id가 회원 중에 존재하지 않는 경우
-		if(memSVC.getIDCnt(memoDTO.getReceiver_id()) == 0) {
+		if(memSVC.getIdCnt(memoDTO.getReceiver_id()) == 0) {
 			// 본문 내용을 링크로! 그 링크를 첨부파일로... (rm:memo_popup, jsp:memo_popup)
 			
 			// 작성자에게 메일 보내기
 			
 		}else { // 수신자가 존재하는 경우
-			// my_memo table에 추가 (수신자 - 보관함:0)
-			memoSVC.insertMyMemo(memSVC.selectNoById(memoDTO.getReceiver_id()),memoNo,0);
+			// 'my_memo' table에 추가 (수신자 - 읽음:0 / 보관함:0)
+			memoSVC.insertMy_memo(memSVC.selectMember_noById(memoDTO.getReceiver_id()), memo_no, 0, 0);
 		}
 		
 

@@ -28,13 +28,13 @@ public class MemberService {
 	}
 	
 	// 21.04.21 아이디 존재 확인
-	public int getIDCnt(String id) {
-		return memDAO.getIDCnt(id);
+	public int getIdCnt(String id) {
+		return memDAO.getIdCnt(id);
 	}
 		
 	// 21.04.17 최근 접속일 갱신
-	public void logDate(String id) {
-		memDAO.logDate(id);
+	public void updateLog_date(String id) {
+		memDAO.updateLog_date(id);
 	}
 	
 	// 21.04.18 전화번호로 아이디 찾기
@@ -51,8 +51,8 @@ public class MemberService {
 	}
 
 	// 21.05.03 회원 아이디로 회원 번호 가져오기
-	public int selectNoById(String id) {
-		int member_no = memDAO.selectNoById(id);
+	public int selectMember_noById(String id) {
+		int member_no = memDAO.selectMember_noById(id);
 		return member_no;
 	}
 }

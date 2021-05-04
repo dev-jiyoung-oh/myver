@@ -7,7 +7,7 @@ public class FileDTO {
 	// constructor(생성자)
 	public FileDTO() {}
 	
-	public FileDTO(int area, String original_name, String saved_name, Double file_size) {
+	public FileDTO(int area, String original_name, String saved_name, double file_size) {
 		this.area = area;
 		this.original_name = original_name;
 		this.saved_name = saved_name;
@@ -20,7 +20,7 @@ public class FileDTO {
 	private int  area;				// 영역 (쪽지1/블로그2/카페3)
 	private String original_name;	// 파일 본래이름
 	private String saved_name;		// 파일 저장명
-	private Double file_size;		// 파일 크기
+	private double file_size;		// 파일 크기
 	private Date date;				// 등록일
 	private int can_delete;			// 삭제 가능 여부 (불가능0/가능1)
 	
@@ -49,10 +49,10 @@ public class FileDTO {
 	public void setOriginal_name(String original_name) {
 		this.original_name = original_name;
 	}
-	public Double getFile_size() {
+	public double getFile_size() {
 		return file_size;
 	}
-	public void setFile_size(Double file_size) {
+	public void setFile_size(double file_size) {
 		this.file_size = file_size;
 	}
 	public Date getDate() {

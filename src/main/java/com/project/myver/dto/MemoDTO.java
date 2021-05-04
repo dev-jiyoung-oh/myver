@@ -14,7 +14,7 @@ public class MemoDTO {
 	private String content;		  // 내용
 	private Date date;			  // 작성일자
 	private int has_file;		  // 첨부파일 유무 (0:없음 / 1:있음)
-	private Double memo_size;	  // 쪽지 크기
+	private double memo_size;	  // 쪽지 크기
 	
 	// 'my_memo' table
 	private int my_memo_mo;		  // 나의 쪽지 번호
@@ -86,10 +86,10 @@ public class MemoDTO {
 	public void setHas_file(int has_file) {
 		this.has_file = has_file;
 	}
-	public Double getMemo_size() {
+	public double getMemo_size() {
 		return memo_size;
 	}
-	public void setMemo_size(Double memo_size) {
+	public void setMemo_size(double memo_size) {
 		this.memo_size = memo_size;
 	}
 	public int getMy_memo_mo() {

@@ -112,7 +112,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		System.out.println("findPw-id:"+memDTO.getUsername());
 		
 		String result = "";
-		int cnt = memSVC.getIDCnt(memDTO.getUsername());
+		int cnt = memSVC.getIdCnt(memDTO.getUsername());
 		
 		if(cnt==1) {
 			result = "success";

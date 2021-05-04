@@ -74,7 +74,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		clearAuthenticationAttributes(request);
 		
 		// 21.04.17 최근 접속일 갱신
-		memSVC.logDate(request.getParameter("id"));
+		memSVC.updateLog_date(request.getParameter("id"));
 		
 		int intRedirectStrategy = decideRedirectStrategy(request, response);
 		switch(intRedirectStrategy) {
