@@ -136,4 +136,10 @@ public class MemoController {
 		
 		return mv;
 	}
+	
+	// 21.05.05 쪽지 팝업
+	@RequestMapping(value = "/memo_popup", method = RequestMethod.POST)
+	public ModelAndView memoPopup(ModelAndView mv, MemoDTO memoDTO) {
+		return mv;
+	}
 }
