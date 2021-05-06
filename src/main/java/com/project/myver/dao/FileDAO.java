@@ -17,8 +17,8 @@ public class FileDAO extends SqlSessionDaoSupport {
 	}
 
 	// 21.05.03 'file_no'로 해당 레코드의 크기 가져오기
-	public int selectRecordSize(int file_no) {
-		int recordSize = session.selectOne("file.selectRecordSize", file_no);
+	public double selectRecordSize(int file_no) {
+		double recordSize = session.selectOne("file.selectRecordSize", file_no);
 		return recordSize;
 	}
 }

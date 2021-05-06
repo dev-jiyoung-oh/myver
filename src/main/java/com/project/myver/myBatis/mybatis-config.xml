@@ -16,10 +16,12 @@
 	   		<typeAlias type="com.project.myver.dto.FileDTO" alias="fileDTO"/>
    		</typeAliases>
    		
-   		<!-- SQL 설정 
+   		<!-- SQL 설정
    		<mappers>
-	   		<mapper resource="/com/project/myver/sql/memberSQL.xml"/>
-   		</mappers>
-  		-->
+	   		<mapper resource="/com/project/myver/sql/MemberSQL.xml"/>
+	   		<mapper resource="/com/project/myver/sql/MemoSQL.xml"/>
+	   		<mapper resource="/com/project/myver/sql/FileSQL.xml"/>
+   		</mappers> -->
+  		
     </configuration>
 

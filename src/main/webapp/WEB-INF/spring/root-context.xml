@@ -25,7 +25,6 @@
 		- 추가사항 : MySQL, MyBatis 에 대한 설정
 	    		  dataSource, sqlSessionFactory
         - 참고사이트 : https://all-record.tistory.com/175?category=733072 -->
-	
 	<!-- MySQL dataSource -->
 	<!-- dataSource : MySQL과 연결을 담당. JDBC커넥션을 처리하는 기능을 가지고 있기에 DB연동작업에 필요 -->
 	<!-- 2021.01.10
@@ -52,8 +51,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath*:/com/project/myver/sql/*SQL.xml"/>
-        <!-- <property name="mapperLocations" value="classpath*:/com/project/myver/sql/*SQL.xml"></property>-->
+        <property name="mapperLocations" value="classpath*:/com/project/myver/sql/*SQL.xml"></property>
     </bean>
 
 
@@ -65,7 +63,7 @@
 							 	이걸 등록해두면 개발자가 직접 트랜잭션 관리나 DB 연결, 종료를 해야하는 작업을 줄일 수 있음. -->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
           destroy-method="clearCache">
-        <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
     </bean>
 	
 	
