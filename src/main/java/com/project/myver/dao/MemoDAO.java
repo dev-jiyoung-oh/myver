@@ -13,13 +13,15 @@ public class MemoDAO extends SqlSessionDaoSupport {
 	// 'memo' table =================================================
 	// 21.05.03 데이터 삽입하고 'memo_no' 가져오기 
 	public int insertMemo(MemoDTO memoDTO) {
-		int memo_no = session.insert("memo.insertMemo", memoDTO);
+		session.insert("memo.insertMemo", memoDTO);
+		int memo_no = memoDTO.getMemo_no();
+		System.out.println("MemoDAO.insertMemo - memo_no : "+memo_no);
 		return memo_no;
 	}
 
 	// 21.05.03 'memo_no'에 해당하는 레코드의 크기 가져오기 
-	public int selectRecordSizeFromMemo(int memo_no) {
-		int recordSize = session.selectOne("memo.selectRecordSizeFromMemo", memo_no);
+	public double selectRecordSizeFromMemo(int memo_no) {
+		double recordSize = session.selectOne("memo.selectRecordSizeFromMemo", memo_no);
 		return recordSize;
 	}
 
@@ -40,13 +42,15 @@ public class MemoDAO extends SqlSessionDaoSupport {
 	// 'memo_file' table =================================================
 	// 21.05.03 데이터 삽입하고 'memo_file_no' 가져오기
 	public int insertMemo_file(MemoDTO memoDTO) {
-		int memo_file_no = session.insert("memo.insertMemo_file", memoDTO);
+		session.insert("memo.insertMemo_file", memoDTO);
+		int memo_file_no = memoDTO.getMemo_file_no();
+		System.out.println("MemoDAO.insertMemo - memo_no : "+memo_file_no);
 		return memo_file_no;
 	}
 
 	// 21.05.03 'memo_file_no'에 해당하는 레코드의 크기 가져오기
-	public int selectRecordSizeFromMemo_file(int memo_file_no) {
-		int recordSize = session.selectOne("memo.selectRecordSizeFromMemo_file", memo_file_no);
+	public double selectRecordSizeFromMemo_file(int memo_file_no) {
+		double recordSize = session.selectOne("memo.selectRecordSizeFromMemo_file", memo_file_no);
 		return recordSize;
 	}
 	

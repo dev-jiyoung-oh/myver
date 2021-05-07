@@ -11,7 +11,7 @@
 	</insert>
 	
 	<!-- 21.05.04 'file_no'에 해당하는 레코드 크기 가져오기 -->
-	<select id="selectRecordSize" parameterType="Integer" resultType="Integer">
+	<select id="selectRecordSize" parameterType="Integer" resultType="Double">
 		select ifnull(MAX(LENGTH(file_no)+LENGTH(area)+LENGTH(saved_name)+LENGTH(original_name)+LENGTH(file_size)+LENGTH(date)+LENGTH(can_delete)),0) from file
 		where file_no = #{file_no}
 	</select>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-"HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
 
 	<!-- 21.04.18 회원가입 -->
@@ -45,7 +45,7 @@
 	</update>
 	
 	<!-- 21.05.03 회원 아이디로 회원 번호 가져오기 -->
-	<select id="selectMember_noById" parameterType="Integer" >
+	<select id="selectMember_noById" parameterType="String" resultType="Integer">
 		select member_no from member
 		where id = #{id}
 	</select>

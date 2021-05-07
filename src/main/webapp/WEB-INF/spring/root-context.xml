@@ -51,9 +51,8 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath*:/com/project/myver/sql/*SQL.xml"></property>
+        <property name="mapperLocations" value="classpath:com/project/myver/sql/*.xml"/>
     </bean>
-
 
 	<!-- 2021.01.10
 		- 추가사항 : SqlSessionTemplate 추가
@@ -82,7 +81,6 @@
 		<property name="sqlSessionTemplate" ref="sqlSession"/>
 	</bean>
 	<bean id="fileSVC" class="com.project.myver.service.FileService"/>
-	
 	
 	
 	

@@ -19,8 +19,8 @@ public class MemoService {
 	}
 
 	// 21.05.03 해당 'memo_no' 레코드의 크기 가져오기
-	public int selectRecordSizeFromMemo(int memo_no) {
-		int recordSize = memoDAO.selectRecordSizeFromMemo(memo_no);
+	public double selectRecordSizeFromMemo(int memo_no) {
+		double recordSize = memoDAO.selectRecordSizeFromMemo(memo_no);
 		return recordSize;
 	}
 	
@@ -57,8 +57,8 @@ public class MemoService {
 	}
 
 	// 21.05.03 'memo_file_no'에 해당하는 레코드의 크기 가져오기
-	public int selectRecordSizeFromMemo_file(int memo_file_no) {
-		int recordSize = memoDAO.selectRecordSizeFromMemo_file(memo_file_no);
+	public double selectRecordSizeFromMemo_file(int memo_file_no) {
+		double recordSize = memoDAO.selectRecordSizeFromMemo_file(memo_file_no);
 		return recordSize;
 	}
 

@@ -10,6 +10,7 @@
  		<typeAliases>
 	        <typeAlias type="java.lang.Integer" alias="Integer"/>
 		   	<typeAlias type="java.lang.String" alias="String"/>
+		   	<typeAlias type="java.lang.Double" alias="Double"/>
 	   		<!-- <typeAlias type="com.project.myver.util.PageUtil" alias="PageUtil"/>  -->
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
 	   		<typeAlias type="com.project.myver.dto.MemoDTO" alias="memoDTO"/>

@@ -12,14 +12,14 @@
 	</insert>
 	
 	<!-- 21.05.04 'memo_no'에 해당하는 레코드 크기 가져오기 -->
-	<select id="selectRecordSizeFromMemo" parameterType="Integer" resultType="Integer">
+	<select id="selectRecordSizeFromMemo" parameterType="Integer" resultType="Double">
 		select ifnull(MAX(LENGTH(memo_no)+LENGTH(writer_id)+LENGTH(writer_name)+LENGTH(receiver_id)+LENGTH(receiver_name)+LENGTH(title)+LENGTH(content)+LENGTH(DATE)+LENGTH(has_file)+LENGTH(memo_size)),0) from memo 
 		where memo_no = #{memo_no}
 	</select>
 
 	<update id="updateMemo_size" parameterType="memoDTO">
 		update memo SET memo_size = #{memo_size} 
-		where id = #{memo_no}
+		where memo_no = #{memo_no}
 	</update>
 
 
@@ -32,7 +32,7 @@
 	</insert>
 	
 	<!-- 21.05.04 'memo_file_no'에 해당하는 레코드 크기 가져오기 -->
-	<select id="selectRecordSizeFromMemo_file" parameterType="Integer" resultType="Integer">
+	<select id="selectRecordSizeFromMemo_file" parameterType="Integer" resultType="Double">
 		select ifnull(MAX(LENGTH(memo_file_no)+LENGTH(memo_no)+LENGTH(file_seq)+LENGTH(file_no)),0) from memo_file
 		where memo_file_no = #{memo_file_no}
 	</select>

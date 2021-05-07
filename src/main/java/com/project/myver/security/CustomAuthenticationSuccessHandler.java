@@ -73,8 +73,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			Authentication authentication) throws IOException, ServletException {
 		clearAuthenticationAttributes(request);
 		
+		HttpSession session = request.getSession(); // 세션 가져오기
+		
 		// 21.04.17 최근 접속일 갱신
 		memSVC.updateLog_date(request.getParameter("id"));
+		
+		// 21.05.07 세션에 로그인 한 회원 id 저장
+		session.setAttribute("MID",request.getParameter("id"));
 		
 		int intRedirectStrategy = decideRedirectStrategy(request, response);
 		switch(intRedirectStrategy) {

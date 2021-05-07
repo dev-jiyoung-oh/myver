@@ -59,6 +59,7 @@ public class MemoController {
 				ModelAndView mv,
 				MultipartHttpServletRequest mtfRequest,
 				MemoDTO memoDTO) {
+		System.out.println(memoDTO.memoToString());
 		boolean memoWrite_success = true;
 		
 		try {
@@ -66,7 +67,8 @@ public class MemoController {
 			double memo_size = 0D;
 			int memo_no =-1;
 			
-			if(fileList != null) { // 파일 첨부한 경우
+			if(fileList != null && !fileList.isEmpty()) { // 파일 첨부한 경우
+				for (MultipartFile mf : fileList) {System.out.println(mf.toString());}
 				memoDTO.setHas_file(1); // 1 : 첨부파일 있음
 				
 				int file_seq = 1; // 첨부순서
@@ -77,6 +79,7 @@ public class MemoController {
 				memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 				
 				for (MultipartFile mf : fileList) {
+					System.out.println("파일 첨부 - "+mf.getOriginalFilename()+" "+mf.getSize());
 					String saved_name = "";
 					
 					try {
@@ -111,6 +114,7 @@ public class MemoController {
 				memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); 
 			}
 			
+			if(memo_no != -1) {
 			// 21.05.03 memo_no에 해당하는 레코드의 쪽지 크기 수정
 			memoSVC.updateMemo_size(memo_no, memo_size);
 			
@@ -152,6 +156,7 @@ public class MemoController {
 			}else { // 수신자가 존재하는 경우
 				// 'my_memo' table에 추가 (수신자 - 읽음:0 / 보관함:0)
 				memoSVC.insertMy_memo(memSVC.selectMember_noById(memoDTO.getReceiver_id()), memo_no, 0, 0);
+			}
 			}
 		} catch(Exception e) {
 			System.out.println("MemoController-memoWrite() 실패");

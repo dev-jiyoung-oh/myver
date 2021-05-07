@@ -27,6 +27,7 @@
 			<input id="logoutBtn" type="submit" value="Logout" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	</form>
+	${sessionScope.MID} 님
 </sec:authorize>
 
 <%-- 관리자 로그인 시 --%>
