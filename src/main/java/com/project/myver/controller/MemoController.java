@@ -33,7 +33,7 @@ public class MemoController {
 	@RequestMapping(value = "/list")
 	public ModelAndView memoList(MemberDTO memdto, ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
-		
+		// String id = session.getAttribute("MID"); , HttpSession session
 		//mv.addObject("ID",id);
 		
 		mv.setViewName("member/memo/list");
