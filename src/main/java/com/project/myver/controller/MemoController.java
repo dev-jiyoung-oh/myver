@@ -179,13 +179,13 @@ public class MemoController {
 	
 	// 21.05.05 쪽지 팝업 폼(아이디랑 비밀번호 입력하는 폼)
 	@RequestMapping(value = "/popup", method = RequestMethod.GET)
-	public ModelAndView memoPopupFrm(ModelAndView mv, int mfn) {
+	public ModelAndView memoPopupFrm(ModelAndView mv, int mn) {
 		return mv;
 	}
 	
 	// 21.05.05 쪽지 팝업
 	@RequestMapping(value = "/popup", method = RequestMethod.POST)
-	public ModelAndView memoPopup(ModelAndView mv, int mfn, MemberDTO memDTO) {
+	public ModelAndView memoPopup(ModelAndView mv, int mn, MemberDTO memDTO) {
 		return mv;
 	}
 }
