@@ -1,5 +1,8 @@
 package com.project.myver.dao;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +70,18 @@ public class MemoDAO extends SqlSessionDaoSupport {
 		}else {
 			System.out.println("MemoDAO-insertMy_memo 예상치 못한 오류");
 		}
+	}
+	
+	// 테이블 조인 ============================================================
+	/* 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - member_no랑 box에 해당하는 데이터 가져오기
+	public ArrayList<MemoDTO> selectMemoAndMy_memo(Map<String,Integer> member_noAndBox) {
+		ArrayList<MemoDTO> my_memo_list = (ArrayList)session.selectList("memo.selectMemoAndMy_memo", member_noAndBox);
+		return my_memo_list;
+	}
+	*/
+	// 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - member_no랑 box에 해당하는 데이터 가져오기
+	public ArrayList<MemoDTO> selectMemoAndMy_memo(int member_no) {
+		ArrayList<MemoDTO> my_memo_list = (ArrayList)session.selectList("memo.selectMemoAndMy_memo", member_no);
+		return my_memo_list;
 	}
 }

@@ -1,7 +1,10 @@
 package com.project.myver.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.project.myver.dto.FileDTO;
 import com.project.myver.dto.MemberDTO;
@@ -29,13 +33,29 @@ public class MemoController {
 	@Autowired
 	private FileService fileSVC;
 	
-	// 21.04.26 쪽지24 리스트
+	// 21.04.26 쪽지 리스트
 	@RequestMapping(value = "/list")
-	public ModelAndView memoList(MemberDTO memdto, ModelAndView mv) {
+	public ModelAndView memoList(HttpSession session, ModelAndView mv, RedirectView rv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
-		// String id = session.getAttribute("MID"); , HttpSession session
-		//mv.addObject("ID",id);
+		String session_id = (String)session.getAttribute("MID");
 		
+		if(session_id==null) {
+			rv.setUrl("../login");
+			mv.setView(rv);
+			return mv;
+		}
+		
+		int session_no = memSVC.selectMember_noById(session_id);
+		/*ArrayList<ArrayList<MemoDTO>> memo_lists = memoSVC.selectAllFromMemoAndMy_memo(session_no);
+		
+		for(int i=0; i<memo_lists.size(); i++) { // my_memo.box별로
+			mv.addObject("my_memo_"+i,memo_lists.get(i));
+		}
+		*/
+		
+		ArrayList<MemoDTO> my_memo_list = memoSVC.selectAllFromMemoAndMy_memo(session_no);
+		
+		mv.addObject("MEMOLIST", my_memo_list);
 		mv.setViewName("member/memo/list");
 		
 		return mv;

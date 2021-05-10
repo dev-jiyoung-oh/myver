@@ -1,5 +1,8 @@
 package com.project.myver.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +76,30 @@ public class MemoService {
 		memoDTO.setBox(box);
 		
 		memoDAO.insertMy_memo(memoDTO);
+	}
+	
+	// 테이블 조인 ============================================================
+	/* 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - 'member_no'에 해당하는 모든 데이터 가져오기(my_memo.box별로)
+	public ArrayList<ArrayList<MemoDTO>> selectAllFromMemoAndMy_memo(int member_no){
+		ArrayList<ArrayList<MemoDTO>> list = new ArrayList<>();
+		
+		for(int i=0; i<6; i++) {
+			HashMap<String,Integer> map = new HashMap<>();
+			map.put("member_no", member_no);
+			map.put("box", i);
+			
+			ArrayList<MemoDTO> my_memo_list = memoDAO.selectMemoAndMy_memo(map);
+			list.add(my_memo_list);
+		}
+		
+		return list;
+	}
+	*/
+	// 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - 'member_no'에 해당하는 모든 데이터 가져오기
+	public ArrayList<MemoDTO> selectAllFromMemoAndMy_memo(int member_no){
+		
+		ArrayList<MemoDTO> my_memo_list = memoDAO.selectMemoAndMy_memo(member_no);
+		
+		return my_memo_list;
 	}
 }
