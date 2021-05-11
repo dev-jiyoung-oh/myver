@@ -41,6 +41,11 @@ public class MemoDAO extends SqlSessionDaoSupport {
 		}
 	}
 	
+	// 21.05.12 'memo_no'에 해당하는 content 데이터 가져오기
+	public String selectContentByMemo_no(int memo_no) {
+		String content = session.selectOne("memo.selectContentByMemo_no", memo_no);
+		return content;
+	}
 	
 	// 'memo_file' table =================================================
 	// 21.05.03 데이터 삽입하고 'memo_file_no' 가져오기
@@ -84,4 +89,6 @@ public class MemoDAO extends SqlSessionDaoSupport {
 		ArrayList<MemoDTO> my_memo_list = (ArrayList)session.selectList("memo.selectMemoAndMy_memo", member_no);
 		return my_memo_list;
 	}
+
+	
 }

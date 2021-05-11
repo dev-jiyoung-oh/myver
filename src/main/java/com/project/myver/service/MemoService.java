@@ -46,6 +46,12 @@ public class MemoService {
 		return memo_no;
 	}
 	
+	// 21.05.12 'memo_no'에 해당하는 content 데이터 가져오기
+	public String selectContentByMemo_no(int memo_no) {
+		String content = memoDAO.selectContentByMemo_no(memo_no);
+		return content;
+	}
+		
 	// 'memo_file' table =================================================
 	// 21.05.03 데이터 삽입하고 'memo_file_no' 가져오기
 	public int insertMemo_file(int memo_no, int file_seq, int file_no) {
@@ -102,4 +108,6 @@ public class MemoService {
 		
 		return my_memo_list;
 	}
+
+	
 }

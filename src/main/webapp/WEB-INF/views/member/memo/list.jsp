@@ -7,6 +7,66 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.min.js"></script>
+<script>
+/*
+function getContent(event){
+	alert($(event.currentTarget));
+}*/
+	$(function(){
+		//id => $('#아이디밸류')
+		//class => $('.클래스밸류')
+		//name => $('[name="네임밸류"]')
+		/*
+		$('.getContent').click{
+			$target = $(event.target);
+			$.ajax({ 
+				type: "POST", 
+				url : "${pageContext.request.contextPath}/findPwAuth", 
+				data: { id : ${ID}, phone : $('[name="phone"]').val() }, 
+				async: false, // 동기 방식으로 처리(아작스 처리 후 return isok;)
+				success : function(result){
+					if(result != null){
+						alert(result);
+					}else {
+						alert('실패');
+					}
+				}, 
+				error: function(request,status,error) { 
+					alert("????"+"code = "+ request.status + " message = " + request.responseText + " error = " + error); 
+				} 
+			})
+			
+			return isok;
+		})*/
+		
+		$('.title').click(function(event){
+			
+			/*
+			for(var key in event.target){
+				console.log("attributes:"+key+", value:"+event.target[key]);
+			}
+			*/
+			// alert(event.target["innerHTML"]);
+			$.ajax({ 
+				type: "POST", 
+				url : "${pageContext.request.contextPath}/memo/getContent", 
+				data: { mn :  "1"}, 
+				async: false, // 동기 방식으로 처리(아작스 처리 후 return isok;)
+				success : function(result){
+					if(result != null){
+						alert(result);
+					}else {
+						alert('실패');
+					}
+				}, 
+				error: function(request,status,error) { 
+					alert("????"+"code = "+ request.status + " message = " + request.responseText + " error = " + error); 
+				} 
+			})
+		})
+	})
+</script>
 </head>
 <body>
 	<div id="nav_snb" class="" style="width: 251px;">
@@ -103,20 +163,46 @@
 	</div>
 
 	<div>
-		<table>
+		<table border="1">
 			<c:forEach var="memo" items="${MEMOLIST}">
-			<tr>
+			<tr class="list|${memo.memo_no}">
 				<c:if test="${memo.box==2}"><td>발신</td></c:if>
 				<c:if test="${memo.box==0}"><td>개인</td></c:if>
 				<td><input type="checkbox"></td>
 				<td>${memo.is_important}</td>
 				<td>${memo.is_read}</td>
-				<td>${memo.writer_id}</td>
+				<td>${memo.writer_id} ${memo.writer_name}</td>
 				<td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td>
+				<td class="title">${memo.title}</td>
 				<td>${memo.date}</td>
 				<td>${memo.memo_size}</td>
 			</tr>
 			</c:forEach>
+		</table>
+		
+		<table border="1">
+			<tr>
+				<td id="is_important"></td>
+				<td id="title"></td>
+				<td id="date"></td>
+			</tr>
+			<tr>
+				<td>보낸사람</td>
+				<td colspan="2" id="writer">
+					${MEMO.writer_id} &lt;${MEMO.writer_name}&gt;
+				</td>
+			</tr>
+			<tr>
+				<td>받는사람</td>
+				<td colspan="2">
+					${MEMO.receiver_id} &lt;${MEMO.receiver_name}&gt;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					${MEMO.content}
+				</td>
+			</tr>
 		</table>
 	</div>			
 				

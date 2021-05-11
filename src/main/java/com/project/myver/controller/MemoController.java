@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -214,5 +215,17 @@ public class MemoController {
 	public ModelAndView memoRead(ModelAndView mv, int mn) {
 		mv.setViewName("member/memo/read");
 		return mv;
+	}
+	
+	// 21.05.12 'memo_no'에 해당하는 memo.content 데이터 가져오기 (mn: memo_no)
+	@RequestMapping(value = "/getContent", method = RequestMethod.POST)
+	@ResponseBody
+	public String selectContentByMemo_no(int mn) {
+		System.out.println("selectContentByMemo_no-meno_no: "+mn);
+		
+		String content = memoSVC.selectContentByMemo_no(mn);
+		
+		System.out.println("content: "+content);
+		return content;
 	}
 }

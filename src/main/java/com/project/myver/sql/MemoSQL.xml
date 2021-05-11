@@ -22,7 +22,13 @@
 		where memo_no = #{memo_no}
 	</update>
 
-
+	<!-- 21.05.12 'memo_no'에 해당하는 'content' 컬럼 데이터 가져오기 -->
+	<select id="selectContentByMemo_no" parameterType="Integer" resultType="String">
+		SELECT content 
+		FROM memo 
+		WHERE memo_no = #{memo_no}
+	</select>
+	
 	<!-- 'memo_file' table =============================================================== -->
 	<!-- 21.05.03 데이터 삽입 -->
 	<insert id="insertMemo_file" parameterType="memoDTO" 
@@ -52,9 +58,10 @@
 		WHERE memo.memo_no = my_memo.memo_no 
 		AND my_memo.member_no = #{member_no}  AND box = #{box}
 	</select> -->
-	<!-- 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - memo_no랑 box에 해당하는 데이터 가져오기 -->
+	<!-- 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - memo_no랑 box에 해당하는 데이터 가져오기 (memo.content 제외)-->
 	<select id="selectMemoAndMy_memo" parameterType="Integer" resultType="MemoDTO">
-		SELECT * FROM my_memo, memo 
+		SELECT my_memo_no, memo.memo_no, is_important, is_read, box, writer_id, writer_name, receiver_id, receiver_name, title, date, has_file, memo_size
+		FROM my_memo, memo 
 		WHERE memo.memo_no = my_memo.memo_no 
 		AND my_memo.member_no = #{member_no}
 	</select>
