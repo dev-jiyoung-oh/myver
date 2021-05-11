@@ -208,4 +208,11 @@ public class MemoController {
 	public ModelAndView memoPopup(ModelAndView mv, int mn, MemberDTO memDTO) {
 		return mv;
 	}
+	
+	// 21.05.11 쪽지 상세 (mn: memo_no)
+	@RequestMapping(value = "/read")
+	public ModelAndView memoRead(ModelAndView mv, int mn) {
+		mv.setViewName("member/memo/read");
+		return mv;
+	}
 }

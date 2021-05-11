@@ -112,7 +112,7 @@
 				<td>${memo.is_important}</td>
 				<td>${memo.is_read}</td>
 				<td>${memo.writer_id}</td>
-				<td>${memo.title}</td>
+				<td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td>
 				<td>${memo.date}</td>
 				<td>${memo.memo_size}</td>
 			</tr>
