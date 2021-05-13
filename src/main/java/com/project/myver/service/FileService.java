@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,21 +19,25 @@ public class FileService {
 	private FileDAO fileDAO;
 	
 	// 21.05.03 파일 업로드
-	public String upload(MultipartFile mf, int area, String id) throws IllegalStateException, IOException {
+	public String[] upload(MultipartFile mf, int area, String id) throws IllegalStateException, IOException {
 		StringBuffer path = new StringBuffer();
 		StringBuffer sb_name = new StringBuffer();
+		String saved_path = "";
 		
 		path.append("D:\\jy_project\\myver\\workspace\\upload\\");
 		
 		switch(area) {
 		case 0:
 			path.append("0_memo\\");
+			saved_path = "0_memo\\";
 			break;
 		case 1:
 			path.append("1_blog\\");
+			saved_path = "1_blog\\";
 			break;
 		case 2:
 			path.append("2_cafe\\");
+			saved_path = "2_cafe\\";
 			break;
 		}
 
@@ -50,7 +55,7 @@ public class FileService {
 		
 		mf.transferTo(new File(path.toString()));
 		
-		return saved_name;
+		return new String[]{saved_name, saved_path};
 	}
 	
 	// 21.05.06 동일한 이름의 파일이 이미 존재할 시, 현재 파일 이름 변경 (-> 업어쓰기가 되지 않도록 방지)
@@ -108,7 +113,7 @@ public class FileService {
 		fileOutfutStream.close(); // FileOutputStream을 닫아준다.(중요!)
 		
 		// 파일사이즈, 파일 저장명 리턴
-		return new FileDTO(0,original_name,saved_name,content.getBytes().length);
+		return new FileDTO(0, original_name, saved_name, path, content.getBytes().length);
 	}
 	
 	
@@ -123,6 +128,14 @@ public class FileService {
 	public double selectRecordSize(int file_no) {
 		double recordSize = fileDAO.selectRecordSize(file_no);
 		return recordSize;
+	}
+
+	
+	// 테이블 조인 ============================================================
+	// 21.05.13 'memo_file'테이블과 'file'테이블 조인 - 'memo_file.memo_no'에 해당하는 데이터 가져오기
+	public List<FileDTO> selectMemofileAndFile(int memo_no) {
+		List<FileDTO> fileList = fileDAO.selectMemofileAndFile(memo_no);
+		return fileList;
 	}
 	
 }

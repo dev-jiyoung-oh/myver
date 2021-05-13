@@ -7,10 +7,11 @@ public class FileDTO {
 	// constructor(생성자)
 	public FileDTO() {}
 	
-	public FileDTO(int area, String original_name, String saved_name, double file_size) {
+	public FileDTO(int area, String original_name, String saved_name, String saved_path, double file_size) {
 		this.area = area;
 		this.original_name = original_name;
 		this.saved_name = saved_name;
+		this.saved_path = saved_path;
 		this.file_size = file_size;
 	}
 
@@ -20,6 +21,7 @@ public class FileDTO {
 	private int  area;				// 영역 (쪽지1/블로그2/카페3)
 	private String original_name;	// 파일 본래이름
 	private String saved_name;		// 파일 저장명
+	private String saved_path;		// 파일 저장위치
 	private double file_size;		// 파일 크기
 	private Date date;				// 등록일
 	private int can_delete;			// 삭제 가능 여부 (불가능0/가능1)
@@ -42,6 +44,12 @@ public class FileDTO {
 	}
 	public void setSaved_name(String saved_name) {
 		this.saved_name = saved_name;
+	}
+	public String getSaved_path() {
+		return saved_path;
+	}
+	public void setSaved_path(String saved_path) {
+		this.saved_path = saved_path;
 	}
 	public String getOriginal_name() {
 		return original_name;
@@ -69,9 +77,12 @@ public class FileDTO {
 	}
 	
 	
+
 	@Override
 	public String toString() {
-		return "FileDTO [file_no=" + file_no + ", area=" + area + ", saved_name=" + saved_name + ", original_name="
-				+ original_name + ", file_size=" + file_size + ", date=" + date + ", can_delete=" + can_delete + "]";
+		return "FileDTO [file_no=" + file_no + ", area=" + area + ", original_name=" + original_name + ", saved_name="
+				+ saved_name + ", saved_path=" + saved_path + ", file_size=" + file_size + ", date=" + date
+				+ ", can_delete=" + can_delete + "]";
 	}
+	
 }
