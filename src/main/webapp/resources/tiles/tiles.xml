@@ -37,7 +37,7 @@
 	
 	<!-- 2. base를 상속받은것. 
 		 - 즉, body부분만 설정한 경로대로 갈아 끼우고, 나머지 header, footer는 base의 형식대로 상속받아 오는 것 --> 
-	<definition name="*" extends="base"> 
+	<!-- <definition name="*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
 	<definition name="/*" extends="base"> 
@@ -46,6 +46,16 @@
 	<definition name="/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
 	</definition>
-	
-	
+	<definition name="/*/*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" /> 
+	</definition>-->
+	<definition name="/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
+	</definition>
+	<definition name="/*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" /> 
+	</definition>
+	<definition name="/*/*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
+	</definition>
 </tiles-definitions>

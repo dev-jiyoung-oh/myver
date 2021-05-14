@@ -13,13 +13,15 @@
 function getContent(event){
 	alert($(event.currentTarget));
 }*/
-function getContent(n){
+function getContent(n, e){
+	alert(event.target.parent());
 	/*
 	for(var key in event.target){
 		console.log("attributes:"+key+", value:"+event.target[key]);
 	}
 	*/
 	// alert(event.target["innerHTML"]);
+	/*
 	$.ajax({ 
 		type: "POST", 
 		url : "${pageContext.request.contextPath}/memo/getContent", 
@@ -28,14 +30,15 @@ function getContent(n){
 		async: false, // 동기 방식으로 처리(아작스 처리 후 return isok;)
 		success : function(data){
 			if(data != null){
-				alert("성공 : "+data.content);
+				//alert("성공 : "+data.content);
 				
 				$.each(data.fileList, function(index, list){
-					alert(index);
-					alert(list.original_name+" "+list.saved_path+" "+list.saved_name);
+					//alert(index);
+					//alert(list.original_name+" "+list.saved_path+" "+list.saved_name);
 					var original_name = list.original_name;
 					var saved_name = list.saved_name;
 					var saved_path = list.saved_path;
+					$('#read_table').empty();
 					$('#read_table').append("<tr><td colspan='1'><a href='/filepath/"+saved_path+saved_name+"' download='"+original_name+"'>"+original_name+"</></td></tr>")
 				})
 				
@@ -49,6 +52,7 @@ function getContent(n){
 			alert("????"+"code = "+ request.status + " message = " + request.responseText + " error = " + error); 
 		}
 	})
+	*/
 }
 	$(function(){
 		//id => $('#아이디밸류')
@@ -59,7 +63,9 @@ function getContent(n){
 </script>
 </head>
 <body>
-	<div id="nav_snb" class="" style="width: 251px;">
+<div class="container-fluid">
+<div class="row">
+	<div id="nav_snb" class="col-md-4" style="width: 251px;">
 		<div class="btn_workset">
 			<a href="${pageContext.request.contextPath}/memo/write" class="">
 				<strong class=""><span>쪽지쓰기</span></strong>
@@ -152,27 +158,27 @@ function getContent(n){
 		</div>
 	</div>
 
-	<div>
+	<div class="col-md-8">
 		<table border="1" id="">
 			<c:forEach var="memo" items="${MEMOLIST}">
-			<tr class="list|${memo.memo_no}">
-				<c:if test="${memo.box==2}"><td>발신</td></c:if>
-				<c:if test="${memo.box==0}"><td>개인</td></c:if>
-				<td><input type="checkbox"></td>
-				<td>
-					<c:if test="${memo.is_important==0}">안중요</c:if>
-					<c:if test="${memo.is_important==1}">중요</c:if>
-				</td>
-				<td>
-					<c:if test="${memo.is_read==0}">안읽음</c:if>
-					<c:if test="${memo.is_read==1}">읽음</c:if>
-				</td>
-				<td>${memo.writer_id} ${memo.writer_name}</td>
-				<td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td>
-				<td onclick="getContent(${memo.memo_no})">${memo.title}</td>
-				<td>${memo.date}</td>
-				<td>${memo.memo_size}</td>
-			</tr>
+				<tr class="list|${memo.memo_no}">
+					<c:if test="${memo.box==2}"><td>발신</td></c:if>
+					<c:if test="${memo.box==0}"><td>개인</td></c:if>
+					<td><input type="checkbox"></td>
+					<td>
+						<c:if test="${memo.is_important==0}">안중요</c:if>
+						<c:if test="${memo.is_important==1}">중요</c:if>
+					</td>
+					<td>
+						<c:if test="${memo.is_read==0}">안읽음</c:if>
+						<c:if test="${memo.is_read==1}">읽음</c:if>
+					</td>
+					<td>${memo.writer_id} &lt;${memo.writer_name}&gt;</td>
+					<!-- <td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td> -->
+					<td onclick="getContent(${memo.memo_no}, event)">${memo.title}</td>
+					<td>${memo.date}</td>
+					<td>${memo.memo_size}</td>
+				</tr>
 			</c:forEach>
 		</table>
 		
@@ -184,24 +190,25 @@ function getContent(n){
 			</tr>
 			<tr>
 				<td>보낸사람</td>
-				<td colspan="2" id="writer">
+				<td colspan="2" id="read_writer">
 					${MEMO.writer_id} &lt;${MEMO.writer_name}&gt;
 				</td>
 			</tr>
 			<tr>
 				<td>받는사람</td>
-				<td colspan="2">
+				<td colspan="2" id="read_receiver">
 					${MEMO.receiver_id} &lt;${MEMO.receiver_name}&gt;
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3">
+				<td colspan="3" id="read_content">
 					${MEMO.content}
 				</td>
 			</tr>
 		</table>
 	</div>			
 				
-			
+</div>	
+</div>		
 </body>
 </html>
