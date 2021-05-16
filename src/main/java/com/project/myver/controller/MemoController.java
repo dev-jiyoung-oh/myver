@@ -94,7 +94,7 @@ public class MemoController {
 				for (MultipartFile mf : fileList) {System.out.println(mf.toString());}
 				memoDTO.setHas_file(1); // 1 : 첨부파일 있음
 				
-				int file_seq = 1; // 첨부순서
+				int file_index = 1; // 첨부순서
 				
 				// 21.05.02 1. 'memo' table에 데이터 삽입하고 쪽지 번호 가져오기 
 				memo_no = memoSVC.insertMemo(memoDTO);
@@ -119,10 +119,10 @@ public class MemoController {
 						memo_size += fileSVC.selectRecordSize(file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 						
 						// 21.05.02 4. 'memo_file' table에 데이터 삽입 (첨부순서:file_seq) 후 쪽지 첨부파일 번호 가져오기
-						int memo_file_no = memoSVC.insertMemo_file(memo_no,file_seq,file_no);
+						int memo_file_no = memoSVC.insertMemo_file(memo_no,file_index,file_no);
 						memo_size += memoSVC.selectRecordSizeFromMemo_file(memo_file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 						
-						file_seq++;
+						file_index++;
 					} catch(IllegalStateException e) {
 						e.printStackTrace();
 		            } catch(IOException e) {

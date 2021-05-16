@@ -25,7 +25,7 @@ public class MemoDTO {
 	
 	// 'memo_file' table
 	private int memo_file_no;	  // 쪽지 첨부파일 번호
-	private int file_seq;		  // 첨부 순서
+	private int file_index;		  // 첨부 순서
 	private int file_no;		  // 파일 번호
 	
 	// 'memo_set' table
@@ -128,11 +128,11 @@ public class MemoDTO {
 	public void setMemo_file_no(int memo_file_no) {
 		this.memo_file_no = memo_file_no;
 	}
-	public int getFile_seq() {
-		return file_seq;
+	public int getFile_index() {
+		return file_index;
 	}
-	public void setFile_seq(int file_seq) {
-		this.file_seq = file_seq;
+	public void setFile_index(int file_index) {
+		this.file_index = file_index;
 	}
 	public int getFile_no() {
 		return file_no;
@@ -160,7 +160,7 @@ public class MemoDTO {
 	}
 	public String memo_fileToString() { // 'memo_file' table toString
 		return "MemoDTO - memo_file [memo_file_no=" + memo_file_no + ", memo_no=" + memo_no
-				+ ", file_seq" + file_seq + ", file_no" + file_no + "]";
+				+ ", file_index" + file_index + ", file_no" + file_no + "]";
 	}
 	public String memo_setToString() { // 'memo_set' table toString
 		return "MemoDTO - memo [memo_set_no=" + memo_set_no + ", member_no=" + member_no 
@@ -172,7 +172,7 @@ public class MemoDTO {
 				+ ", receiver_id=" + receiver_id + ", receiver_name=" + receiver_name + ", title=" + title
 				+ ", content=" + content + ", date=" + date + ", has_file=" + has_file + ", memo_size=" + memo_size
 				+ ", my_memo_mo=" + my_memo_mo + ", member_no=" + member_no + ", is_important=" + is_important
-				+ ", is_read=" + is_read + ", box=" + box + ", memo_file_no=" + memo_file_no + ", file_seq=" + file_seq
+				+ ", is_read=" + is_read + ", box=" + box + ", memo_file_no=" + memo_file_no + ", file_index=" + file_index
 				+ ", file_no=" + file_no + ", memo_set_no=" + memo_set_no + "]";
 	}
 }

@@ -54,10 +54,10 @@ public class MemoService {
 		
 	// 'memo_file' table =================================================
 	// 21.05.03 데이터 삽입하고 'memo_file_no' 가져오기
-	public int insertMemo_file(int memo_no, int file_seq, int file_no) {
+	public int insertMemo_file(int memo_no, int file_index, int file_no) {
 		MemoDTO memoDTO = new MemoDTO();
 		memoDTO.setMemo_no(memo_no);
-		memoDTO.setFile_seq(file_seq);
+		memoDTO.setFile_index(file_index);
 		memoDTO.setFile_no(file_no);
 		
 		int memo_file_no = memoDAO.insertMemo_file(memoDTO);
