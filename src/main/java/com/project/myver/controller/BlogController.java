@@ -26,7 +26,7 @@ import com.project.myver.service.MemberService;
 import com.project.myver.service.BlogService;
 
 @Controller
-@RequestMapping("/memo")
+@RequestMapping("/blog")
 public class BlogController {
 	
 	@Autowired
@@ -36,24 +36,38 @@ public class BlogController {
 	@Autowired
 	private FileService fileSVC;
 	
-	/* 21.04.26 쪽지 리스트
-	@RequestMapping(value = "/list")
+	// 21.05.17 블로그 홈_메인 페이지
+	@RequestMapping(value = "/home")
+	public ModelAndView home_main(HttpSession session, ModelAndView mv) {
+		/* 1. 핫토픽(인기글) 리스트
+		 * 2. 이웃 새글 리스트
+		 * 3. 내 소식(좋아요/댓글) 리스트
+		 * 4. 내 블로그 번호
+		 */
+		//int member_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
+		
+		//mv.addObject("ID",id);
+		
+		mv.setViewName("blog/main");
+		
+		return mv;
+	}
+	/*
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public ModelAndView memoList(HttpSession session, ModelAndView mv, RedirectView rv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		String session_id = (String)session.getAttribute("MID");
 		mv.addObject("MEMOLIST", my_memo_list);
-		mv.setViewName("/member/memo/list");
+		mv.setViewName("member/memo/list");
 		
 		return mv;
 	}
-	
-	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public ModelAndView memoWriteFrm(ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		
 		//mv.addObject("ID",id);
 		
-		mv.setViewName("/member/memo/write");
+		mv.setViewName("member/memo/write");
 		
 		return mv;
 	}

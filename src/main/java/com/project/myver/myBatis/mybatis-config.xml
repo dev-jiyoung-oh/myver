@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
     
-    <!-- <typeAliases>태그를 통해 VO클래스 등록. 등록한 이름을 SQL.xml에서 사용. -->
+    <!-- <typeAliases>태그를 통해 DTO클래스 등록. -->
     <configuration>
  		
  		<!-- SQL에서 사용할 별칭 -->
@@ -15,14 +15,8 @@
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
 	   		<typeAlias type="com.project.myver.dto.MemoDTO" alias="memoDTO"/>
 	   		<typeAlias type="com.project.myver.dto.FileDTO" alias="fileDTO"/>
+	   		<typeAlias type="com.project.myver.dto.BlogDTO" alias="blogDTO"/>
    		</typeAliases>
-   		
-   		<!-- SQL 설정
-   		<mappers>
-	   		<mapper resource="/com/project/myver/sql/MemberSQL.xml"/>
-	   		<mapper resource="/com/project/myver/sql/MemoSQL.xml"/>
-	   		<mapper resource="/com/project/myver/sql/FileSQL.xml"/>
-   		</mappers> -->
   		
     </configuration>
 

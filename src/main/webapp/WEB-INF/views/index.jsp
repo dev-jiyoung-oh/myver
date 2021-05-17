@@ -18,12 +18,12 @@
 </head>
 <body>
 
-<a class="hanSansYello">MY</a><a class="hanSansGreen">VER</a>
+<a class="hanSansYello" href="${pageContext.request.contextPath}/myver/">MY</a><a class="hanSansGreen" href="${pageContext.request.contextPath}/myver/">VER</a>
 <br/><input type="search"><br/>
 <a href="${pageContext.request.contextPath}/memo/list">
 	<img src="${pageContext.request.contextPath}/resources/img/icons/mail-green.png"/>
 </a>
-<a class="hanSansGreen">B</a><a class="hanSansYello">log</a>
+<a class="hanSansGreen" href="${pageContext.request.contextPath}/blog/home">B</a><a class="hanSansYello" href="${pageContext.request.contextPath}/blog/home">log</a>
 <a class="hanSansGreen">C</a><a class="hanSansYello">afe</a>
 </body>
 </html>

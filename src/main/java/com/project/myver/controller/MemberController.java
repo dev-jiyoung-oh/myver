@@ -32,11 +32,11 @@ import com.project.myver.service.MemberService;
 public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private MemberService memSVC;
-
+	
 	// 21.04.17 회원가입 폼
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
-		return "/common/join/join";
+		return "common/join/join";
 	}
 	
 	// 21.04.18 회원가입
@@ -52,7 +52,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.02.12 로그인폼
 	@RequestMapping(value = "/login")
 	public String loginPage() throws Exception{
-		return "/common/login";
+		return "common/login";
 	}
 	
 	/* 아이디 중복확인
@@ -76,7 +76,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.04.18 전화번호로 아이디 찾기 폼
 	@RequestMapping(value = "/findId", method = RequestMethod.GET)
 	public String findId() {
-		return "/common/find/findIdFrm";
+		return "common/find/findIdFrm";
 	}
 	
 	// 21.04.18 전화번호로 아이디 찾기
@@ -86,7 +86,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		
 		mv.addObject("ID",id);
 		
-		mv.setViewName("/common/find/findId_success");
+		mv.setViewName("common/find/findId_success");
 		
 		return mv;
 	}
@@ -102,7 +102,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	// 21.04.19 비밀번호 찾기 - 1. 아이디 입력 폼
 	@RequestMapping(value = "/findPw", method = RequestMethod.GET)
 	public String findPwFrm() {
-		return "/common/find/findPwFrm";
+		return "common/find/findPwFrm";
 	}
 	
 	// 21.04.21 비밀번호 찾기 - 2. 아이디 검색 -> 비동기통신 (성공: 3으로 / 실패: alert)
@@ -129,7 +129,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		System.out.println("findPwAuthFrm-id:" + memDTO.getUsername());
 		mv.addObject("ID", memDTO.getUsername());
 		
-		mv.setViewName("/common/find/findPwFrm_auth");
+		mv.setViewName("common/find/findPwFrm_auth");
 		
 		return mv;
 	}
@@ -158,7 +158,7 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		System.out.println("findPwChangeFrm-id:" + memDTO.getUsername());
 		mv.addObject("ID", memDTO.getUsername());
 		
-		mv.setViewName("/common/find/findPwFrm_change");
+		mv.setViewName("common/find/findPwFrm_change");
 		
 		return mv;
 	}
@@ -170,10 +170,10 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		
 		if(i==1) {
 			System.out.println(memDTO.getUsername()+" 비밀번호 변경 성공");
-			mv.setViewName("/common/find/findPw_change_success");
+			mv.setViewName("common/find/findPw_change_success");
 		}else {
 			System.out.println(memDTO.getUsername()+" 비밀번호 변경 실패");
-			mv.setViewName("/common/find/findPw_change_fail");
+			mv.setViewName("common/find/findPw_change_fail");
 		}
 		
 		return mv;

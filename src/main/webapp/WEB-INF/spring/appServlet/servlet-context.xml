@@ -26,7 +26,7 @@
 		<!-- 21.04.14 추가
 			 - 기존 view resolver의 우선순위를 2로 해줌. (tiles 설정을 위해)
 			 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
-			 <beans:property name="order" value="2" />
+			 <beans:property name="order" value="1" />
 	</beans:bean>
 	
 	
@@ -47,7 +47,7 @@
     <beans:bean id="tilesViewResolver"
         class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
-        <beans:property name="order" value="1" /> <!-- tiles의 우선순위를 1로 해줌 -->
+        <beans:property name="order" value="0" /> <!-- tiles의 우선순위를 1로 해줌 -->
     </beans:bean>
 	
 	

@@ -148,24 +148,29 @@ public class MemoDTO {
 	}
 	
 	
+	// toString()
 	public String memoToString() { // 'memo' table toString
 		return "MemoDTO - memo [memo_no=" + memo_no + ", writer_id=" + writer_id + ", writer_name=" + writer_name
 				+ ", receiver_id=" + receiver_id + ", receiver_name=" + receiver_name + ", title=" + title
 				+ ", content=" + content + ", date=" + date + ", has_file=" + has_file
 				+ ", memo_size=" + memo_size + "]";
 	}
+	
 	public String my_memoToString() { // 'my_memo" table toString
 		return "MemoDTO - my_memo [my_memo_mo=" + my_memo_mo + ", member_no=" + member_no + ", memo_no=" + memo_no
 				+ ", is_important=" + is_important + ", is_read=" + is_read + ", box=" + box + "]";
 	}
+	
 	public String memo_fileToString() { // 'memo_file' table toString
 		return "MemoDTO - memo_file [memo_file_no=" + memo_file_no + ", memo_no=" + memo_no
 				+ ", file_index" + file_index + ", file_no" + file_no + "]";
 	}
+	
 	public String memo_setToString() { // 'memo_set' table toString
 		return "MemoDTO - memo [memo_set_no=" + memo_set_no + ", member_no=" + member_no 
 				+ ", writer_name=" + writer_name + "]";
 	}
+	
 	@Override
 	public String toString() {
 		return "MemoDTO [memo_no=" + memo_no + ", writer_id=" + writer_id + ", writer_name=" + writer_name

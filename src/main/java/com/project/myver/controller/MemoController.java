@@ -59,7 +59,7 @@ public class MemoController {
 		ArrayList<MemoDTO> my_memo_list = memoSVC.selectAllFromMemoAndMy_memo(session_no);
 		
 		mv.addObject("MEMOLIST", my_memo_list);
-		mv.setViewName("/member/memo/list");
+		mv.setViewName("member/memo/list");
 		
 		return mv;
 	}
@@ -71,7 +71,7 @@ public class MemoController {
 		
 		//mv.addObject("ID",id);
 		
-		mv.setViewName("/member/memo/write");
+		mv.setViewName("member/memo/write");
 		
 		return mv;
 	}
@@ -194,9 +194,9 @@ public class MemoController {
 		
 		//mv.addObject("ID",id);
 		if(memoWrite_success) {
-			mv.setViewName("/member/memo/write_success");
+			mv.setViewName("member/memo/write_success");
 		}else {
-			mv.setViewName("/member/memo/write_fail");
+			mv.setViewName("member/memo/write_fail");
 		}
 		
 		
@@ -218,7 +218,7 @@ public class MemoController {
 	// 21.05.11 쪽지 상세 (mn: memo_no)
 	@RequestMapping(value = "/read")
 	public ModelAndView memoRead(ModelAndView mv, int mn) {
-		mv.setViewName("/member/memo/read");
+		mv.setViewName("member/memo/read");
 		return mv;
 	}
 	

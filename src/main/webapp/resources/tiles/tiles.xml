@@ -49,13 +49,14 @@
 	<definition name="/*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" /> 
 	</definition>-->
-	<definition name="/*" extends="base"> 
+	
+	<definition name="*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
-	<definition name="/*/*" extends="base"> 
+	<definition name="*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" /> 
 	</definition>
-	<definition name="/*/*/*" extends="base"> 
+	<definition name="*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
 	</definition>
 </tiles-definitions>
