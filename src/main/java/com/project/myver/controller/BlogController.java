@@ -39,12 +39,30 @@ public class BlogController {
 	// 21.05.17 블로그 홈_메인 페이지
 	@RequestMapping(value = "/home")
 	public ModelAndView home_main(HttpSession session, ModelAndView mv) {
-		/* 1. 핫토픽(인기글) 리스트
-		 * 2. 이웃 새글 리스트
-		 * 3. 내 소식(좋아요/댓글) 리스트
-		 * 4. 내 블로그 번호
+		/* 회원가입하면 'blog'table 데이터 생성해야겠다!
+		 * member_no: member_no
+		 * blog_title: member_nick의 블로그
+		 * nick: member_nick
+		 * info:null
+		 * blog_topic:null
+		 * blog_img_no: null
+		 * 
+		 * main.jsp에 보낼 정보
+		 * 1. 블로그 번호
+		 * 2. 블로그 nick, img
+		 * 3. 오늘 방문자수
+		 * 4. 내 소식 리스트
+		 * 5. 내가 남긴 글 리스트
+		 * 6. 이웃 목록 리스트
+		 * 7. 이웃 새글 리스트
+		 * 8. 인기글 리스트 가져오기
 		 */
-		//int member_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
+		int member_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
+		/* blog table에서 가져올거
+		 * nick, blog_img
+		 * */
+		//blogSVC.selectBlog_no()
+		
 		
 		//mv.addObject("ID",id);
 		

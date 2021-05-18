@@ -21,6 +21,41 @@
 <a class="hanSansGreen">VER</a>&nbsp;
 <a class="hanSansGreen">블로그</a>
 <input type="search">
-
+<div class="">
+인기글div
+</div>
+<div>
+이웃새글div
+</div>
+<div>
+	<div>
+		<span>
+			블로그 이미지
+		</span>
+		<a>닉네임</a>
+		<a>오늘 방문자수</a>
+		<a>로그아웃</a>
+		<nav>
+			<a>내 블로그</a>
+			<a>글쓰기</a>
+		</nav>
+	</div>
+	<div>
+		<div>
+			<a>내 소식</a>
+			<a>내가 남긴 글</a>
+			<a>이웃 목록</a>
+		</div>
+		<div>
+			리스트~
+		</div>
+		<div>
+			<a>모두 삭제</a>
+			<a>&lt;</a>
+			<a>&gt;</a>
+		</div>
+	</div>
+	
+</div>
 </body>
 </html>
