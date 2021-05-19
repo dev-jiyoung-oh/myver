@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.project.myver.dto.BlogDTO;
 import com.project.myver.dto.FileDTO;
 import com.project.myver.dto.MemberDTO;
 import com.project.myver.dto.MemoDTO;
@@ -39,35 +41,70 @@ public class BlogController {
 	// 21.05.17 블로그 홈_메인 페이지
 	@RequestMapping(value = "/home")
 	public ModelAndView home_main(HttpSession session, ModelAndView mv) {
-		/* 회원가입하면 'blog'table 데이터 생성해야겠다!
-		 * member_no: member_no
-		 * blog_title: member_nick의 블로그
-		 * nick: member_nick
-		 * info:null
-		 * blog_topic:null
-		 * blog_img_no: null
-		 * 
-		 * main.jsp에 보낼 정보
-		 * 1. 블로그 번호
-		 * 2. 블로그 nick, img
-		 * 3. 오늘 방문자수
+		/* main.jsp에 보낼 정보
+		 * 1. 블로그 정보 'blog'table - blog_no, nick, blog_img_no
+		 * 2. blog_img_no로 'image'table에서 path, saved_name 가져오기
+		 * 3. 오늘 방문자수 'blog_visit'table
 		 * 4. 내 소식 리스트
 		 * 5. 내가 남긴 글 리스트
 		 * 6. 이웃 목록 리스트
 		 * 7. 이웃 새글 리스트
 		 * 8. 인기글 리스트 가져오기
 		 */
-		int member_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
-		/* blog table에서 가져올거
-		 * nick, blog_img
-		 * */
-		//blogSVC.selectBlog_no()
+		
+		if(session.getAttribute("MID")!=null) {
+			int member_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
+			
+			// 1. 블로그 정보 'blog'table - blog_no, nick, blog_img_no
+			BlogDTO blogDTO = blogSVC.selectBlogHomeDataFromBlog(member_no);
+			// 2. blog_img_no로 'image'table에서 path, saved_name 가져오기
+			
+			// 3. 오늘 방문자수 'blog_visit'table
+			int today_visit_cnt = blogSVC.todayBlogVisitCount(blogDTO.getBlog_no());
+			
+			
+			mv.addObject("BLOG", blogDTO);
+			mv.addObject("TODAYVISIT", today_visit_cnt);
+		}
+		mv.setViewName("blog/home");
+		
+		return mv;
+	}
+	
+	// 21.05.19 블로그 (str: id)
+	@RequestMapping(value = "/{str}")
+	public ModelAndView blog(HttpSession session, ModelAndView mv, @PathVariable("str")String str) {
+		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
+		if(str.length()==0) { 
+			mv.setViewName("blog/home");
+			return mv;
+		}
+		
+		/* 1. str(id)->member_no로 블로그 정보 가져오기
+		 * 2. 이미지 번호로 이미지 path, saved_name 가져오기
+		 * 3. 카테고리 리스트 가져오기
+		 * 4. 이웃 리스트 가져오기
+		 * 5. 블로그 글 리스트 가져오기
+		 */
+		// 21.05.19 member_no로 블로그 정보 가져오기
+		int member_no = memSVC.selectMember_noById(str);
+		
+		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
+			System.out.println("실패에요~");
+			mv.setViewName("blog/home");
+			return mv;
+		}
+		
+		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
+		
+		// 
 		
 		
-		//mv.addObject("ID",id);
 		
+		
+		mv.addObject("BLOG", blogDTO);
+		mv.addObject("str", str);
 		mv.setViewName("blog/main");
-		
 		return mv;
 	}
 	/*

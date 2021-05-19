@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="blog">
+
+	<!-- 'blog'table ========================================================== -->
+	<!-- 21.05.03 블로그 생성 -->
+	<insert id="insertBlog" parameterType="blogDTO">
+		INSERT INTO blog (member_no, blog_title, blog_nick)
+		VALUES (#{member_no}, #{blog_title}, #{blog_nick})
+	</insert>
+	
+	<!-- 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보 -->
+	<select id="selectBlogHomeDataFromBlog" parameterType="Integer" resultType="blogDTO">
+		SELECT blog_no, blog_nick, blog_img_no
+		FROM blog
+		WHERE member_no = #{member_no}
+	</select>
+	
+	<!-- 21.05.19 member_no로 블로그 정보 가져오기 -->
+	<select id="selectAllFromBlog" parameterType="Integer" resultType="blogDTO">
+		SELECT * 
+		FROM blog 
+		WHERE member_no = #{member_no}
+	</select>
+	
+	
+	<!-- 'blog_visit'table ===================================================== -->
+	<!-- 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 -->
+	<select id="todayBlogVisitCount" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(blog_visit_no)
+		FROM blog_visit
+		WHERE blog_no = #{blog_no}
+			AND DATE_FORMAT(DATE, "%Y-%m-%d") = CURDATE()
+	</select>
+</mapper>
+	

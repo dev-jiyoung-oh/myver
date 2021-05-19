@@ -20,22 +20,43 @@
 <a class="hanSansYello">MY</a>
 <a class="hanSansGreen">VER</a>&nbsp;
 <a class="hanSansGreen">블로그</a>
-
+<input type="search">
 <div class="row">
 	<div class="col-md-12">
-		<a>이웃 블로그</a>
-		<a>블로그 홈</a>
-		<a>내 메뉴</a>
-		<sec:authorize access="isAuthenticated()">
-			<a>${sessionScope.MID}</a>
-		</sec:authorize>
+	인기글div
 	</div>
-	<div class="col-md-12">
-		<a>${BLOG.blog_title}</a>
+	<div class="col-md-8">
+	이웃새글div
 	</div>
-	<div class="col-md-3">
-		<a>${BLOG.blog_nick}</a>
-		<a>${BLOG.blog_info}</a>
+	<div class="col-md-4">
+		<div>
+			<span>
+				블로그 이미지
+			</span>
+			<a>닉네임${BLOG.nick}</a>
+			<a>오늘 방문자수${TODAYVISIT}</a>
+			<a>로그아웃</a>
+			<nav>
+				<a>내 블로그${BLOG.blog_no}</a>
+				<a>글쓰기</a>
+			</nav>
+		</div>
+		<div>
+			<div>
+				<a>내 소식</a>
+				<a>내가 남긴 글</a>
+				<a>이웃 목록</a>
+			</div>
+			<div>
+				리스트~
+			</div>
+			<div>
+				<a>모두 삭제</a>
+				<a>&lt;</a>
+				<a>&gt;</a>
+			</div>
+		</div>
+		
 	</div>
 </div>
 </body>

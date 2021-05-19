@@ -22,9 +22,9 @@ public class MemberService {
 	}
 	
 	// 21.04.18 회원가입
-	public void join(MemberDTO memDTO) {
+	public int join(MemberDTO memDTO) {
 		memDTO.setPw(encode(memDTO.getPassword()));
-		memDAO.join(memDTO);
+		return memDAO.join(memDTO);
 	}
 	
 	// 21.04.21 아이디 존재 확인

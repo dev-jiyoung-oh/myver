@@ -8,8 +8,8 @@ public class BlogDTO {
 	private int blog_no;			//블로그 번호
 	private int member_no;			//회원번호
 	private String blog_title;		//블로그명
-	private String nick;			//별명
-	private String info;			//블로그 소개글
+	private String blog_nick;			//별명
+	private String blog_info;			//블로그 소개글
 	private String blog_topic;		//블로그 주제
 	private int blog_img_no;		//블로그 소개 이미지 번호
 	
@@ -68,17 +68,17 @@ public class BlogDTO {
 	public void setBlog_title(String blog_title) {
 		this.blog_title = blog_title;
 	}
-	public String getNick() {
-		return nick;
+	public String getBlog_nick() {
+		return blog_nick;
 	}
-	public void setNick(String nick) {
-		this.nick = nick;
+	public void setBlog_nick(String blog_nick) {
+		this.blog_nick = blog_nick;
 	}
-	public String getInfo() {
-		return info;
+	public String getBlog_info() {
+		return blog_info;
 	}
-	public void setInfo(String info) {
-		this.info = info;
+	public void setBlog_info(String blog_info) {
+		this.blog_info = blog_info;
 	}
 	public String getBlog_topic() {
 		return blog_topic;
@@ -228,8 +228,8 @@ public class BlogDTO {
 	
 	@Override
 	public String toString() {
-		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", nick="
-				+ nick + ", info=" + info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no
+		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", blog_nick="
+				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no
 				+ ", blog_category_no=" + blog_category_no + ", parent_category_no=" + parent_category_no
 				+ ", category_index=" + category_index + ", category_name=" + category_name + ", is_public=" + is_public
 				+ ", topic=" + topic + ", type=" + type + ", show_list=" + show_list + ", show_list_line="
@@ -240,8 +240,8 @@ public class BlogDTO {
 	}
 	
 	public String blogToString() {
-		return "BlogDTO - blog [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", nick="
-				+ nick + ", info=" + info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no + "]";
+		return "BlogDTO - blog [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", blog_nick="
+				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no + "]";
 	}
 	
 	public String blog_categoryToString() {

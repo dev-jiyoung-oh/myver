@@ -26,12 +26,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.project.myver.dto.MemberDTO;
+import com.project.myver.service.BlogService;
 import com.project.myver.service.MemberService;
 
 @Controller
 public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@Autowired
 	private MemberService memSVC;
+	@Autowired
+	private BlogService blogSVC;
 	
 	// 21.04.17 회원가입 폼
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
@@ -41,9 +44,12 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	
 	// 21.04.18 회원가입
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public ModelAndView join(MemberDTO memdto, ModelAndView mv) {
-		System.out.println("join - " + memdto.toString());
-		memSVC.join(memdto);
+	public ModelAndView join(MemberDTO memDTO, ModelAndView mv) {
+		System.out.println("join - " + memDTO.toString());
+		int member_no = memSVC.join(memDTO);
+
+		// 21.05.19 해당 아이디의 블로그 생성
+		blogSVC.insertBlog(member_no, memDTO.getNick());
 		RedirectView rv = new RedirectView("./joinSuccess");
 		mv.setView(rv);
 		return mv;

@@ -12,14 +12,16 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	SqlSessionTemplate session;
 
 	// 21.04.18 회원가입
-	public void join(MemberDTO memdto) {
-		int i = session.insert("member.join", memdto);
+	public int join(MemberDTO memDTO) {
+		int i = session.insert("member.join", memDTO);
 		
 		if(i==0) {
-			System.out.println(memdto.getUsername()+" - 회원가입 실패");
+			System.out.println(memDTO.getUsername()+" - 회원가입 실패");
 		}else {
-			System.out.println(memdto.getUsername()+" - 회원가입 성공");
+			System.out.println(memDTO.getUsername()+" - 회원가입 성공");
 		}
+		
+		return memDTO.getMember_no();
 	}
 	
 	// 21.04.21 아이디 존재 확인

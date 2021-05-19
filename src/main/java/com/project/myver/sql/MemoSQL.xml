@@ -33,13 +33,13 @@
 	<!-- 21.05.03 데이터 삽입 -->
 	<insert id="insertMemo_file" parameterType="memoDTO" 
 		useGeneratedKeys="true" keyProperty="memo_file_no">
-		insert into memo_file (memo_no, file_seq, file_no)
-		values (#{memo_no}, #{file_seq}, #{file_no})
+		insert into memo_file (memo_no, file_index, file_no)
+		values (#{memo_no}, #{file_index}, #{file_no})
 	</insert>
 	
 	<!-- 21.05.04 'memo_file_no'에 해당하는 레코드 크기 가져오기 -->
 	<select id="selectRecordSizeFromMemo_file" parameterType="Integer" resultType="Double">
-		select ifnull(MAX(LENGTH(memo_file_no)+LENGTH(memo_no)+LENGTH(file_seq)+LENGTH(file_no)),0) from memo_file
+		select ifnull(MAX(LENGTH(memo_file_no)+LENGTH(memo_no)+LENGTH(file_index)+LENGTH(file_no)),0) from memo_file
 		where memo_file_no = #{memo_file_no}
 	</select>
 	

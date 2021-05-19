@@ -4,7 +4,7 @@
 <mapper namespace="member">
 
 	<!-- 21.04.18 회원가입 -->
-	<insert id="join" parameterType="memDTO">
+	<insert id="join" parameterType="memDTO" useGeneratedKeys="true" keyProperty="member_no">
 		insert into member (id, pw, name, nick, phone, date, auth)
 		values (#{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
 	</insert>

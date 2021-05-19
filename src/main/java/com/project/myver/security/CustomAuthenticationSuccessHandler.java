@@ -79,7 +79,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		memSVC.updateLog_date(request.getParameter("id"));
 		
 		// 21.05.07 세션에 로그인 한 회원 id 저장
-		session.setAttribute("MID",request.getParameter("id"));
+		session.setAttribute("MID", request.getParameter("id"));
 		
 		int intRedirectStrategy = decideRedirectStrategy(request, response);
 		switch(intRedirectStrategy) {

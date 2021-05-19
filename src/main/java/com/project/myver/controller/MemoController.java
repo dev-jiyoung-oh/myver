@@ -49,12 +49,6 @@ public class MemoController {
 		}
 		
 		int session_no = memSVC.selectMember_noById(session_id);
-		/*ArrayList<ArrayList<MemoDTO>> memo_lists = memoSVC.selectAllFromMemoAndMy_memo(session_no);
-		
-		for(int i=0; i<memo_lists.size(); i++) { // my_memo.box별로
-			mv.addObject("my_memo_"+i,memo_lists.get(i));
-		}
-		*/
 		
 		ArrayList<MemoDTO> my_memo_list = memoSVC.selectAllFromMemoAndMy_memo(session_no);
 		
