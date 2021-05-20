@@ -16,6 +16,7 @@
 	   		<typeAlias type="com.project.myver.dto.MemoDTO" alias="memoDTO"/>
 	   		<typeAlias type="com.project.myver.dto.FileDTO" alias="fileDTO"/>
 	   		<typeAlias type="com.project.myver.dto.BlogDTO" alias="blogDTO"/>
+	   		<typeAlias type="com.project.myver.dto.ImageDTO" alias="imgDTO"/>
    		</typeAliases>
   		
     </configuration>

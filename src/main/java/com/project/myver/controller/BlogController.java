@@ -90,7 +90,7 @@ public class BlogController {
 		int member_no = memSVC.selectMember_noById(str);
 		
 		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
-			System.out.println("실패에요~");
+			System.out.println("member id==0");
 			mv.setViewName("blog/home");
 			return mv;
 		}

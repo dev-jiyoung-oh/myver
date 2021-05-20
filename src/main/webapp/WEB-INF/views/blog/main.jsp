@@ -37,6 +37,9 @@
 		<a>${BLOG.blog_nick}</a>
 		<a>${BLOG.blog_info}</a>
 	</div>
+	<div class="col-md-3">
+		<a>카테고리</a>
+	</div>
 </div>
 </body>
 </html>
