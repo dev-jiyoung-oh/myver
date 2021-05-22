@@ -26,6 +26,7 @@ public class BlogDTO {
 	private int number_of_objects_per_page; //페이지당 글 개수(1,3,5,10)
 	private int is_basic;			//대표 여부(아님:0, 대표:1)
 	private int is_upper;			//블로그 상단 표시 여부(아님:0, 표시:1)
+	private int all_category;		//카테고리 전체보기 여부(아님:0, 맞음:1)
 	
 	// 'blog_visit' table
 	private int blog_visit_no;		//블로그 방문 번호
@@ -165,6 +166,12 @@ public class BlogDTO {
 	public void setIs_upper(int is_upper) {
 		this.is_upper = is_upper;
 	}
+	public int getAll_category() {
+		return all_category;
+	}
+	public void setAll_category(int all_category) {
+		this.all_category = all_category;
+	}
 	public int getBlog_visit_no() {
 		return blog_visit_no;
 	}
@@ -233,17 +240,20 @@ public class BlogDTO {
 	}
 	
 	
+	
 	@Override
 	public String toString() {
-		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", blog_nick="
-				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no
-				+ ", blog_category_no=" + blog_category_no + ", parent_category_no=" + parent_category_no
-				+ ", category_index=" + category_index + ", category_name=" + category_name + ", is_public=" + is_public
-				+ ", topic=" + topic + ", type=" + type + ", show_list=" + show_list + ", show_list_line="
-				+ show_list_line + ", number_of_objects_per_page=" + number_of_objects_per_page + ", is_basic=" + is_basic + ", is_upper=" + is_upper + ", blog_visit_no="
-				+ blog_visit_no + ", visitor_no=" + visitor_no + ", search_word=" + search_word + ", date=" + date
-				+ ", blog_object_no=" + blog_object_no + ", title=" + title + ", content=" + content + ", hits=" + hits
-				+ ", likes=" + likes + ", blog_object_like_no=" + blog_object_like_no + ", id=" + id + "]";
+		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title
+				+ ", blog_nick=" + blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic
+				+ ", blog_img_no=" + blog_img_no + ", blog_category_no=" + blog_category_no + ", parent_category_no="
+				+ parent_category_no + ", category_index=" + category_index + ", category_name=" + category_name
+				+ ", is_public=" + is_public + ", topic=" + topic + ", type=" + type + ", show_list=" + show_list
+				+ ", show_list_line=" + show_list_line + ", number_of_objects_per_page=" + number_of_objects_per_page
+				+ ", is_basic=" + is_basic + ", is_upper=" + is_upper + ", all_category=" + all_category
+				+ ", blog_visit_no=" + blog_visit_no + ", visitor_no=" + visitor_no + ", search_word=" + search_word
+				+ ", date=" + date + ", blog_object_no=" + blog_object_no + ", title=" + title + ", content=" + content
+				+ ", hits=" + hits + ", likes=" + likes + ", blog_object_like_no=" + blog_object_like_no + ", id=" + id
+				+ "]";
 	}
 	
 	public String blogToString() {
@@ -257,7 +267,7 @@ public class BlogDTO {
 				+ ", category_name=" + category_name + ", is_public=" + is_public + ", topic=" + topic 
 				+ ", type=" + type + ", show_list=" + show_list + ", show_list_line=" + show_list_line 
 				+ ", number_of_objects_per_page=" + number_of_objects_per_page + ", is_basic=" + is_basic 
-				+ ", is_upper=" + is_upper + "]";
+				+ ", is_upper=" + is_upper + ", all_category=" + all_category + "]";
 	}
 	
 	public String blog_visitToString() {

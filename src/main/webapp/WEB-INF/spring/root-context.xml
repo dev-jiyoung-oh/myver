@@ -86,6 +86,10 @@
 		<property name="sqlSessionTemplate" ref="sqlSession"/>
 	</bean>
 	<bean id="blogSVC" class="com.project.myver.service.BlogService"/>
+	<bean id="imgDAO" class="com.project.myver.dao.ImageDAO">
+		<property name="sqlSessionTemplate" ref="sqlSession"/>
+	</bean>
+	<bean id="imgSVC" class="com.project.myver.service.ImageService"/>
 	
 	
 	<context:component-scan base-package="com.project.myver" />
