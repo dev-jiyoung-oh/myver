@@ -1,5 +1,7 @@
 package com.project.myver.dao;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,14 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
 	public int todayBlogVisitCount(int blog_no) {
 		return session.selectOne("blog.todayBlogVisitCount", blog_no);
+	}
+
+	
+	// 'blog_category'table ========================================
+	// 21.05.23 카테고리 리스트 가져오기
+	public ArrayList<BlogDTO> selectAllFromBlog_category(int blog_no) {
+		ArrayList categoryList = (ArrayList)session.selectList("blog.selectAllFromBlog_category", blog_no);
+		return categoryList;
 	}
 
 	

@@ -10,21 +10,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.myver.dao.FileDAO;
-import com.project.myver.dto.FileDTO;
+import com.project.myver.dao.ImageDAO;
+import com.project.myver.dto.ImageDTO;
 
 public class ImageService {
 
 	@Autowired
-	private FileDAO fileDAO;
+	private ImageDAO imgDAO;
 	
-	// 21.05.03 파일 업로드
+	// 21.05.23 이미지 업로드
 	public String[] upload(MultipartFile mf, int area, String id) throws IllegalStateException, IOException {
 		StringBuffer path = new StringBuffer();
 		StringBuffer sb_name = new StringBuffer();
 		String saved_path = "";
 		
-		path.append("D:\\jy_project\\myver\\workspace\\upload\\");
+		path.append("D:\\jy_project\\myver\\workspace\\image\\");
 		
 		switch(area) {
 		case 0:
@@ -58,7 +58,7 @@ public class ImageService {
 		return new String[]{saved_name, saved_path};
 	}
 	
-	// 21.05.06 동일한 이름의 파일이 이미 존재할 시, 현재 파일 이름 변경 (-> 업어쓰기가 되지 않도록 방지)
+	// 21.05.23 동일한 이름의 파일이 이미 존재할 시, 현재 파일 이름 변경 (-> 업어쓰기가 되지 않도록 방지)
 	public String renameTo(String path, String name) {
 		
 		// 만약 같은 이름의 파일이 존재하면 현재 파일이름 다음에 (번호) 를 붙여서 이름을 바꾸도록 한다.
@@ -90,35 +90,11 @@ public class ImageService {
 		return tempName;
 	}
 	
-	// 21.05.06 url 바로가기 파일 생성 (미완)
-	public FileDTO uploadUrlFile(int memo_no, String original_name) throws IOException {
-		
-		String path = "D:\\jy_project\\myver\\workspace\\upload\\0_memo\\";
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-		String dateStr = sdf.format(Calendar.getInstance().getTime());
-		
-		String saved_name = renameTo(path, dateStr + "_myver_" + original_name);
-		String content = "[InternetShortcut]\r\n\r\n"
-				+ "URL=http://localhost:8080/myver/memo/popup/mn="+memo_no; 
-		
-		FileOutputStream fileOutfutStream = new FileOutputStream(new File(path+saved_name)); 
-		
-		// FileOutputStream은 값을 사용할 때는 byte로 변환하여 사용
-		byte[] buf = content.getBytes(); 
-		
-		fileOutfutStream.write(buf); // 내용 입력
-		
-		fileOutfutStream.flush(); // 버퍼의 내용을 비우는 역할 
-		fileOutfutStream.close(); // FileOutputStream을 닫아준다.(중요!)
-		
-		// 파일사이즈, 파일 저장명 리턴
-		return new FileDTO(0, original_name, saved_name, path, content.getBytes().length);
-	}
 	
 	
-	// 'file' table =======================================================
-	// 21.05.03 첨부파일 테이블에 데이터 삽입하고 파일번호 가져오기
+	
+	// 'image' table =======================================================
+	/* 21.05.03 첨부파일 테이블에 데이터 삽입하고 파일번호 가져오기
 	public int insert(FileDTO fileDTO) {
 		int file_no = fileDAO.insert(fileDTO);
 		return file_no;
@@ -137,5 +113,5 @@ public class ImageService {
 		List<FileDTO> fileList = fileDAO.selectMemofileAndFile(memo_no);
 		return fileList;
 	}
-	
+	*/
 }

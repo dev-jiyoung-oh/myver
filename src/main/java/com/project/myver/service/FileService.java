@@ -24,7 +24,7 @@ public class FileService {
 		StringBuffer sb_name = new StringBuffer();
 		String saved_path = "";
 		
-		path.append("D:\\jy_project\\myver\\workspace\\upload\\");
+		path.append("D:\\jy_project\\myver\\workspace\\file\\");
 		
 		switch(area) {
 		case 0:
@@ -93,7 +93,7 @@ public class FileService {
 	// 21.05.06 url 바로가기 파일 생성 (미완)
 	public FileDTO uploadUrlFile(int memo_no, String original_name) throws IOException {
 		
-		String path = "D:\\jy_project\\myver\\workspace\\upload\\0_memo\\";
+		String path = "D:\\jy_project\\myver\\workspace\\file\\0_memo\\";
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
 		String dateStr = sdf.format(Calendar.getInstance().getTime());

@@ -86,7 +86,6 @@ public class BlogController {
 		 * 4. 이웃 리스트 가져오기
 		 * 5. 블로그 글 리스트 가져오기
 		 */
-		// 21.05.19 member_no로 블로그 정보 가져오기
 		int member_no = memSVC.selectMember_noById(str);
 		
 		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
@@ -95,12 +94,15 @@ public class BlogController {
 			return mv;
 		}
 		
+		// 21.05.19 member_no로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
-		// 
+		// 21.05.23 카테고리 리스트 가져오기
+		ArrayList<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
 		
+		// 이웃 리스트 가져오기
 		
-		
+		// 블로그 글 리스트 가져오기
 		
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("str", str);

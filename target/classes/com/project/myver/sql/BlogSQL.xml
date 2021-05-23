@@ -33,5 +33,15 @@
 		WHERE blog_no = #{blog_no}
 			AND DATE_FORMAT(DATE, "%Y-%m-%d") = CURDATE()
 	</select>
+	
+	
+	<!-- // 'blog_category'table ========================================
+	// 21.05.23 카테고리 리스트 가져오기 -->
+	<select id="selectAllFromBlog_category" parameterType="Integer" resultType="blogDTO">
+		SELECT * 
+		FROM blog_category 
+		WHERE blog_no = #{blog_no} 
+		ORDER BY category_index
+	</select>
 </mapper>
 	

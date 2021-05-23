@@ -41,6 +41,13 @@ public class BlogService {
 	public int todayBlogVisitCount(int blog_no) {
 		return blogDAO.todayBlogVisitCount(blog_no);
 	}
+
+	
+	// 'blog_category'table ========================================
+	// 21.05.23 카테고리 리스트 가져오기SELECT * FROM blog_category WHERE blog_no=#{blog_no} order by category_index
+	public ArrayList<BlogDTO> selectAllFromBlog_category(int blog_no) {
+		return blogDAO.selectAllFromBlog_category(blog_no);
+	}
 	
 	
 

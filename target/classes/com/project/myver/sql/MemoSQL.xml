@@ -59,7 +59,7 @@
 		AND my_memo.member_no = #{member_no}  AND box = #{box}
 	</select> -->
 	<!-- 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - memo_no랑 box에 해당하는 데이터 가져오기 (memo.content 제외)-->
-	<select id="selectMemoAndMy_memo" parameterType="Integer" resultType="MemoDTO">
+	<select id="selectMemoAndMy_memo" parameterType="Integer" resultType="memoDTO">
 		SELECT my_memo_no, memo.memo_no, is_important, is_read, box, writer_id, writer_name, receiver_id, receiver_name, title, date, has_file, memo_size
 		FROM my_memo, memo 
 		WHERE memo.memo_no = my_memo.memo_no 
