@@ -49,6 +49,13 @@
 		select member_no from member
 		where id = #{id}
 	</select>
+	
+	<!-- 21.05.24 회원 번호로 회원 아이디 가져오기 -->
+	<select id="selectIdByMember_no" parameterType="Integer" resultType="String">
+		select id from member
+		where member_no = #{member_no}
+	</select>
+	
 	<!-- 
 	<update id="memUpdate" parameterType="memDTO">
 		UPDATE member 

@@ -98,9 +98,11 @@ public class BlogController {
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
 		// 21.05.23 카테고리 리스트 가져오기
-		ArrayList<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
+		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
 		
-		// 이웃 리스트 가져오기
+		// 21.05.24 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(member_no);
 		
 		// 블로그 글 리스트 가져오기
 		

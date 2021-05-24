@@ -1,6 +1,7 @@
 package com.project.myver.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -38,9 +39,20 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	
 	// 'blog_category'table ========================================
 	// 21.05.23 카테고리 리스트 가져오기
-	public ArrayList<BlogDTO> selectAllFromBlog_category(int blog_no) {
-		ArrayList categoryList = (ArrayList)session.selectList("blog.selectAllFromBlog_category", blog_no);
-		return categoryList;
+	public List<BlogDTO> selectAllFromBlog_category(int blog_no) {
+		return session.selectList("blog.selectAllFromBlog_category", blog_no);
+	}
+
+	
+	// 'blog_neighbor'table =========================================
+	// 21.05.24 내가 추가한 이웃 리스트 가져오기
+	public List<BlogDTO> selectFollowingListFromBlog_neighbor(int member_no) {
+		return session.selectList("blog.selectFollowingListFromBlog_neighbor", member_no);
+	}
+
+	// 21.05.24 나를 추가한 이웃 리스트 가져오기
+	public List<BlogDTO> selectFollowerListFromBlog_neighbor(int member_no) {
+		return session.selectList("blog.selectFollowerListFromBlog_neighbor", member_no);
 	}
 
 	

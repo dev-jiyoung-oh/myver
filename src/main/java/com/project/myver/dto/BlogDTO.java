@@ -49,6 +49,10 @@ public class BlogDTO {
 	private String id;				//좋아요 누른 id
 	//private Date date;			//날짜
 	
+	// 'blog_neighbor' table
+	private int blog_neighbor_no;	//블로그 이웃 번호
+	//private int member_no;		//회원 번호
+	private int neighbor_member_no;	//이웃 회원 번호
 	
 	
 	// Getters and Setters
@@ -238,6 +242,18 @@ public class BlogDTO {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public int getBlog_neighbor_no() {
+		return blog_neighbor_no;
+	}
+	public void setBlog_neighbor_no(int blog_neighbor_no) {
+		this.blog_neighbor_no = blog_neighbor_no;
+	}
+	public int getNeighbor_member_no() {
+		return neighbor_member_no;
+	}
+	public void setNeighbor_member_no(int neighbor_member_no) {
+		this.neighbor_member_no = neighbor_member_no;
+	}
 	
 	
 	
@@ -253,8 +269,8 @@ public class BlogDTO {
 				+ ", blog_visit_no=" + blog_visit_no + ", visitor_no=" + visitor_no + ", search_word=" + search_word
 				+ ", date=" + date + ", blog_object_no=" + blog_object_no + ", title=" + title + ", content=" + content
 				+ ", hits=" + hits + ", likes=" + likes + ", blog_object_like_no=" + blog_object_like_no + ", id=" + id
-				+ "]";
-	}
+				+ ", blog_neighbor_no=" + blog_neighbor_no + ", neighbor_member_no=" + neighbor_member_no + "]";
+	}	
 	
 	public String blogToString() {
 		return "BlogDTO - blog [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", blog_nick="
@@ -285,5 +301,10 @@ public class BlogDTO {
 	public String blog_object_likeToString() {
 		return "BlogDTO - blog_object_like [blog_object_like_no=" + blog_object_like_no
 				+ ", blog_object_no=" + blog_object_no + ", id=" + id + ", date=" + date + "]";
+	}
+	
+	public String blog_neighborToString() {
+		return "BlogDTO - blog_neighbor [blog_neighbor_no=" + blog_neighbor_no 
+				+ "member_no=" + member_no + ", neighbor_member_no=" + neighbor_member_no + "]";
 	}
 }

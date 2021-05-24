@@ -2,6 +2,7 @@ package com.project.myver.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,11 +46,21 @@ public class BlogService {
 	
 	// 'blog_category'table ========================================
 	// 21.05.23 카테고리 리스트 가져오기SELECT * FROM blog_category WHERE blog_no=#{blog_no} order by category_index
-	public ArrayList<BlogDTO> selectAllFromBlog_category(int blog_no) {
+	public List<BlogDTO> selectAllFromBlog_category(int blog_no) {
 		return blogDAO.selectAllFromBlog_category(blog_no);
 	}
+
 	
+	// 'blog_neighbor'table =========================================
+	// 21.05.24 내가 추가한 이웃 리스트 가져오기
+	public List<BlogDTO> selectFollowingListFromBlog_neighbor(int member_no) {
+		return blogDAO.selectFollowingListFromBlog_neighbor(member_no);
+	}
 	
+	// 21.05.24 나를 추가한 이웃 리스트 가져오기
+	public List<BlogDTO> selectFollowerListFromBlog_neighbor(int member_no) {
+		return blogDAO.selectFollowerListFromBlog_neighbor(member_no);
+	}
 
 	
 }
