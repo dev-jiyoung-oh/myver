@@ -92,26 +92,17 @@ public class ImageService {
 	
 	
 	
-	
 	// 'image' table =======================================================
-	/* 21.05.03 첨부파일 테이블에 데이터 삽입하고 파일번호 가져오기
-	public int insert(FileDTO fileDTO) {
-		int file_no = fileDAO.insert(fileDTO);
-		return file_no;
+	// 21.05.25 'image_no'로 'path', 'saved_name' 가져오기
+	public ImageDTO selectPathAndSaved_nameFromImage(int image_no) {
+		return imgDAO.selectPathAndSaved_nameFromImage(image_no);
 	}
-
-	// 21.05.03 첨부파일 번호로 해당 레코드의 크기 가져오기
-	public double selectRecordSize(int file_no) {
-		double recordSize = fileDAO.selectRecordSize(file_no);
-		return recordSize;
+	
+	// 21.05.25 데이터 삽입하고 이미지 번호 가져오기
+	public int insert(ImageDTO imgDTO) {
+		int image_no = imgDAO.insert(imgDTO);
+		return image_no;
 	}
 
 	
-	// 테이블 조인 ============================================================
-	// 21.05.13 'memo_file'테이블과 'file'테이블 조인 - 'memo_file.memo_no'에 해당하는 데이터 가져오기
-	public List<FileDTO> selectMemofileAndFile(int memo_no) {
-		List<FileDTO> fileList = fileDAO.selectMemofileAndFile(memo_no);
-		return fileList;
-	}
-	*/
 }

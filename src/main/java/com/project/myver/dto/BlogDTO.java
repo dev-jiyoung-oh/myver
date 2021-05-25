@@ -54,6 +54,11 @@ public class BlogDTO {
 	//private int member_no;		//회원 번호
 	private int neighbor_member_no;	//이웃 회원 번호
 	
+	// 블로그 이미지 관련 정보
+	private String path;			//저장경로
+	private String saved_name;		//저장명
+	
+	
 	
 	// Getters and Setters
 	public int getBlog_no() {
@@ -254,6 +259,18 @@ public class BlogDTO {
 	public void setNeighbor_member_no(int neighbor_member_no) {
 		this.neighbor_member_no = neighbor_member_no;
 	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public String getSaved_name() {
+		return saved_name;
+	}
+	public void setSaved_name(String saved_name) {
+		this.saved_name = saved_name;
+	}
 	
 	
 	
@@ -261,7 +278,8 @@ public class BlogDTO {
 	public String toString() {
 		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title
 				+ ", blog_nick=" + blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic
-				+ ", blog_img_no=" + blog_img_no + ", blog_category_no=" + blog_category_no + ", parent_category_no="
+				+ ", blog_img_no=" + blog_img_no + ", path=" + path + ", saved_name=" + saved_name 
+				+ ", blog_category_no=" + blog_category_no + ", parent_category_no="
 				+ parent_category_no + ", category_index=" + category_index + ", category_name=" + category_name
 				+ ", is_public=" + is_public + ", topic=" + topic + ", type=" + type + ", show_list=" + show_list
 				+ ", show_list_line=" + show_list_line + ", number_of_objects_per_page=" + number_of_objects_per_page
@@ -274,7 +292,8 @@ public class BlogDTO {
 	
 	public String blogToString() {
 		return "BlogDTO - blog [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_title=" + blog_title + ", blog_nick="
-				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no + "]";
+				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no 
+				+ ", path=" + path + ", saved_name=" + saved_name + "]";
 	}
 	
 	public String blog_categoryToString() {

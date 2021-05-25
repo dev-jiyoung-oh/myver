@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="file">
+<mapper namespace="img">
 
-	<!-- 21.05.03 파일 삽입 -->
-	<insert id="insertFile" parameterType="fileDTO" 
-			useGeneratedKeys="true" keyProperty="file_no">
-		insert into file (area, original_name, saved_name, path, file_size, date)
-		values (#{area}, #{original_name}, #{saved_name}, #{path}, #{file_size}, SYSDATE())
+	<!-- 21.05.25 이미지 삽입 -->
+	<insert id="insertImage" parameterType="imgDTO" 
+			useGeneratedKeys="true" keyProperty="image_no">
+		insert into image (area, original_name, saved_name, path, image_size, date)
+		values (#{area}, #{original_name}, #{saved_name}, #{path}, #{image_size}, SYSDATE())
 	</insert>
 	
-	<!-- 21.05.04 'file_no'에 해당하는 레코드 크기 가져오기 -->
-	<select id="selectRecordSize" parameterType="Integer" resultType="Double">
-		select ifnull(MAX(LENGTH(file_no)+LENGTH(area)+LENGTH(saved_name)+LENGTH(original_name)+LENGTH(original_name)+LENGTH(path)+LENGTH(date)+LENGTH(can_delete)),0) from file
-		where file_no = #{file_no}
+	<!-- 21.05.25 'image_no'로 'path', 'saved_name' 가져오기 -->
+	<select id="selectPathAndSaved_nameFromImage" parameterType="Integer" resultType="imgDTO">
+		SELECT path, saved_name 
+		FROM image 
+		WHERE image_no = #{image_no}
 	</select>
 	
 	
-	<!-- 테이블 조인 ============================================================ -->
-	<!-- 21.05.13 'memo_file'테이블과 'file'테이블 조인 - 'memo_file.memo_no'에 해당하는 데이터 가져오기 -->
-	<select id="selectMemofileAndFile" parameterType="Integer" resultType="fileDTO">
-		SELECT saved_name, original_name, path, file_size 
-		FROM memo_file, file 
-		WHERE memo_file.file_no = file.file_no and memo_no = #{memo_no}
-		ORDER BY file_index
-	</select>
-	<!-- 
-	<update id="logDate" parameterType="String">
-		update member SET log_date = SYSDATE() where id = #{id}
-	</update> -->
 </mapper>
 	
