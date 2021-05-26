@@ -105,6 +105,15 @@ public class BlogController {
 		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(member_no);
 		
 		// 블로그 글 리스트 가져오기
+		/* 1. 대표 카테고리로 설정된 카테고리의 글 상세히 가져오기 
+		 *    - 카테고리 설정에서 '페이지당 글 개수' 설정한 개수만큼... PageUtil 객체 생성 및 그거에 맞는 값 가져오기
+		 *    - 해당 카테고리의 모든 글 개수에서 '페이지당 글 개수'로 나눈만큼 1,2,3,4... 버튼 생성
+		 * 2. 대표 카테고리의 글 목록 가져오기...글제목, 댓글수, 조회수, 날짜 
+		 *    - 카테고리 설정에서 '목록 개수' 설정한 만큼...
+		 *    - 해당 카테고리의 모든 글 개수에서 '목록개수'로 나눈만큼 1,2,3,4,5... 버튼 생성
+		 * 이건 다른 얘기! 회원가입했을때 블로그 생성하고 '전체보기' 카테고리도 생성하자.
+		 */
+		//List<BlogDTO> objectList = blogSVC.selectAllFromBlog_object()
 		
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("str", str);
