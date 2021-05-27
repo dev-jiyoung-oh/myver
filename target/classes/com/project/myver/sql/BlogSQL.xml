@@ -49,6 +49,7 @@
 		FROM blog_category 
 		WHERE blog_no = #{blog_no} 
 		ORDER BY category_index
+		
 	</select>
 	
 	
@@ -68,6 +69,35 @@
 	</select>
 	
 	
+	<!-- 'blog_object'table =================================================================== -->
+	<!-- 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기 -->
+	<select id="selectTotalCountFromBlog_object" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(blog_object_no) 
+		FROM blog_object 
+		WHERE blog_category_no = #{blog_category_no}
+	</select>
+	
+	<!-- 21.05.27 목록 가져오기 -->
+	<select id="selectListDetailFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
+		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
+  		FROM (SELECT blog_object_no, title, DATE, is_public, hits
+          	  FROM blog_object
+          	  WHERE blog_category_no = #{blog_cateogry_no}
+              ORDER BY blog_object_no DESC) AS TB
+      		, (SELECT @ROWNUM := 0) AS RN
+ 		LIMIT #{startNo}, #{endNo}
+	</select>
+	
+	<!-- 21.05.27 게시글 내용 가져오기 -->
+	<select id="selectObjectDetailFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
+		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
+  		FROM (SELECT blog_object_no, title, content, DATE, is_public, hits, likes
+          	  FROM blog_object
+          	  WHERE blog_category_no = #{blog_cateogry_no}
+              ORDER BY blog_object_no DESC) AS TB
+      		, (SELECT @ROWNUM := 0) AS RN
+ 		LIMIT #{startNo}, #{endNo}
+	</select>
 	
 	
 </mapper>

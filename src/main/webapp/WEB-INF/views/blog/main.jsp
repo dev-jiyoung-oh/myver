@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +40,41 @@
 		<a>${BLOG.blog_info}</a>
 	</div>
 	<div class="col-md-3">
-		<a>카테고리</a>
+		<ul>
+			<c:forEach var="category" items="${CATEGORY}">
+				<li>${category.category_name}</li>
+			</c:forEach>
+		</ul>
+	</div>
+	<div class="col-md-12">
+		<table>
+			<tr>
+				<td>글제목</td>
+				<td>조회수</td>
+				<td>작성일</td>
+			</tr>
+			<c:forEach var="list" items="${LIST}">
+				<tr>
+					<td>${list.title}</td>
+					<td>${list.hits}</td>
+					<td>${list.date}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+	<div class="col-md-12">
+		<c:forEach var="object" items="${OBJECT}">
+			<table>
+				<tr>
+					<td>${object.title}</td>
+					<td>${object.hits}</td>
+					<td>${object.date}</td>
+				</tr>
+				<tr>
+					<td colspan="3">${object.content}</td>
+				</tr>
+			</table>
+		</c:forEach>
 	</div>
 </div>
 </body>

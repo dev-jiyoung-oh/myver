@@ -22,8 +22,8 @@ public class BlogDTO {
 	private String topic;			//카테고리 주제
 	private int type;				//유형(블로그형:0, 앨범형:1)
 	private int show_list;			//목록열기여부(열기:0, 닫기:1)
-	private int show_list_line;		//목록의 글 개수(닫은 경우:0, 연 경우:5/10/15/20/30)
-	private int number_of_objects_per_page; //페이지당 글 개수(1,3,5,10)
+	private int list_line;		//목록의 글 개수(닫은 경우:0, 연 경우:5/10/15/20/30)
+	private int objects_per_page; //페이지당 글 개수(1,3,5,10)
 	private int is_basic;			//대표 여부(아님:0, 대표:1)
 	private int is_upper;			//블로그 상단 표시 여부(아님:0, 표시:1)
 	private int all_category;		//카테고리 전체보기 여부(아님:0, 맞음:1)
@@ -151,17 +151,17 @@ public class BlogDTO {
 	public void setShow_list(int show_list) {
 		this.show_list = show_list;
 	}
-	public int getShow_list_line() {
-		return show_list_line;
+	public int getList_line() {
+		return list_line;
 	}
-	public void setShow_list_line(int show_list_line) {
-		this.show_list_line = show_list_line;
+	public void setList_line(int list_line) {
+		this.list_line = list_line;
 	}
-	public int getNumber_of_objects_per_page() {
-		return number_of_objects_per_page;
+	public int getObjects_per_page() {
+		return objects_per_page;
 	}
-	public void setNumber_of_objects_per_page(int number_of_objects_per_page) {
-		this.number_of_objects_per_page = number_of_objects_per_page;
+	public void setObjects_per_page(int objects_per_page) {
+		this.objects_per_page = objects_per_page;
 	}
 	public int getIs_basic() {
 		return is_basic;
@@ -282,7 +282,7 @@ public class BlogDTO {
 				+ ", blog_category_no=" + blog_category_no + ", parent_category_no="
 				+ parent_category_no + ", category_index=" + category_index + ", category_name=" + category_name
 				+ ", is_public=" + is_public + ", topic=" + topic + ", type=" + type + ", show_list=" + show_list
-				+ ", show_list_line=" + show_list_line + ", number_of_objects_per_page=" + number_of_objects_per_page
+				+ ", list_line=" + list_line + ", objects_per_page=" + objects_per_page
 				+ ", is_basic=" + is_basic + ", is_upper=" + is_upper + ", all_category=" + all_category
 				+ ", blog_visit_no=" + blog_visit_no + ", visitor_no=" + visitor_no + ", search_word=" + search_word
 				+ ", date=" + date + ", blog_object_no=" + blog_object_no + ", title=" + title + ", content=" + content
@@ -300,8 +300,8 @@ public class BlogDTO {
 		return "BlogDTO - blog_category [blog_category_no=\" + blog_category_no" + ", blog_no=" + blog_no
 				+ ", category_index=" + category_index + ", parent_category_no=" + parent_category_no 
 				+ ", category_name=" + category_name + ", is_public=" + is_public + ", topic=" + topic 
-				+ ", type=" + type + ", show_list=" + show_list + ", show_list_line=" + show_list_line 
-				+ ", number_of_objects_per_page=" + number_of_objects_per_page + ", is_basic=" + is_basic 
+				+ ", type=" + type + ", show_list=" + show_list + ", list_line=" + list_line 
+				+ ", objects_per_page=" + objects_per_page + ", is_basic=" + is_basic 
 				+ ", is_upper=" + is_upper + ", all_category=" + all_category + "]";
 	}
 	

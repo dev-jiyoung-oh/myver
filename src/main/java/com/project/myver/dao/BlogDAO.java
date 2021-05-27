@@ -8,6 +8,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.myver.dto.BlogDTO;
+import com.project.myver.util.PageUtil;
 
 public class BlogDAO extends SqlSessionDaoSupport {
 	@Autowired
@@ -57,6 +58,24 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	// 21.05.24 나를 추가한 이웃 리스트 가져오기(member_no 리스트)
 	public List<BlogDTO> selectFollowerListFromBlog_neighbor(int member_no) {
 		return session.selectList("blog.selectFollowerListFromBlog_neighbor", member_no);
+	}
+
+	
+	// 'blog_object'table =================================================
+	// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기 selectTotalCountFromBlog_object
+	public int selectTotalCountFromBlog_object(int blog_category_no) {
+		return session.selectOne("blog.selectTotalCountFromBlog_object", blog_category_no);
+	}
+
+	// 21.05.27 목록 내용 가져오기
+	public List<BlogDTO> selectListDetailFromBlog_object(PageUtil listInfo) {
+		System.out.println(listInfo.toString());
+		return session.selectList("blog.selectListDetailFromBlog_object", listInfo);
+	}
+
+	// 21.05.27 게시글 내용 가져오기
+	public List<BlogDTO> selectObjectDetailFromBlog_object(PageUtil pageInfo) {
+		return session.selectList("blog.selectObjectDetailFromBlog_object", pageInfo);
 	}
 
 	

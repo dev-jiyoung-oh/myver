@@ -25,6 +25,7 @@ import com.project.myver.dto.MemberDTO;
 import com.project.myver.dto.MemoDTO;
 import com.project.myver.service.FileService;
 import com.project.myver.service.MemberService;
+import com.project.myver.util.PageUtil;
 import com.project.myver.service.BlogService;
 
 @Controller
@@ -72,10 +73,10 @@ public class BlogController {
 	}
 	
 	// 21.05.19 블로그 (str: id)
-	@RequestMapping(value = "/{str}")
-	public ModelAndView blog(HttpSession session, ModelAndView mv, @PathVariable("str")String str) {
+	@RequestMapping(value = "/{id}")
+	public ModelAndView blog(HttpSession session, ModelAndView mv, @PathVariable("id")String id) {
 		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
-		if(str.length()==0) { 
+		if(id.length()==0) { 
 			mv.setViewName("blog/home");
 			return mv;
 		}
@@ -86,7 +87,7 @@ public class BlogController {
 		 * 4. 이웃 리스트 가져오기
 		 * 5. 블로그 글 리스트 가져오기
 		 */
-		int member_no = memSVC.selectMember_noById(str);
+		int member_no = memSVC.selectMember_noById(id);
 		
 		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
 			System.out.println("member id==0");
@@ -97,14 +98,12 @@ public class BlogController {
 		// 21.05.19 member_no로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
+		// 이미지 번호로 이미지 path, saved_name 가져오기
+		
 		// 21.05.23 카테고리 리스트 가져오기
 		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
 		
-		// 21.05.24 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
-		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
-		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(member_no);
-		
-		// 블로그 글 리스트 가져오기
+		// 블로그 글 리스트 가져오기 ---두 가지 경우 생각해야 함(블로그 주인/그 외)
 		/* 1. 대표 카테고리로 설정된 카테고리의 글 상세히 가져오기 
 		 *    - 카테고리 설정에서 '페이지당 글 개수' 설정한 개수만큼... PageUtil 객체 생성 및 그거에 맞는 값 가져오기
 		 *    - 해당 카테고리의 모든 글 개수에서 '페이지당 글 개수'로 나눈만큼 1,2,3,4... 버튼 생성
@@ -113,11 +112,46 @@ public class BlogController {
 		 *    - 해당 카테고리의 모든 글 개수에서 '목록개수'로 나눈만큼 1,2,3,4,5... 버튼 생성
 		 * 이건 다른 얘기! 회원가입했을때 블로그 생성하고 '전체보기' 카테고리도 생성하자.
 		 */
-		//List<BlogDTO> objectList = blogSVC.selectAllFromBlog_object()
+		// 21.05.27
+		for(BlogDTO category : categoryList) {
+			// 대표 카테고리인 경우
+			if(category.getIs_basic() == 1) {
+				int blog_category_no = category.getBlog_category_no();
+				// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
+				int totalCount = blogSVC.selectTotalCountFromBlog_object(blog_category_no);
+				
+				// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,blog_cateogry_no)
+				PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no);
+				PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no);
+				
+				// 21.05.27 목록 내용 가져오기
+				List<BlogDTO> lists = blogSVC.selectListDetailFromBlog_object(listInfo);
+						
+				// 21.05.27 게시글 내용 가져오기
+				List<BlogDTO> objects = blogSVC.selectObjectDetailFromBlog_object(pageInfo);
+				
+				mv.addObject("CATEGORY_NO", category.getBlog_category_no());
+				mv.addObject("CATEGORY_NAME", category.getCategory_name());
+				mv.addObject("LIST", lists);
+				mv.addObject("OBJECT", objects);
+				
+				break;
+			}
+		}
+		
+		
+		// 21.05.24 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(member_no);
+		
 		
 		mv.addObject("BLOG", blogDTO);
-		mv.addObject("str", str);
+		mv.addObject("CATEGORY", categoryList);
+		mv.addObject("FOLLOWING", followingList);
+		mv.addObject("FOLLOWER", followerList);
+		
 		mv.setViewName("blog/main");
+		
 		return mv;
 	}
 	/*
