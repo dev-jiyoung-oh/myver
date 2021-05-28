@@ -5,7 +5,7 @@
 
 	<!-- 'blog'table ========================================================== -->
 	<!-- 21.05.03 블로그 생성 -->
-	<insert id="insertBlog" parameterType="blogDTO">
+	<insert id="insertBlog" parameterType="blogDTO" useGeneratedKeys="true" keyProperty="blog_no">
 		INSERT INTO blog (member_no, blog_title, blog_nick)
 		VALUES (#{member_no}, #{blog_title}, #{blog_nick})
 	</insert>
@@ -43,6 +43,12 @@
 	
 	
 	<!-- 'blog_category'table ================================================================ -->
+	<!-- 21.05.28 블로그 기본 카테고리('전체보기') 생성 -->
+	<insert id="insertDefaultBlogCategory" parameterType="Integer">
+		INSERT INTO blog_category (blog_no, category_index, category_name, is_basic, all_category)
+		VALUES (#{blog_no}, 0, '전체보기', 1, 1)
+	</insert>
+	
 	<!-- 21.05.23 카테고리 리스트 가져오기 -->
 	<select id="selectAllFromBlog_category" parameterType="Integer" resultType="blogDTO">
 		SELECT * 

@@ -49,7 +49,11 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		int member_no = memSVC.join(memDTO);
 
 		// 21.05.19 해당 아이디의 블로그 생성
-		blogSVC.insertBlog(member_no, memDTO.getNick());
+		int blog_no = blogSVC.insertBlog(member_no, memDTO.getNick());
+		
+		// 21.05.28 블로그 기본 카테고리('전체보기') 생성
+		blogSVC.insertDefaultBlogCategory(blog_no);
+		
 		RedirectView rv = new RedirectView("./joinSuccess");
 		mv.setView(rv);
 		return mv;

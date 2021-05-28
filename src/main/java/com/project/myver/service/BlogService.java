@@ -38,14 +38,14 @@ public class BlogService {
 		
 		
 	// 'blog'table ============================================================
-	// 21.05.19 블로그 생성
-	public void insertBlog(int member_no, String blog_nick) {
+	// 21.05.19 블로그 생성하고 'blog_no' 리턴
+	public int insertBlog(int member_no, String blog_nick) {
 		BlogDTO blogDTO = new BlogDTO();
 		blogDTO.setMember_no(member_no);
 		blogDTO.setBlog_title(blog_nick+"의 블로그");
 		blogDTO.setBlog_nick(blog_nick);
 		
-		blogDAO.insertBlog(blogDTO);
+		return blogDAO.insertBlog(blogDTO);
 	}
 
 	// 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보
@@ -67,6 +67,11 @@ public class BlogService {
 	
 	
 	// 'blog_category'table ==================================================
+	// 21.05.28 블로그 기본 카테고리('전체보기') 생성
+	public void insertDefaultBlogCategory(int blog_no) {
+		blogDAO.insertDefaultBlogCategory(blog_no);
+	}
+	
 	// 21.05.23 카테고리 리스트 가져오기SELECT * FROM blog_category WHERE blog_no=#{blog_no} order by category_index
 	public List<BlogDTO> selectAllFromBlog_category(int blog_no) {
 		return blogDAO.selectAllFromBlog_category(blog_no);
@@ -121,4 +126,5 @@ public class BlogService {
 	public List<BlogDTO> selectObjectDetailFromBlog_object(PageUtil pageInfo) {
 		return blogDAO.selectObjectDetailFromBlog_object(pageInfo);
 	}
+	
 }

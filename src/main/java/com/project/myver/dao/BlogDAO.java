@@ -15,9 +15,10 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	SqlSessionTemplate session;
 
 	// 'blog' table =================================================
-	// 21.05.19 블로그 생성
-	public void insertBlog(BlogDTO blogDTO) {
+	// 21.05.19 블로그 생성하고 'blog_no' 리턴
+	public int insertBlog(BlogDTO blogDTO) {
 		session.insert("blog.insertBlog", blogDTO);
+		return blogDTO.getBlog_no();
 	}
 
 	// 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보
@@ -43,6 +44,11 @@ public class BlogDAO extends SqlSessionDaoSupport {
 
 	
 	// 'blog_category'table ========================================
+	// 21.05.28 블로그 기본 카테고리('전체보기') 생성insertDefaultBlogCategory
+	public void insertDefaultBlogCategory(int blog_no) {
+		session.insert("blog.insertDefaultBlogCategory", blog_no);
+	}
+	
 	// 21.05.23 카테고리 리스트 가져오기
 	public List<BlogDTO> selectAllFromBlog_category(int blog_no) {
 		return session.selectList("blog.selectAllFromBlog_category", blog_no);
@@ -77,6 +83,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public List<BlogDTO> selectObjectDetailFromBlog_object(PageUtil pageInfo) {
 		return session.selectList("blog.selectObjectDetailFromBlog_object", pageInfo);
 	}
+	
 
 	
 }

@@ -23,7 +23,7 @@ import com.project.myver.dto.BlogDTO;
 import com.project.myver.dto.FileDTO;
 import com.project.myver.dto.MemberDTO;
 import com.project.myver.dto.MemoDTO;
-import com.project.myver.service.FileService;
+import com.project.myver.service.ImageService;
 import com.project.myver.service.MemberService;
 import com.project.myver.util.PageUtil;
 import com.project.myver.service.BlogService;
@@ -37,7 +37,7 @@ public class BlogController {
 	@Autowired
 	private MemberService memSVC;
 	@Autowired
-	private FileService fileSVC;
+	private ImageService imgSVC;
 	
 	// 21.05.17 블로그 홈_메인 페이지
 	@RequestMapping(value = "/home")
@@ -98,7 +98,10 @@ public class BlogController {
 		// 21.05.19 member_no로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
-		// 이미지 번호로 이미지 path, saved_name 가져오기
+		// 21.05.28 이미지 번호로 이미지 path, saved_name 세팅(이미지 번호 없는 경우에는 건너뛰기)
+		if(blogDTO.getBlog_img_no()!=0) {
+			imgSVC.selectPathAndSaved_nameFromImage(blogDTO);
+		}
 		
 		// 21.05.23 카테고리 리스트 가져오기
 		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
@@ -110,9 +113,8 @@ public class BlogController {
 		 * 2. 대표 카테고리의 글 목록 가져오기...글제목, 댓글수, 조회수, 날짜 
 		 *    - 카테고리 설정에서 '목록 개수' 설정한 만큼...
 		 *    - 해당 카테고리의 모든 글 개수에서 '목록개수'로 나눈만큼 1,2,3,4,5... 버튼 생성
-		 * 이건 다른 얘기! 회원가입했을때 블로그 생성하고 '전체보기' 카테고리도 생성하자.
 		 */
-		// 21.05.27
+		// 블로그 주인인 경우~~
 		for(BlogDTO category : categoryList) {
 			// 대표 카테고리인 경우
 			if(category.getIs_basic() == 1) {

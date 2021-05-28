@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.myver.dao.ImageDAO;
+import com.project.myver.dto.BlogDTO;
 import com.project.myver.dto.ImageDTO;
 
 public class ImageService {
@@ -93,9 +94,11 @@ public class ImageService {
 	
 	
 	// 'image' table =======================================================
-	// 21.05.25 'image_no'로 'path', 'saved_name' 가져오기
-	public ImageDTO selectPathAndSaved_nameFromImage(int image_no) {
-		return imgDAO.selectPathAndSaved_nameFromImage(image_no);
+	// 21.05.25 'image_no'로 'path', 'saved_name' 가져와서 파라미터 'blogDTO' 값 초기화
+	public void selectPathAndSaved_nameFromImage(BlogDTO blogDTO) {
+		ImageDTO imgDTO = imgDAO.selectPathAndSaved_nameFromImage(blogDTO.getBlog_img_no());
+		blogDTO.setPath(imgDTO.getPath());
+		blogDTO.setSaved_name(imgDTO.getSaved_name());
 	}
 	
 	// 21.05.25 데이터 삽입하고 이미지 번호 가져오기
