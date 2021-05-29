@@ -100,14 +100,18 @@ public class PageUtil {
 	}
 
 
-	// 시작 글번호 계산 : {총 게시글 수 - (한 페이지 게시글 수*현재 페이지 번호)}+1
+	// 시작 글번호 계산 : {총 게시글 수 - (한 페이지 게시글 수*현재 페이지 번호)}+1 3-5+1 8-10+1
 	private void calcStartNo() {
-		startNo = totalCount-(lineCount*nowPage)+1;
+		//startNo = totalCount-(lineCount*nowPage)+1;
+		// (nowPage-1)*lineCount
+		startNo = (nowPage-1)*lineCount;
 	}
 	
-	// 끝 글번호 계산 : 총 게시글수 - ((현재 페이지 -1) * 한 페이지 게시글수)
+	// 끝 글번호 계산 : 총 게시글수 - ((현재 페이지 -1) * 한 페이지 게시글수) 8 - 5 = 3
 	private void calcEndNo() {
-		endNo = totalCount-((nowPage-1)*lineCount);
+		//endNo = totalCount-((nowPage-1)*lineCount);
+		// 시작 글번호 + 한 페이지 게시글 수
+		endNo = startNo+lineCount;
 	}
 
 	// 총 페이지수 계산
@@ -136,7 +140,7 @@ public class PageUtil {
 		endPage = startPage + (pageGroup - 1);
 		
 		//	마지막 페이지보다 더 큰 페이지가 나올 수 있다.
-		if(endPage >= totalPage) {
+		if(endPage > totalPage) {
 			endPage = totalPage;
 		}
 	}

@@ -47,7 +47,7 @@
 		</ul>
 	</div>
 	<div class="col-md-12">
-		<table>
+		<table border="1">
 			<tr>
 				<td>글제목</td>
 				<td>조회수</td>
@@ -64,7 +64,7 @@
 	</div>
 	<div class="col-md-12">
 		<c:forEach var="object" items="${OBJECT}">
-			<table>
+			<table border="1">
 				<tr>
 					<td>${object.title}</td>
 					<td>${object.hits}</td>
