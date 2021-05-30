@@ -76,10 +76,13 @@ public class BlogController {
 	@RequestMapping(value = "/{id}")
 	public ModelAndView blog(HttpSession session, ModelAndView mv, @PathVariable("id")String id) {
 		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
-		if(id.length()==0) { 
+		if(id.length() == 0) { 
 			mv.setViewName("blog/home");
 			return mv;
 		}
+		// 방문자 회원 번호
+		int visitor_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
+		
 		
 		/* 1. str(id)->member_no로 블로그 정보 가져오기
 		 * 2. 이미지 번호로 이미지 path, saved_name 가져오기
@@ -99,10 +102,17 @@ public class BlogController {
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
 		// 21.05.28 이미지 번호로 이미지 path, saved_name 세팅(이미지 번호 없는 경우에는 건너뛰기)
-		if(blogDTO.getBlog_img_no()!=0) {
+		if(blogDTO.getBlog_img_no() != 0) {
 			imgSVC.selectPathAndSaved_nameFromImage(blogDTO);
 		}
-		
+
+		// 방문자가 블로그 주인일 경우
+		if(blogDTO.getMember_no()==visitor_no){
+		// 전체 카테고리 등 가져오기
+		}else { // 방문자가 외부인일 경우
+		// visitor 테이블에 데이터 삽입 + 비밀이 아닌 경우의 카테고리,글,댓글 등 가져오기 + 방문 카운트++ + 어떤글을 봤는지 어떻게 기록할래?
+		}
+
 		// 21.05.23 카테고리 리스트 가져오기
 		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
 		
@@ -156,6 +166,25 @@ public class BlogController {
 		
 		return mv;
 	}
+
+        // 21.05.30 블로그 글 보기	
+        @RequestMapping(value = "/{id}/{object_no}")	
+        public ModelAndView blogObject(HttpSession session, ModelAndView mv, @PathVariable("id") String id, PathVariable("object_no") int object_no) {	
+		if(id.length() == 0) { 
+			mv.setViewName("blog/home");
+			return mv;
+		}
+		if(object_no == 0) { 
+			mv.setViewName("blog/home");
+			return mv;
+		}
+		// mv.addObject("FOLLOWER", followerList);
+		
+		// mv.setViewName("blog/object");
+		
+		return mv;
+        }
+
 	/*
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public ModelAndView memoList(HttpSession session, ModelAndView mv, RedirectView rv) {
