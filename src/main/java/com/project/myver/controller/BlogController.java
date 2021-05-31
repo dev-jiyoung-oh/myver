@@ -80,16 +80,8 @@ public class BlogController {
 			mv.setViewName("blog/home");
 			return mv;
 		}
-		// 방문자 회원 번호
-		int visitor_no = memSVC.selectMember_noById((String)session.getAttribute("MID"));
 		
-		
-		/* 1. str(id)->member_no로 블로그 정보 가져오기
-		 * 2. 이미지 번호로 이미지 path, saved_name 가져오기
-		 * 3. 카테고리 리스트 가져오기
-		 * 4. 이웃 리스트 가져오기
-		 * 5. 블로그 글 리스트 가져오기
-		 */
+		// 블로그 주인 회원 번호
 		int member_no = memSVC.selectMember_noById(id);
 		
 		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
@@ -106,11 +98,27 @@ public class BlogController {
 			imgSVC.selectPathAndSaved_nameFromImage(blogDTO);
 		}
 
+		//방문자
+		String visitor_id = (String)session.getAttribute("MID");
+		int visitor_no = 0;
+		
+		// 방문자 회원 번호
+		if(visitor_id != null) {
+			visitor_no = memSVC.selectMember_noById(visitor_id);
+		}
+		
 		// 방문자가 블로그 주인일 경우
-		if(blogDTO.getMember_no()==visitor_no){
-		// 전체 카테고리 등 가져오기
+		if(visitor_no != 0 && blogDTO.getMember_no()==visitor_no){
+			// 전체 카테고리 등 가져오기
+			
 		}else { // 방문자가 외부인일 경우
-		// visitor 테이블에 데이터 삽입 + 비밀이 아닌 경우의 카테고리,글,댓글 등 가져오기 + 방문 카운트++ + 어떤글을 봤는지 어떻게 기록할래?
+			// 뱡문자가 로그인한 경우
+			if(visitor_no != 0) {
+				
+			}
+			
+			// visitor 테이블에 데이터 삽입 + 비밀이 아닌 경우의 카테고리,글,댓글 등 가져오기 + 방문 카운트++ + 어떤글을 봤는지 어떻게 기록할래?
+			
 		}
 
 		// 21.05.23 카테고리 리스트 가져오기
@@ -124,7 +132,7 @@ public class BlogController {
 		 *    - 카테고리 설정에서 '목록 개수' 설정한 만큼...
 		 *    - 해당 카테고리의 모든 글 개수에서 '목록개수'로 나눈만큼 1,2,3,4,5... 버튼 생성
 		 */
-		// 블로그 주인인 경우~~
+		
 		for(BlogDTO category : categoryList) {
 			// 대표 카테고리인 경우
 			if(category.getIs_basic() == 1) {
@@ -167,23 +175,23 @@ public class BlogController {
 		return mv;
 	}
 
-        // 21.05.30 블로그 글 보기	
-        @RequestMapping(value = "/{id}/{object_no}")	
-        public ModelAndView blogObject(HttpSession session, ModelAndView mv, @PathVariable("id") String id, PathVariable("object_no") int object_no) {	
-		if(id.length() == 0) { 
-			mv.setViewName("blog/home");
-			return mv;
-		}
-		if(object_no == 0) { 
-			mv.setViewName("blog/home");
-			return mv;
-		}
-		// mv.addObject("FOLLOWER", followerList);
-		
-		// mv.setViewName("blog/object");
-		
+    // 21.05.30 블로그 글 보기	
+    @RequestMapping(value = "/{id}/{object_no}")	
+    public ModelAndView blogObject(HttpSession session, ModelAndView mv, @PathVariable("id") String id, @PathVariable("object_no") int object_no) {	
+	if(id.length() == 0) { 
+		mv.setViewName("blog/home");
 		return mv;
-        }
+	}
+	if(object_no == 0) { 
+		mv.setViewName("blog/home");
+		return mv;
+	}
+	// mv.addObject("FOLLOWER", followerList);
+	
+	mv.setViewName("blog/object");
+	
+	return mv;
+    }
 
 	/*
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
