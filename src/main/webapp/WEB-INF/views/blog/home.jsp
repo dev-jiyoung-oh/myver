@@ -33,7 +33,7 @@
 			<span>
 				블로그 이미지
 			</span>
-			<a>닉네임${BLOG.nick}</a>
+			<a>닉네임${BLOG.blog_nick}</a>
 			<a>오늘 방문자수${TODAYVISIT}</a>
 			<a>로그아웃</a>
 			<nav>
