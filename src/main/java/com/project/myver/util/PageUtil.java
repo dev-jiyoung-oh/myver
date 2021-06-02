@@ -20,15 +20,7 @@ public class PageUtil {
 	private int endNo; 				// 한 페이지에 출력할 리스트 중 마지막 no
 	
 	// 블로그
-	private int blog_cateogry_no;	// 블로그 카테고리 번호
-	
-	public int getBlog_cateogry_no() {
-		return blog_cateogry_no;
-	}
-
-	public void setBlog_cateogry_no(int blog_cateogry_no) {
-		this.blog_cateogry_no = blog_cateogry_no;
-	}
+	private int no;	// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
 
 	// 검색 시 필요한 파라미터
 	private String searchWord; //
@@ -62,12 +54,12 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int nowPage, int totalCount, int lineCount, int blog_cateogry_no) {
+	public PageUtil(int nowPage, int totalCount, int lineCount, int no) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
 		this.pageGroup 	= 10;
-		this.blog_cateogry_no = blog_cateogry_no;
+		this.no = no;
 		calcTotalPage();
 		calcStartPage();
 		calcEndPage();
@@ -277,14 +269,20 @@ public class PageUtil {
 	public void setEndPage(int endPage) {
 		this.endPage = endPage;
 	}
-
+	public int getNo() {
+		return no;
+	}
+	public void setNo(int no) {
+		this.no = no;
+	}
+	
 	@Override
 	public String toString() {
 		return "PageUtil [nowPage=" + nowPage + ", totalCount=" + totalCount + ", lineCount=" + lineCount
 				+ ", pageGroup=" + pageGroup + ", totalPage=" + totalPage + ", startPage=" + startPage + ", endPage="
-				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", blog_cateogry_no=" + blog_cateogry_no
-				+ ", searchWord=" + searchWord + ", searchType=" + searchType + ", rid=" + rid + ", coname=" + coname
-				+ ", qid=" + qid + ", qno=" + qno + ", ftype=" + ftype + ", fid=" + fid + ", fno=" + fno + "]";
+				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", no=" + no + ", searchWord=" + searchWord
+				+ ", searchType=" + searchType + ", rid=" + rid + ", coname=" + coname + ", qid=" + qid + ", qno=" + qno
+				+ ", ftype=" + ftype + ", fid=" + fid + ", fno=" + fno + "]";
 	}
 }
 

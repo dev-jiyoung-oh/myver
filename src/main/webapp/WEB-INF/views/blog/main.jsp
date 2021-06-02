@@ -47,6 +47,7 @@
 		</ul>
 	</div>
 	<div class="col-md-12">
+		<a>${CATEGORY_NAME} ${CATEGORY_TOTAL}개의 글 ${CATEGORY_NO}</a>
 		<table border="1">
 			<tr>
 				<td>글제목</td>
@@ -66,8 +67,11 @@
 		<c:forEach var="object" items="${OBJECT}">
 			<table border="1">
 				<tr>
+					<td colspan="3">${object.category_name} ${object.blog_category_no}</td>
+				</tr>
+				<tr>
 					<td>${object.title}</td>
-					<td>${object.hits}</td>
+					<!-- <td>${object.hits}</td> -->
 					<td>${object.date}</td>
 				</tr>
 				<tr>
