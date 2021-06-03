@@ -96,7 +96,7 @@ public class BlogController {
 	}
 	// 21.05.19 블로그 메인
 	@RequestMapping(value = "/{id}")
-	public ModelAndView blogMain(HttpSession session, ModelAndView mv, @PathVariable("id")String id) {
+	public ModelAndView blogMain(HttpSession session, ModelAndView mv, @PathVariable("id")String id, String search_word) {
 		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
 		if(id.length() == 0) { 
 			mv.setViewName("blog/home");
@@ -129,7 +129,7 @@ public class BlogController {
 			visitor_no = memSVC.selectMember_noById(visitor_id);
 		}
 		
-		// 방문자가 블로그 주인일 경우
+		// 21.06.03 방문자가 블로그 주인일 경우
 		if(visitor_no != 0 && blogDTO.getMember_no()==visitor_no){
 			System.out.println("주인이 방문했습니다.");
 			
@@ -143,17 +143,17 @@ public class BlogController {
 						System.out.println("전체 카테고리가 기본 카테고리임!");
 						// 21.06.02 블로그 글 테이블에서 'blog_no'에 해당하는 개수 가져오기
 						int blog_no = blogDTO.getBlog_no();
-						int totalCount = blogSVC.selectTotalCountByBlog_noFromBlog_object(blog_no);
+						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", false);
 						
-						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,blog_cateogry_no)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no);
+						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
+						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no,"blog_no",false);
+						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no,"blog_no",false);
 						
 						// 21.06.02 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByBlog_noFromBlog_object(listInfo);
+						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
 								
 						// 21.06.02 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByBlog_noFromBlog_object(pageInfo);
+						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
 						
 						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
 						mv.addObject("CATEGORY_NAME", category.getCategory_name());
@@ -164,23 +164,17 @@ public class BlogController {
 					}else {
 						int blog_category_no = category.getBlog_category_no();
 						// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
-						int totalCount = blogSVC.selectTotalCountByBlog_category_noFromBlog_object(blog_category_no);
+						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", false);
 						
-						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,blog_cateogry_no)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no);
+						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
+						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no,"blog_category_no",false);
+						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",false);
 						
 						// 21.05.27 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByBlog_category_noFromBlog_object(listInfo);
+						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
 								
 						// 21.05.27 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByBlog_category_noFromBlog_object(pageInfo);
-						
-						// 21.06.02 각 게시글에 카테고리명 입력
-						String category_name = category.getCategory_name();
-						for(BlogDTO object : objects) {
-							object.setCategory_name(category_name);
-						}
+						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
 						
 						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
 						mv.addObject("CATEGORY_NAME", category.getCategory_name());
@@ -194,16 +188,19 @@ public class BlogController {
 			}
 			
 			mv.addObject("CATEGORY", categoryList);
-		}else { // 방문자가 외부인일 경우
+		}else { // 21.06.030 방문자가 외부인일 경우
 			System.out.println("외부인이 방문했습니다.");
 			
-			// 뱡문자가 로그인한 경우
-			if(visitor_no != 0) {
+			if(visitor_no != 0) { // 뱡문자가 로그인한 경우
 				System.out.println("외부인이 로그인했습니다.");
-				// visitor 테이블에 데이터 삽입
+				// 방문 카운트++ && 어떤글을 봤는지 어떻게 기록할래?
+				// 세션....ip...
+				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, search_word, date)
+			}else {
+				System.out.println("외부인이 로그인하지 않았습니다.");
+				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, search_word, date)
 			}
 			
-			// 비밀이 아닌 경우의 카테고리,글,댓글 등 가져오기 && 방문 카운트++ && 어떤글을 봤는지 어떻게 기록할래? && 검색 경로..
 			// 21.06.02 공개된 카테고리 리스트 가져오기
 			List<BlogDTO> categoryList = blogSVC.selectPublicFromBlog_category(blogDTO.getBlog_no());
 			
@@ -214,17 +211,17 @@ public class BlogController {
 						System.out.println("전체 카테고리가 기본 카테고리임!");
 						// 21.06.02 블로그 글 테이블에서 'blog_no'에 해당하는 공개된 게시글 개수 가져오기
 						int blog_no = blogDTO.getBlog_no();
-						int totalCount = blogSVC.selectPublicTotalCountByBlog_noFromBlog_object(blog_no);
+						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
 						
-						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,blog_cateogry_no)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no);
+						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
+						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no,"blog_no",true);
+						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no,"blog_no",true);
 						
 						// 21.06.02 공개된 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectPublicListDetailByBlog_noFromBlog_object(listInfo);
+						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
 								
 						// 21.06.02 공개된 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectPublicObjectDetailByBlog_noFromBlog_object(pageInfo);
+						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
 						
 						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
 						mv.addObject("CATEGORY_NAME", category.getCategory_name());
@@ -235,23 +232,17 @@ public class BlogController {
 					}else {
 						int blog_category_no = category.getBlog_category_no();
 						// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
-						int totalCount = blogSVC.selectTotalCountByBlog_category_noFromBlog_object(blog_category_no);
+						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", true);
 						
-						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,blog_cateogry_no)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no);
+						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
+						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no,"blog_category_no",true);
+						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",true);
 						
 						// 21.05.27 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByBlog_category_noFromBlog_object(listInfo);
+						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
 								
 						// 21.05.27 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByBlog_category_noFromBlog_object(pageInfo);
-						
-						// 21.06.02 각 게시글에 카테고리명 입력
-						String category_name = category.getCategory_name();
-						for(BlogDTO object : objects) {
-							object.setCategory_name(category_name);
-						}
+						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
 						
 						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
 						mv.addObject("CATEGORY_NAME", category.getCategory_name());

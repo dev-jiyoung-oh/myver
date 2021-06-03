@@ -11,6 +11,7 @@
 	        <typeAlias type="java.lang.Integer" alias="Integer"/>
 		   	<typeAlias type="java.lang.String" alias="String"/>
 		   	<typeAlias type="java.lang.Double" alias="Double"/>
+		   	<typeAlias type="java.util.Map" alias="Map"/>
 	   		<typeAlias type="com.project.myver.util.PageUtil" alias="pageUtil"/>
 	   		<typeAlias type="com.project.myver.dto.MemberDTO" alias="memDTO"/>
 	   		<typeAlias type="com.project.myver.dto.MemoDTO" alias="memoDTO"/>

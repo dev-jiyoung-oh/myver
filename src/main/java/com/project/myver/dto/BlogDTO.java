@@ -4,6 +4,12 @@ import java.sql.Date;
 
 public class BlogDTO {
 	
+	// Constructor
+	// 기본 생성자
+	public BlogDTO(){}
+	
+	
+	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
 	private int member_no;			//회원번호

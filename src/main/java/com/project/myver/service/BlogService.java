@@ -1,6 +1,8 @@
 package com.project.myver.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,63 +119,24 @@ public class BlogService {
 
 	
 	// 'blog_object'table =================================================
-	// 21.05.27 'blog_category_no'에 해당하는 개수 가져오기
-	public int selectTotalCountByBlog_category_noFromBlog_object(int blog_category_no) {
-		return blogDAO.selectTotalCountByBlog_category_noFromBlog_object(blog_category_no);
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
+	public int selectTotalCountByNoFromBlog_object(int no, String column_name, boolean only_public) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("column_name", column_name);
+		map.put("only_public", only_public);
+		
+		return blogDAO.selectTotalCountByNoFromBlog_object(map);
 	}
 
-	// 21.05.27 'blog_category_no'에 해당하는 목록 내용 가져오기 
-	public List<BlogDTO> selectListDetailByBlog_category_noFromBlog_object(PageUtil listInfo) {
-		return blogDAO.selectListDetailByBlog_category_noFromBlog_object(listInfo);
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 목록 내용 가져오기 (전체/공개)
+	public List<BlogDTO> selectListDetailByNoFromBlog_object(PageUtil listInfo) {
+		return blogDAO.selectListDetailByNoFromBlog_object(listInfo);
 	}
 	
-	// 21.05.27 'blog_category_no'에 해당하는 게시글 내용 가져오기
-	public List<BlogDTO> selectObjectDetailByBlog_category_noFromBlog_object(PageUtil pageInfo) {
-		return blogDAO.selectObjectDetailByBlog_category_noFromBlog_object(pageInfo);
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 게시글 내용 가져오기 (전체/공개)
+	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
+		return blogDAO.selectObjectDetailByNoFromBlog_object(pageInfo);
 	}
 	
-	// 21.06.02 'blog_no'에 해당하는 개수 가져오기
-	public int selectTotalCountByBlog_noFromBlog_object(int blog_no) {
-		return blogDAO.selectTotalCountByBlog_noFromBlog_object(blog_no);
-	}
-
-	// 21.06.02 'blog_no'에 해당하는 목록 내용 가져오기 
-	public List<BlogDTO> selectListDetailByBlog_noFromBlog_object(PageUtil listInfo) {
-		return blogDAO.selectListDetailByBlog_noFromBlog_object(listInfo);
-	}
-	
-	// 21.06.02 'blog_no'에 해당하는 게시글 내용 가져오기
-	public List<BlogDTO> selectObjectDetailByBlog_noFromBlog_object(PageUtil pageInfo) {
-		return blogDAO.selectObjectDetailByBlog_noFromBlog_object(pageInfo);
-	}
-	
-	// 21.06.02 'blog_category_no'에 해당하는 공개된 게시글 개수 가져오기
-	public int selectPublicTotalCountByBlog_category_noFromBlog_object(int blog_category_no) {
-		return blogDAO.selectPublicTotalCountByBlog_category_noFromBlog_object(blog_category_no);
-	}
-
-	// 21.06.02 'blog_category_no'에 해당하는 공개된 목록 내용 가져오기 
-	public List<BlogDTO> selectPublicListDetailByBlog_category_noFromBlog_object(PageUtil listInfo) {
-		return blogDAO.selectPublicListDetailByBlog_category_noFromBlog_object(listInfo);
-	}
-	
-	// 21.06.02 'blog_category_no'에 해당하는 공개된 게시글 내용 가져오기
-	public List<BlogDTO> selectPublicObjectDetailByBlog_category_noFromBlog_object(PageUtil pageInfo) {
-		return blogDAO.selectPublicObjectDetailByBlog_category_noFromBlog_object(pageInfo);
-	}
-	
-	// 21.06.02 'blog_no'에 해당하는 공개된 게시글 개수 가져오기
-	public int selectPublicTotalCountByBlog_noFromBlog_object(int blog_no) {
-		return blogDAO.selectPublicTotalCountByBlog_noFromBlog_object(blog_no);
-	}
-
-	// 21.06.02 'blog_no'에 해당하는 공개된 목록 내용 가져오기 
-	public List<BlogDTO> selectPublicListDetailByBlog_noFromBlog_object(PageUtil listInfo) {
-		return blogDAO.selectPublicListDetailByBlog_noFromBlog_object(listInfo);
-	}
-	
-	// 21.06.02 'blog_no'에 해당하는 공개된 게시글 내용 가져오기
-	public List<BlogDTO> selectPublicObjectDetailByBlog_noFromBlog_object(PageUtil pageInfo) {
-		return blogDAO.selectPublicObjectDetailByBlog_noFromBlog_object(pageInfo);
-	}
 }

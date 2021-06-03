@@ -83,65 +83,69 @@
 	
 	
 	<!-- 'blog_object'table =================================================================== -->
-	<!-- 21.05.27 'blog_category_no'에 해당하는 개수 가져오기 -->
-	<select id="selectTotalCountByBlog_category_noFromBlog_object" parameterType="Integer" resultType="Integer">
+	<!-- 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기 -->
+	<select id="selectTotalCountByNoFromBlog_object" parameterType="Map" resultType="Integer">
 		SELECT COUNT(blog_object_no) 
-		FROM blog_object 
-		WHERE blog_category_no = #{no}
-		<set>
-			<if test="">
-				
-			</if>
-		</set>
+		FROM blog_object AS O, blog_category AS C
+		WHERE 
+		<choose>
+			<when test="column_name.equalsIgnoreCase('blog_no')">
+				O.blog_no = #{no}
+			</when>
+			<otherwise>
+				O.blog_category_no = #{no}
+			</otherwise>
+		</choose>
+		<if test="only_public">
+			AND O.is_public = 1
+			AND C.is_public = 1
+		</if>
+			AND O.blog_category_no = C.blog_category_no
 	</select>
 	
 	<!-- 21.05.27 목록 가져오기 -->
-	<select id="selectListDetailByBlog_category_noFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
+	<select id="selectListDetailByNoFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
 		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, title, DATE, is_public, hits
-          	  FROM blog_object
-          	  WHERE blog_category_no = #{no}
+  		FROM (SELECT blog_object_no, title, DATE, O.is_public, hits
+          	  FROM blog_object AS O, blog_category AS C
+          	  WHERE 
+          	  <choose>
+					<when test="column_name!=null and column_name.equalsIgnoreCase('blog_no')">
+						O.blog_no = #{no}
+					</when>
+					<otherwise>
+						O.blog_category_no = #{no}
+					</otherwise>
+			  </choose>
+			  <if test="only_public">
+					AND C.is_public = 1
+					AND O.is_public = 1
+			  </if>
+			  		AND O.blog_category_no = C.blog_category_no
               ORDER BY blog_object_no DESC) AS TB
       		, (SELECT @ROWNUM := 0) AS RN
  		LIMIT #{startNo}, #{endNo}
 	</select>
 	
 	<!-- 21.05.27 게시글 내용 가져오기 -->
-	<select id="selectObjectDetailByBlog_category_noFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
-		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, title, content, DATE, is_public, hits, likes
-          	  FROM blog_object
-          	  WHERE blog_category_no = #{no}
-              ORDER BY blog_object_no DESC) AS TB
-      		, (SELECT @ROWNUM := 0) AS RN
- 		LIMIT #{startNo}, #{endNo}
-	</select>
-	
-	<!-- 21.06.02 'blog_no'에 해당하는 개수 가져오기 -->
-	<select id="selectTotalCountByBlog_noFromBlog_object" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(blog_object_no) 
-		FROM blog_object 
-		WHERE blog_no = #{no}
-	</select>
-	
-	<!-- 21.06.02 'blog_no'에 해당하는 목록 가져오기 -->
-	<select id="selectListDetailByBlog_noFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
-		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, title, DATE, is_public, hits
-          	  FROM blog_object
-          	  WHERE blog_no = #{no}
-              ORDER BY blog_object_no DESC) AS TB
-      		, (SELECT @ROWNUM := 0) AS RN
- 		LIMIT #{startNo}, #{endNo}
-	</select>
-	
-	<!-- 21.06.02 'blog_no'에 해당하는 게시글 내용 가져오기 -->
-	<select id="selectObjectDetailByBlog_noFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
+	<select id="selectObjectDetailByNoFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
 		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
   		FROM (SELECT blog_object_no, O.blog_category_no, category_name, title, content, DATE, O.is_public, hits, likes
           	  FROM blog_object AS O, blog_category AS C
-          	  WHERE O.blog_no = #{no}
-					AND O.blog_category_no = C.blog_category_no
+          	  WHERE
+          	  <choose>
+					<when test="column_name!=null and column_name.equalsIgnoreCase('blog_no')">
+						O.blog_no = #{no}
+					</when>
+					<otherwise>
+						O.blog_category_no = #{no}
+					</otherwise>
+			  </choose>
+			  <if test="only_public">
+					AND C.is_public = 1
+					AND O.is_public = 1
+			  </if>
+			  		AND O.blog_category_no = C.blog_category_no
               ORDER BY blog_object_no DESC) AS TB
       		, (SELECT @ROWNUM := 0) AS RN
  		LIMIT #{startNo}, #{endNo}

@@ -20,8 +20,10 @@ public class PageUtil {
 	private int endNo; 				// 한 페이지에 출력할 리스트 중 마지막 no
 	
 	// 블로그
-	private int no;	// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
-
+	private int no;					// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
+	private String column_name;		// no의 컬럼명(블로그 카테고리 번호 혹은 블로그 번호)
+	private boolean only_public;	// 공개된 것만 보여줄지 여부
+	
 	// 검색 시 필요한 파라미터
 	private String searchWord; //
 	private String searchType; //
@@ -54,12 +56,15 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int nowPage, int totalCount, int lineCount, int no) {
+	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean only_public) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
 		this.pageGroup 	= 10;
 		this.no = no;
+		this.column_name = column_name;
+		this.only_public = only_public;
+		
 		calcTotalPage();
 		calcStartPage();
 		calcEndPage();
@@ -275,14 +280,27 @@ public class PageUtil {
 	public void setNo(int no) {
 		this.no = no;
 	}
-	
+	public String getColumn_name() {
+		return column_name;
+	}
+	public void setColumn_name(String column_name) {
+		this.column_name = column_name;
+	}
+	public boolean isOnly_public() {
+		return only_public;
+	}
+	public void setOnly_public(boolean only_public) {
+		this.only_public = only_public;
+	}
+
 	@Override
 	public String toString() {
 		return "PageUtil [nowPage=" + nowPage + ", totalCount=" + totalCount + ", lineCount=" + lineCount
 				+ ", pageGroup=" + pageGroup + ", totalPage=" + totalPage + ", startPage=" + startPage + ", endPage="
-				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", no=" + no + ", searchWord=" + searchWord
-				+ ", searchType=" + searchType + ", rid=" + rid + ", coname=" + coname + ", qid=" + qid + ", qno=" + qno
-				+ ", ftype=" + ftype + ", fid=" + fid + ", fno=" + fno + "]";
+				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", no=" + no + ", column_name=" + column_name
+				+ ", only_public=" + only_public + ", searchWord=" + searchWord + ", searchType=" + searchType
+				+ ", rid=" + rid + ", coname=" + coname + ", qid=" + qid + ", qno=" + qno + ", ftype=" + ftype
+				+ ", fid=" + fid + ", fno=" + fno + "]";
 	}
 }
 
