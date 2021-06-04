@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,17 +95,23 @@ public class BlogController {
 		
 		return mv;
 	}
+	
 	// 21.05.19 블로그 메인
-	@RequestMapping(value = "/{id}")
-	public ModelAndView blogMain(HttpSession session, ModelAndView mv, @PathVariable("id")String id, String search_word) {
+	// 21.06.04 블로그table에는 blogId, 방문자는 logNo, 방문자는 세션에 저장해서~~~, 
+	@RequestMapping(value = "/{blogId}")
+	public ModelAndView blogMain(HttpSession session, 
+				     ModelAndView mv, 
+				     @PathVariable("blogId")String blogId, 
+				     @RequestParam(value="query", defaultValue="") String query, 
+				     @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
 		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
-		if(id.length() == 0) { 
+		if(blogId.length() == 0) { 
 			mv.setViewName("blog/home");
 			return mv;
 		}
 		
 		// 블로그 주인 회원 번호
-		int member_no = memSVC.selectMember_noById(id);
+		int member_no = memSVC.selectMember_noById(blogId);
 		
 		if(member_no == 0) { // member id가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
 			System.out.println("member id==0");
@@ -115,9 +122,11 @@ public class BlogController {
 		// 21.05.19 member_no로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 		
-		// 21.05.28 이미지 번호로 이미지 path, saved_name 세팅(이미지 번호 없는 경우에는 건너뛰기)
+		// 21.05.28 이미지 번호로 이미지 path, saved_name 세팅(이미지 번호 없는 경우에는 blank.png)
 		if(blogDTO.getBlog_img_no() != 0) {
 			imgSVC.selectPathAndSaved_nameFromImage(blogDTO);
+		}else{
+			//21.06.04 이미지 번호 없는 경우 처리~~
 		}
 
 		//방문자
@@ -146,8 +155,8 @@ public class BlogController {
 						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", false);
 						
 						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no,"blog_no",false);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no,"blog_no",false);
+						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_no,"blog_no",false);
+						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_no,"blog_no",false);
 						
 						// 21.06.02 목록 내용 가져오기
 						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
@@ -167,8 +176,8 @@ public class BlogController {
 						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", false);
 						
 						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no,"blog_category_no",false);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",false);
+						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_category_no,"blog_category_no",false);
+						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",false);
 						
 						// 21.05.27 목록 내용 가져오기
 						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
@@ -195,10 +204,10 @@ public class BlogController {
 				System.out.println("외부인이 로그인했습니다.");
 				// 방문 카운트++ && 어떤글을 봤는지 어떻게 기록할래?
 				// 세션....ip...
-				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, search_word, date)
+				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query, date)
 			}else {
 				System.out.println("외부인이 로그인하지 않았습니다.");
-				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, search_word, date)
+				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query, date)
 			}
 			
 			// 21.06.02 공개된 카테고리 리스트 가져오기
@@ -214,8 +223,8 @@ public class BlogController {
 						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
 						
 						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_no,"blog_no",true);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_no,"blog_no",true);
+						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_no,"blog_no",true);
+						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_no,"blog_no",true);
 						
 						// 21.06.02 공개된 목록 내용 가져오기
 						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
@@ -235,8 +244,8 @@ public class BlogController {
 						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", true);
 						
 						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(1,totalCount,category.getList_line(),blog_category_no,"blog_category_no",true);
-						PageUtil pageInfo = new PageUtil(1,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",true);
+						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_category_no,"blog_category_no",true);
+						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",true);
 						
 						// 21.05.27 목록 내용 가져오기
 						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
@@ -275,8 +284,12 @@ public class BlogController {
 	}
 
     // 21.05.30 블로그 글 보기	
-    @RequestMapping(value = "/{id}/{object_no}")	
-    public ModelAndView blogObject(HttpSession session, ModelAndView mv, @PathVariable("id") String id, @PathVariable("object_no") int object_no) {	
+    @RequestMapping(value = "/{blogId}/{object_no}")	
+    public ModelAndView blogObject(HttpSession session, 
+				   ModelAndView mv, 
+				   @PathVariable("blogId") String blogId, 
+				   @PathVariable("object_no") int object_no, 
+				   @RequestParam(value="query", defaultValue="") String query) {	
 	if(id.length() == 0) { 
 		mv.setViewName("blog/home");
 		return mv;
@@ -285,8 +298,14 @@ public class BlogController {
 		mv.setViewName("blog/home");
 		return mv;
 	}
-	// mv.addObject("FOLLOWER", followerList);
 	
+	// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
+	List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
+	List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(member_no);
+
+	mv.addObject("BLOG", blogDTO);
+	mv.addObject("FOLLOWING", followingList);
+	mv.addObject("FOLLOWER", followerList);
 	mv.setViewName("blog/object");
 	
 	return mv;
