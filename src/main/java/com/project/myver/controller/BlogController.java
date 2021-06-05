@@ -282,7 +282,7 @@ public class BlogController {
 		
 		return mv;
 	}
-
+    // 21.06.05 글 번호에 해당하는 내용 가져오기. 글에 해당하는 카테고리 정보 가져와서 목록/글 페이지 정보 만들고 리스트 가져오기 && 방문자 처리
     // 21.05.30 블로그 글 보기	
     @RequestMapping(value = "/{blogId}/{object_no}")	
     public ModelAndView blogObject(HttpSession session, 
