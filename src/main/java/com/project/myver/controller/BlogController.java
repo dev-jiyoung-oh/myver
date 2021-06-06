@@ -290,7 +290,7 @@ public class BlogController {
 				   @PathVariable("blogId") String blogId, 
 				   @PathVariable("object_no") int object_no, 
 				   @RequestParam(value="query", defaultValue="") String query) {	
-	if(id.length() == 0) { 
+	if(blogId.length() == 0) {
 		mv.setViewName("blog/home");
 		return mv;
 	}
@@ -298,6 +298,11 @@ public class BlogController {
 		mv.setViewName("blog/home");
 		return mv;
 	}
+	
+	// 블로그 주인 회원 번호
+	int member_no = memSVC.selectMember_noById(blogId);
+	// member_no로 블로그 정보 가져오기
+	BlogDTO blogDTO = blogSVC.selectAllFromBlog(member_no);
 	
 	// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
 	List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
