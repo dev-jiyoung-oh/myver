@@ -203,8 +203,9 @@ public class BlogController {
 			if(visitor_no != 0) { // 뱡문자가 로그인한 경우
 				System.out.println("외부인이 로그인했습니다.");
 				// 방문 카운트++ && 어떤글을 봤는지 어떻게 기록할래?
-				// 세션....ip...
-				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query, date)
+				blogSVC.objectHitCount(blogDTO.getBlog_object_no(), session);
+				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query)
+				blogSVC.insertBlog_visit(blogDTO.getBlog_no(), visitor_no, query);
 			}else {
 				System.out.println("외부인이 로그인하지 않았습니다.");
 				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query, date)
