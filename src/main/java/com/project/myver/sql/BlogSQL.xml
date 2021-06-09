@@ -151,8 +151,32 @@
  		LIMIT #{startNo}, #{endNo}
 	</select>
 	
+	<!-- 21.06.09 게시물 조회수 업데이트(증가) -->
+	<update id="updateBlogObjectHits" parameterType="Integer">
+		UPDATE blog_object
+		SET
+		hits = hits+1
+		where blog_object_no = #{blog_object_no}
+	</update>
 
-
-
+	<!-- 21.06.09 블로그 방문자 정보 추가 -->
+	<insert id="insertBlog_visit" parameterType="blogDTO">
+		INSERT INTO blog_visit (blog_no, blog_object_no, visitor_no, date
+		<if test="query != null">
+			, query
+		</if>
+		)
+		VALUES (#{blog_no}, #{blog_object_no}, #{visitor_no}, SYSDATE()
+		<if test="query != null">
+			, #{query}
+		</if>
+		)
+	</insert>
+	
+	
+	
+	
+	
+	
 </mapper>
 	

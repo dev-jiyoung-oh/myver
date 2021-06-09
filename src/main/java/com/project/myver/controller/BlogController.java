@@ -200,15 +200,16 @@ public class BlogController {
 		}else { // 21.06.030 방문자가 외부인일 경우
 			System.out.println("외부인이 방문했습니다.");
 			
-			if(visitor_no != 0) { // 뱡문자가 로그인한 경우
+			// 21.06.09 게시글 조회수 업데이트(증가)
+			blogSVC.updateBlogObjectHits(blogDTO.getBlog_object_no(), session);
+			// 21.06.09 블로그 방문자 정보 추가
+			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), blogDTO.getBlog_object_no(), visitor_no, query, session);
+			
+			if(visitor_no != 0) { // 외부 방문자가 로그인한 경우
 				System.out.println("외부인이 로그인했습니다.");
-				// 방문 카운트++ && 어떤글을 봤는지 어떻게 기록할래?
-				blogSVC.objectHitCount(blogDTO.getBlog_object_no(), session);
-				// blog_visit 테이블에 데이터 삽입 (blog_no, blog_object_no, visitor_no, query)
-				blogSVC.insertBlog_visit(blogDTO.getBlog_no(), visitor_no, query);
-			}else {
+				
+			}else { // 외부 방문자가 로그인하지 않은 경우
 				System.out.println("외부인이 로그인하지 않았습니다.");
-				// visitor 테이블에 데이터 삽입 (blog_no, visitor_no, query, date)
 			}
 			
 			// 21.06.02 공개된 카테고리 리스트 가져오기

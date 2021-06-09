@@ -87,6 +87,16 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
 		return session.selectList("blog.selectObjectDetailByNoFromBlog_object", pageInfo);
 	}
+
+	// 21.06.09 게시물 조회수 업데이트(증가)
+	public void updateBlogObjectHits(int blog_object_no) {
+		session.update("blog.updateBlogObjectHits", blog_object_no);
+	}
+
+	// 21.06.09 블로그 방문자 정보 추가
+	public void insertBlog_visit(BlogDTO blogDTO) {
+		session.insert("blog.insertBlog_visit", blogDTO);
+	}
 	
 	
 }

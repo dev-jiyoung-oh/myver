@@ -9,7 +9,6 @@ public class BlogDTO {
 	public BlogDTO(){}
 	
 	
-	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
 	private int member_no;			//회원번호
@@ -37,7 +36,7 @@ public class BlogDTO {
 	// 'blog_visit' table
 	private int blog_visit_no;		//블로그 방문 번호
 	private int visitor_no;			//방문자 번호
-	private String search_word;		//검색 단어(검색 유입 경로)
+	private String query;		//검색 단어(검색 유입 경로)
 	private Date date;				//방문일
 	//private int blog_object_no;	//유입된 블로그 글 번호
 	
@@ -199,11 +198,11 @@ public class BlogDTO {
 	public void setVisitor_no(int visitor_no) {
 		this.visitor_no = visitor_no;
 	}
-	public String getSearch_word() {
-		return search_word;
+	public String getQuery() {
+		return query;
 	}
-	public void setSearch_word(String search_word) {
-		this.search_word = search_word;
+	public void setQuery(String query) {
+		this.query = query;
 	}
 	public Date getDate() {
 		return date;
@@ -290,7 +289,7 @@ public class BlogDTO {
 				+ ", is_public=" + is_public + ", topic=" + topic + ", type=" + type + ", show_list=" + show_list
 				+ ", list_line=" + list_line + ", objects_per_page=" + objects_per_page
 				+ ", is_basic=" + is_basic + ", is_upper=" + is_upper + ", all_category=" + all_category
-				+ ", blog_visit_no=" + blog_visit_no + ", visitor_no=" + visitor_no + ", search_word=" + search_word
+				+ ", blog_visit_no=" + blog_visit_no + ", visitor_no=" + visitor_no + ", query=" + query
 				+ ", date=" + date + ", blog_object_no=" + blog_object_no + ", title=" + title + ", content=" + content
 				+ ", hits=" + hits + ", likes=" + likes + ", blog_object_like_no=" + blog_object_like_no + ", id=" + id
 				+ ", blog_neighbor_no=" + blog_neighbor_no + ", neighbor_member_no=" + neighbor_member_no + "]";
@@ -313,7 +312,7 @@ public class BlogDTO {
 	
 	public String blog_visitToString() {
 		return "BlogDTO - blog_visit [blog_visit_no=" + visitor_no +", blog_no=" + blog_no
-				+ ", visitor_no=" + visitor_no + ", search_word=" + search_word + ", date=" + date
+				+ ", visitor_no=" + visitor_no + ", query=" + query + ", date=" + date
 				+ ", blog_object_no=" + blog_object_no + "]";
 	}
 	

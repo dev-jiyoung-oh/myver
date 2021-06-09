@@ -1,8 +1,11 @@
 package com.project.myver.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,6 +140,68 @@ public class BlogService {
 	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 게시글 내용 가져오기 (전체/공개)
 	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
 		return blogDAO.selectObjectDetailByNoFromBlog_object(pageInfo);
+	}
+	
+	// 21.06.09 게시물 조회수 업데이트(증가)
+	public boolean updateBlogObjectHits(int blog_object_no, HttpSession session) {
+		ArrayList<Integer> list = (ArrayList) session.getAttribute("BLOGOBJECTHITCHECK");
+		boolean is_first;
+		
+		System.out.println("session id: "+session.getId()+", list: " + list);
+		
+		// 기록이 없을 경우(블로그 게시글 자체를 처음 방문하는 경우)
+		if (list == null) {
+			list = new ArrayList<>();
+			list.add(blog_object_no);
+			session.setAttribute("BLOGOBJECTHITCHECK", list);
+			is_first = true;
+		}else if (list.contains(blog_object_no)) { // 기록이 있을 경우 -> 해당 게시글을 이미 조회한 경우
+			is_first = false;
+		}else {// 기록이 있는 경우 -> 해당 게시글을 처음 방문하는 경우
+			list.add(blog_object_no);
+			session.setAttribute("BLOGOBJECTHITCHECK", list);
+			is_first = true;
+		}
+		
+		if(is_first) {
+			blogDAO.updateBlogObjectHits(blog_object_no);
+		}
+		
+		return is_first;
+	}
+
+	// 21.06.09 블로그 방문자 정보 추가
+	public boolean insertBlog_visit(int blog_no, int blog_object_no, int visitor_no, String query, HttpSession session) {
+		ArrayList<Integer> list = (ArrayList) session.getAttribute("BLOGVISITCHECK");
+		boolean is_first;
+		
+		System.out.println("session id: "+session.getId()+", list: " + list);
+		
+		// 기록이 없을 경우(블로그 자체를 처음 방문하는 경우)
+		if (list == null) {
+			list = new ArrayList<>();
+			list.add(blog_no);
+			session.setAttribute("BLOGVISITCHECK", list);
+			is_first = true;
+		}else if (list.contains(blog_no)) { // 기록이 있을 경우 -> 해당 블로그를 방문한 경우
+			is_first = false;
+		}else {// 기록이 있는 경우 -> 해당 블로그를 처음 방문하는 경우
+			list.add(blog_no);
+			session.setAttribute("BLOGVISITCHECK", list);
+			is_first = true;
+		}
+		
+		if(is_first) {
+			BlogDTO blogDTO = new BlogDTO();
+			blogDTO.setBlog_no(blog_no);
+			blogDTO.setBlog_object_no(blog_object_no);
+			blogDTO.setVisitor_no(visitor_no);
+			blogDTO.setQuery(query);
+			
+			blogDAO.insertBlog_visit(blogDTO);
+		}
+		
+		return is_first;
 	}
 	
 }
