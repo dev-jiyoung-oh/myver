@@ -44,9 +44,10 @@ public class BlogService {
 		
 	// 'blog'table ============================================================
 	// 21.05.19 블로그 생성하고 'blog_no' 리턴
-	public int insertBlog(int member_no, String blog_nick) {
+	public int insertBlog(int member_no, String member_id, String blog_nick) {
 		BlogDTO blogDTO = new BlogDTO();
 		blogDTO.setMember_no(member_no);
+		blogDTO.setBlog_id(member_id);
 		blogDTO.setBlog_title(blog_nick+"의 블로그");
 		blogDTO.setBlog_nick(blog_nick);
 		
@@ -202,6 +203,16 @@ public class BlogService {
 		}
 		
 		return is_first;
+	}
+
+	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
+	public BlogDTO selectBlog_object(int blog_no, int blog_object_no, boolean is_owner) {
+		Map map = new HashMap();
+		map.put("blog_no", blog_no);
+		map.put("blog_object_no", blog_object_no);
+		map.put("is_owner",is_owner);
+		
+		return blogDAO.selectBlog_object(map);
 	}
 	
 }

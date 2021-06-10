@@ -173,8 +173,15 @@
 		)
 	</insert>
 	
-	
-	
+	<!-- 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기 -->
+	<select id="selectBlog_object" parameterType="Map" resultType="blogDTO">
+		SELECT * FROM blog_object 
+		WHERE blog_no = #{blog_no}
+			AND blog_object_no = #{blog_object_no}
+			<if test="!is_owner">
+				AND is_public = 0
+			</if>
+	</select>
 	
 	
 	
