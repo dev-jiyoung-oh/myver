@@ -126,7 +126,7 @@ public class BlogController {
 		if(visitor_id != null) {
 			visitor_no = memSVC.selectMember_noById(visitor_id);
 		}
-		
+		// 이름못정함(주인일 경우, 카테고리 번호)
 		// 21.06.03 방문자가 블로그 주인일 경우
 		if(visitor_no != 0 && blogDTO.getMember_no()==visitor_no){
 			System.out.println("주인이 방문했습니다.");
