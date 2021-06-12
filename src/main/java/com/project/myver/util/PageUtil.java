@@ -22,7 +22,7 @@ public class PageUtil {
 	// 블로그
 	private int no;					// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
 	private String column_name;		// no의 컬럼명(블로그 카테고리 번호 혹은 블로그 번호)
-	private boolean only_public;	// 공개된 것만 보여줄지 여부
+	private boolean is_owner;		// 주인 여부
 	
 	// 검색 시 필요한 파라미터
 	private String searchWord; //
@@ -56,14 +56,14 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean only_public) {
+	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean is_owner) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
 		this.pageGroup 	= 10;
 		this.no = no;
 		this.column_name = column_name;
-		this.only_public = only_public;
+		this.is_owner = is_owner;
 		
 		calcTotalPage();
 		calcStartPage();
@@ -286,11 +286,11 @@ public class PageUtil {
 	public void setColumn_name(String column_name) {
 		this.column_name = column_name;
 	}
-	public boolean isOnly_public() {
-		return only_public;
+	public boolean getIs_owner() {
+		return is_owner;
 	}
-	public void setOnly_public(boolean only_public) {
-		this.only_public = only_public;
+	public void setIs_owner(boolean is_owner) {
+		this.is_owner = is_owner;
 	}
 
 	@Override
@@ -298,7 +298,7 @@ public class PageUtil {
 		return "PageUtil [nowPage=" + nowPage + ", totalCount=" + totalCount + ", lineCount=" + lineCount
 				+ ", pageGroup=" + pageGroup + ", totalPage=" + totalPage + ", startPage=" + startPage + ", endPage="
 				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", no=" + no + ", column_name=" + column_name
-				+ ", only_public=" + only_public + ", searchWord=" + searchWord + ", searchType=" + searchType
+				+ ", is_owner=" + is_owner + ", searchWord=" + searchWord + ", searchType=" + searchType
 				+ ", rid=" + rid + ", coname=" + coname + ", qid=" + qid + ", qno=" + qno + ", ftype=" + ftype
 				+ ", fid=" + fid + ", fno=" + fno + "]";
 	}

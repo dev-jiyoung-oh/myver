@@ -41,13 +41,49 @@
 	</div>
 	<div class="col-md-3">
 		<ul>
-			<c:forEach var="category" items="${CATEGORY}">
+			<c:forEach var="category" items="${CATEGORY_LIST}">
 				<li>${category.category_name}</li>
 			</c:forEach>
 		</ul>
 	</div>
+	<div class="col-md-3">
+		내가 추가한
+		<ul>
+			<c:forEach var="following" items="${FOLLOWING}">
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${following.blog_id}">
+						<c:if test="${empty following.path or empty following.saved_name}">
+							<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+						</c:if>
+						<c:if test="${!empty following.path and !empty following.saved_name}">
+							<img src="/filepath/${following.path}/${following.saved_name}">
+						</c:if>
+					</a>
+					<a href="${pageContext.request.contextPath}/blog/${following.blog_id}">${following.blog_nick}</a>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
+	<div class="col-md-3">
+		나를 추가한
+		<ul>
+			<c:forEach var="follower" items="${FOLLOWER}">
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${follower.blog_id}">
+						<c:if test="${empty follower.path or empty follower.saved_name}">
+							<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+						</c:if>
+						<c:if test="${!empty follower.path and !empty follower.saved_name}">
+							<img src="/filepath/${follower.path}/${follower.saved_name}">
+						</c:if>
+					</a>
+					<a href="${pageContext.request.contextPath}/blog/${follower.blog_id}">${follower.blog_nick}</a>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
 	<div class="col-md-12">
-		<a>${CATEGORY_NAME} ${CATEGORY_TOTAL}개의 글 ${CATEGORY_NO}</a>
+		<a>${CATEGORY.category_name} ${CATEGORY_TOTAL}개의 글 ${CATEGORY.blog_category_no}</a>
 		<table border="1">
 			<tr>
 				<td>글제목</td>

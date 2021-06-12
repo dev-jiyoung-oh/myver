@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.project.myver.dao.BlogDAO;
 import com.project.myver.dao.ImageDAO;
@@ -24,11 +25,16 @@ public class BlogService {
 	private ImageDAO imgDAO;
 
 	// 클래스 내에서 사용하는 함수 =====================================================
-	// 21.05.25 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_title, blog_nick, blog_img_no)
-	public void setBlog_titleAndNickAndImg_no(BlogDTO blogDTO) {
-		BlogDTO temp = blogDAO.selectBlog_titleAndNickAndImg_noFromBlog(blogDTO.getMember_no());
+	// 21.05.25 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_id, blog_nick, blog_img_no)
+	public void setBlog_idAndNickAndImg_no(BlogDTO blogDTO, String followingOrFollower) {
+		BlogDTO temp = null;
+		if(followingOrFollower.equals("following")) {
+			temp = blogDAO.selectBlog_idAndNickAndImg_noFromBlog(blogDTO.getNeighbor_member_no());
+		}else {
+			temp = blogDAO.selectBlog_idAndNickAndImg_noFromBlog(blogDTO.getMember_no());
+		}
 		
-		blogDTO.setBlog_title(temp.getBlog_title());
+		blogDTO.setBlog_id(temp.getBlog_id());
 		blogDTO.setBlog_nick(temp.getBlog_nick());
 		blogDTO.setBlog_img_no(temp.getBlog_img_no());
 	}
@@ -37,8 +43,11 @@ public class BlogService {
 	public void setPathAndSavedName(BlogDTO blogDTO) {
 		ImageDTO imgDTO = imgDAO.selectPathAndSaved_nameFromImage(blogDTO.getBlog_img_no());
 		
-		blogDTO.setPath(imgDTO.getPath());
-		blogDTO.setSaved_name(imgDTO.getSaved_name());
+		if(imgDTO != null) {
+			blogDTO.setPath(imgDTO.getPath());
+			blogDTO.setSaved_name(imgDTO.getSaved_name());
+		}
+		
 	}
 		
 		
@@ -95,8 +104,8 @@ public class BlogService {
 		List<BlogDTO> blogList = blogDAO.selectFollowingListFromBlog_neighbor(member_no);
 		
 		for(BlogDTO blogDTO : blogList) {
-			// 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_title, blog_nick, blog_img_no)
-			setBlog_titleAndNickAndImg_no(blogDTO);
+			// 'blogDTO.neighber_member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_id, blog_nick, blog_img_no)
+			setBlog_idAndNickAndImg_no(blogDTO, "following");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
 			setPathAndSavedName(blogDTO);
@@ -111,7 +120,7 @@ public class BlogService {
 		
 		for(BlogDTO blogDTO : blogList) {
 			// 'blogDTO.member_no'로  blog_title, blog_nick, blog_img_no 가져와서 blogDTO 값 초기화
-			setBlog_titleAndNickAndImg_no(blogDTO);
+			setBlog_idAndNickAndImg_no(blogDTO, "follwer");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
 			setPathAndSavedName(blogDTO);
@@ -207,12 +216,117 @@ public class BlogService {
 
 	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
 	public BlogDTO selectBlog_object(int blog_no, int blog_object_no, boolean is_owner) {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 		map.put("blog_no", blog_no);
 		map.put("blog_object_no", blog_object_no);
 		map.put("is_owner",is_owner);
 		
 		return blogDAO.selectBlog_object(map);
+	}
+
+	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, boolean is_owner, int blog_category_no, int currentPage) {
+		Map<String, Object> map = new HashMap<>();
+		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
+		int no = -1;			 // blog_category_no 혹은 blog_no가 들어갈 예정
+		BlogDTO blog_category = null;
+		
+		// 21.06.03 방문자가 블로그 주인일 경우
+		if(is_owner){
+			System.out.println("주인이 방문했습니다.");
+			
+			// 21.05.23 카테고리 리스트 가져오기
+			List<BlogDTO> categoryList = selectAllFromBlog_category(blogDTO.getBlog_no());
+			
+			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
+			if(blog_category_no!= -1) {
+				Map<String, Object> tempMap = new HashMap<>();
+				tempMap.put("blog_category_no", blog_category_no);
+				tempMap.put("is_owner", is_owner);
+				
+				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
+				
+			}else { // 카테고리 번호가 존재하지 않는 경우
+				for(BlogDTO category : categoryList) {
+					// 대표 카테고리인 경우
+					if(category.getIs_basic() == 1) {
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						
+						break;
+					}
+				}				
+			}
+			
+			map.put("categoryList", categoryList);
+		}else { // 21.06.30 방문자가 외부인일 경우
+			System.out.println("외부인이 방문했습니다.");
+			
+			// 21.06.02 공개된 카테고리 리스트 가져오기
+			List<BlogDTO> categoryList = selectPublicFromBlog_category(blogDTO.getBlog_no());
+			
+			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
+			if(blog_category_no!= -1) {
+				Map<String, Object> tempMap = new HashMap<>();
+				tempMap.put("blog_category_no", blog_category_no);
+				tempMap.put("is_owner", is_owner);
+				
+				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
+	
+			}else { // 카테고리 번호가 존재하지 않는 경우
+				for(BlogDTO category : categoryList) {
+					// 대표 카테고리인 경우
+					if(category.getIs_basic() == 1) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						
+						break;
+					}
+				}
+			}
+			
+			map.put("categoryList", categoryList);
+		}
+		
+		// 존재하지 않은 카테고리에 들어가려고 하는 경우/ 외부인이 비공개인 카테고리에 들어가려고 하는 경우
+		if(blog_category == null) {
+			return null;
+		}
+		
+		// 21.05.27 블로그 글 테이블에서 'blog_no' 혹은 'blog_category_no'에 해당하는 개수 가져오기
+		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, is_owner);
+		
+		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,is_owner)
+		PageUtil listInfo = new PageUtil(currentPage,totalCount,blog_category.getList_line(),no,column_name,is_owner);
+		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blog_category.getObjects_per_page(),no,column_name,is_owner);
+		
+		// 21.05.27 목록 내용 가져오기
+		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);
+				
+		// 21.05.27 게시글 내용 가져오기
+		List<BlogDTO> objects = selectObjectDetailByNoFromBlog_object(pageInfo);
+		
+		map.put("blog_category", blog_category);
+		map.put("totalCount", totalCount);
+		map.put("lists", lists);
+		map.put("objects", objects);
+		
+		return map;
 	}
 	
 }

@@ -32,9 +32,9 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectAllFromBlog", member_no);
 	}
 
-	// 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_title, blog_nick, blog_img_no)
-	public BlogDTO selectBlog_titleAndNickAndImg_noFromBlog(int member_no) {
-		return session.selectOne("blog.selectBlog_titleAndNickAndImg_noFromBlog", member_no);
+	// 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_id, blog_nick, blog_img_no)
+	public BlogDTO selectBlog_idAndNickAndImg_noFromBlog(int member_no) {
+		return session.selectOne("blog.selectBlog_idAndNickAndImg_noFromBlog", member_no);
 	}
 	
 	// 'blog_visit'table =========================================
@@ -59,6 +59,12 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public List<BlogDTO> selectPublicFromBlog_category(int blog_no) {
 		return session.selectList("blog.selectPublicFromBlog_category", blog_no);
 	}
+	
+	// 21.06.12 'blog_category_no'에 해당하는 정보 가져오기
+	public BlogDTO selectByBlog_category_noFromBlog_category(Map map) {
+		return session.selectOne("blog.selectByBlog_category_noFromBlog_category", map);
+	}
+	
 	
 	// 'blog_neighbor'table =========================================
 	// 21.05.24 내가 추가한 이웃 리스트 가져오기(member_no 리스트)
@@ -102,6 +108,8 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public BlogDTO selectBlog_object(Map map) {
 		return session.selectOne("blog.selectBlog_object", map);
 	}
+
+	
 	
 	
 }

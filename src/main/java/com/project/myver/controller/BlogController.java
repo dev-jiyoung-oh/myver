@@ -86,7 +86,7 @@ public class BlogController {
 	
 	// 21.05.19 블로그 메인
 	// 21.06.04 블로그table에는 blogId, 방문자는 logNo, 방문자는 세션에 저장해서~~~, 
-	@RequestMapping(value = "/{blogId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{blogId}")
 	public ModelAndView blogMain(HttpSession session, 
 				     ModelAndView mv, 
 				     @PathVariable("blogId")String blogId, 
@@ -126,166 +126,25 @@ public class BlogController {
 		if(visitor_id != null) {
 			visitor_no = memSVC.selectMember_noById(visitor_id);
 		}
-		// 이름못정함(주인일 경우, 카테고리 번호)
-		// 21.06.03 방문자가 블로그 주인일 경우
-		if(visitor_no != 0 && blogDTO.getMember_no()==visitor_no){
-			System.out.println("주인이 방문했습니다.");
-			
-			// 21.05.23 카테고리 리스트 가져오기
-			List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blogDTO.getBlog_no());
-			
-			// 카테고리 번호 들어온 경우
-			if(blog_category_no!= -1) {
-				for(BlogDTO category : categoryList) {
-					if(category.getBlog_category_no()==blog_category_no) {
-						// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
-						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", false);
-						
-						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_category_no,"blog_category_no",false);
-						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",false);
-						
-						// 21.05.27 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
-								
-						// 21.05.27 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
-						
-						mv.addObject("CATEGORY_NO", blog_category_no);
-						mv.addObject("CATEGORY_NAME", category.getCategory_name());
-						mv.addObject("CATEGORY_TOTAL", totalCount);
-						mv.addObject("LIST", lists);
-						mv.addObject("OBJECT", objects);
-						break;
-					}
-				}
-			}else {
-				
-			}
-			for(BlogDTO category : categoryList) {
-				// 대표 카테고리인 경우
-				if(category.getIs_basic() == 1) {
-					if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
-						System.out.println("전체 카테고리가 기본 카테고리임!");
-						// 21.06.02 블로그 글 테이블에서 'blog_no'에 해당하는 개수 가져오기
-						int blog_no = blogDTO.getBlog_no();
-						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", false);
-						
-						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_no,"blog_no",false);
-						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_no,"blog_no",false);
-						
-						// 21.06.02 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
-								
-						// 21.06.02 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
-						
-						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
-						mv.addObject("CATEGORY_NAME", category.getCategory_name());
-						mv.addObject("CATEGORY_TOTAL", totalCount);
-						mv.addObject("LIST", lists);
-						mv.addObject("OBJECT", objects);
-						
-					}else {
-						blog_category_no = category.getBlog_category_no();
-						// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
-						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", false);
-						
-						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_category_no,"blog_category_no",false);
-						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",false);
-						
-						// 21.05.27 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
-								
-						// 21.05.27 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
-						
-						mv.addObject("CATEGORY_NO", blog_category_no);
-						mv.addObject("CATEGORY_NAME", category.getCategory_name());
-						mv.addObject("CATEGORY_TOTAL", totalCount);
-						mv.addObject("LIST", lists);
-						mv.addObject("OBJECT", objects);
-					}
-					
-					break;
-				}
-			}
-			
-			mv.addObject("CATEGORY", categoryList);
-		}else { // 21.06.30 방문자가 외부인일 경우
-			System.out.println("외부인이 방문했습니다.");
-			
-			// 21.06.09 블로그 방문자 정보 추가
-			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), blogDTO.getBlog_object_no(), visitor_no, query, session);
-			
-			if(visitor_no != 0) { // 외부 방문자가 로그인한 경우
-				System.out.println("외부인이 로그인했습니다.");
-				
-			}else { // 외부 방문자가 로그인하지 않은 경우
-				System.out.println("외부인이 로그인하지 않았습니다.");
-			}
-			
-			// 21.06.02 공개된 카테고리 리스트 가져오기
-			List<BlogDTO> categoryList = blogSVC.selectPublicFromBlog_category(blogDTO.getBlog_no());
-			
-			for(BlogDTO category : categoryList) {
-				// 대표 카테고리인 경우
-				if(category.getIs_basic() == 1) {
-					if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
-						System.out.println("전체 카테고리가 기본 카테고리임!");
-						// 21.06.02 블로그 글 테이블에서 'blog_no'에 해당하는 공개된 게시글 개수 가져오기
-						int blog_no = blogDTO.getBlog_no();
-						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
-						
-						// 21.06.02 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_no,"blog_no",true);
-						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_no,"blog_no",true);
-						
-						// 21.06.02 공개된 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
-								
-						// 21.06.02 공개된 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
-						
-						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
-						mv.addObject("CATEGORY_NAME", category.getCategory_name());
-						mv.addObject("CATEGORY_TOTAL", totalCount);
-						mv.addObject("LIST", lists);
-						mv.addObject("OBJECT", objects);
-						
-					}else {
-						blog_category_no = category.getBlog_category_no();
-						// 21.05.27 블로그 글 테이블에서 'blog_category_no'에 해당하는 개수 가져오기
-						int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_category_no, "blog_category_no", true);
-						
-						// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,only_public)
-						PageUtil listInfo = new PageUtil(currentPage,totalCount,category.getList_line(),blog_category_no,"blog_category_no",true);
-						PageUtil pageInfo = new PageUtil(currentPage,totalCount,category.getObjects_per_page(),blog_category_no,"blog_category_no",true);
-						
-						// 21.05.27 목록 내용 가져오기
-						List<BlogDTO> lists = blogSVC.selectListDetailByNoFromBlog_object(listInfo);
-								
-						// 21.05.27 게시글 내용 가져오기
-						List<BlogDTO> objects = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
-						
-						mv.addObject("CATEGORY_NO", category.getBlog_category_no());
-						mv.addObject("CATEGORY_NAME", category.getCategory_name());
-						mv.addObject("CATEGORY_TOTAL", totalCount);
-						mv.addObject("LIST", lists);
-						mv.addObject("OBJECT", objects);
-					}
-					
-					break;
-				}
-			}
-			
-			mv.addObject("CATEGORY", categoryList);
+		
+		// 방문자가 주인인지 여부(주인일 경우:true, 외부인일 경우:false)
+		boolean is_owner = blogDTO.getMember_no() == visitor_no;
+		
+		// 21.06.12 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
+		Map<String,Object> map  = blogSVC.selectCategoryAndListAndObject(blogDTO, is_owner, blog_category_no, currentPage);
+		
+		// 21.06.12 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
+		if(map == null) {
+			System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
+			mv.setViewName("blog/error_to_main");
+			mv.addObject("BLOG", blogDTO);
+			return mv;
 		}
 
-		
-		
+		// 21.06.09 외부인이 방문한 경우, 블로그 방문자 정보 추가
+		if(!is_owner) {
+			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), -1, visitor_no, query, session);
+		}
 		
 		// 21.05.24 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
 		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(member_no);
@@ -294,7 +153,13 @@ public class BlogController {
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWING", followingList);
 		mv.addObject("FOLLOWER", followerList);
-		
+
+		mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
+		mv.addObject("CATEGORY", map.get("blog_category"));
+		mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
+		mv.addObject("LIST", (List)map.get("lists"));
+		mv.addObject("OBJECT", (List)map.get("objects"));
+
 		mv.setViewName("blog/main");
 		
 		return mv;

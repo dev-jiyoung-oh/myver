@@ -24,9 +24,9 @@
 		WHERE member_no = #{member_no}
 	</select>
 	
-	<!-- 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_title, blog_nick, blog_img_no) -->
-	<select id="selectBlog_titleAndNickAndImg_noFromBlog" parameterType="Integer" resultType="blogDTO">
-		SELECT blog_title, blog_nick, blog_img_no 
+	<!-- 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_id, blog_nick, blog_img_no) -->
+	<select id="selectBlog_idAndNickAndImg_noFromBlog" parameterType="Integer" resultType="blogDTO">
+		SELECT blog_id, blog_nick, blog_img_no 
 		FROM blog 
 		WHERE member_no = #{member_no}
 	</select>
@@ -65,6 +65,16 @@
 		ORDER BY category_index
 	</select>
 	
+	<!-- 21.06.12 'blog_category_no'에 해당하는 정보 가져오기 -->
+	<select id="selectByBlog_category_noFromBlog_category" parameterType="Map" resultType="blogDTO">
+		SELECT * 
+		FROM blog_category 
+		WHERE blog_category_no = #${blog_category_no}
+		<if test="!is_owner">
+			AND is_public = 0
+		</if>
+	</select>
+	
 	
 	<!-- 'blog_neighbor'table ================================================================== -->
 	<!-- 21.05.24 내가 추가한 이웃 리스트 가져오기 -->
@@ -96,7 +106,7 @@
 				O.blog_category_no = #{no}
 			</otherwise>
 		</choose>
-		<if test="only_public">
+		<if test="!is_owner">
 			AND O.is_public = 1
 			AND C.is_public = 1
 		</if>
@@ -117,7 +127,7 @@
 						O.blog_category_no = #{no}
 					</otherwise>
 			  </choose>
-			  <if test="only_public">
+			  <if test="!is_owner">
 					AND C.is_public = 1
 					AND O.is_public = 1
 			  </if>
@@ -141,7 +151,7 @@
 						O.blog_category_no = #{no}
 					</otherwise>
 			  </choose>
-			  <if test="only_public">
+			  <if test="!is_owner">
 					AND C.is_public = 1
 					AND O.is_public = 1
 			  </if>
