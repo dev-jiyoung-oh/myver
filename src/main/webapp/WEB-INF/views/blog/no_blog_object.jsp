@@ -10,8 +10,8 @@
 </head>
 <body>
 삭제되었거나 존재하지 않는 게시물입니다.
-<c:if test="${!empty BLOG.member_id}">
-	<a href="${pageContext.request.contextPath}/blog/${BLOG.member_id}">${BLOG.blog_title} 방문하기</a>
+<c:if test="${!empty BLOG.blog_id}">
+	<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}">${BLOG.blog_title} 방문하기</a>
 </c:if>
 <a href="${pageContext.request.contextPath}/blog/home">블로그 홈</a>
 </body>

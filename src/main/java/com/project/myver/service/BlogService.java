@@ -22,7 +22,7 @@ public class BlogService {
 	@Autowired
 	private BlogDAO blogDAO;
 	@Autowired
-	private ImageDAO imgDAO;
+	private ImageService imgSVC;
 
 	// 클래스 내에서 사용하는 함수 =====================================================
 	// 21.05.25 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_id, blog_nick, blog_img_no)
@@ -37,17 +37,6 @@ public class BlogService {
 		blogDTO.setBlog_id(temp.getBlog_id());
 		blogDTO.setBlog_nick(temp.getBlog_nick());
 		blogDTO.setBlog_img_no(temp.getBlog_img_no());
-	}
-	
-	// 21.05.25 'blogDTO.blog_img_no'로 'image'테이블에서 'path', 'saved_name' 가져와서 blogDTO 값 초기화
-	public void setPathAndSavedName(BlogDTO blogDTO) {
-		ImageDTO imgDTO = imgDAO.selectPathAndSaved_nameFromImage(blogDTO.getBlog_img_no());
-		
-		if(imgDTO != null) {
-			blogDTO.setPath(imgDTO.getPath());
-			blogDTO.setSaved_name(imgDTO.getSaved_name());
-		}
-		
 	}
 		
 		
@@ -65,7 +54,12 @@ public class BlogService {
 
 	// 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보
 	public BlogDTO selectBlogHomeDataFromBlog(int member_no) {
-		return blogDAO.selectBlogHomeDataFromBlog(member_no);
+		BlogDTO blogDTO = blogDAO.selectBlogHomeDataFromBlog(member_no);
+		// 이미지 번호로 이미지 path, saved_name 세팅(이미지 번호 없는 경우 제외)
+		if(blogDTO.getBlog_img_no() != 0) {
+			imgSVC.setPathAndSaved_nameFromImage(blogDTO);
+		}
+		return blogDTO;
 	}
 	
 	// 21.05.19 member_no로 블로그 정보 가져오기
@@ -108,7 +102,9 @@ public class BlogService {
 			setBlog_idAndNickAndImg_no(blogDTO, "following");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
-			setPathAndSavedName(blogDTO);
+			if(blogDTO.getBlog_img_no() != 0) {
+				imgSVC.setPathAndSaved_nameFromImage(blogDTO);
+			}
 		}
 		
 		return blogList;
@@ -123,8 +119,9 @@ public class BlogService {
 			setBlog_idAndNickAndImg_no(blogDTO, "follwer");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
-			setPathAndSavedName(blogDTO);
-			
+			if(blogDTO.getBlog_img_no() != 0) {
+				imgSVC.setPathAndSaved_nameFromImage(blogDTO);
+			}
 		}
 		
 		return blogList;
@@ -223,7 +220,8 @@ public class BlogService {
 		
 		return blogDAO.selectBlog_object(map);
 	}
-
+	
+	// 21.06.12 블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
 	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, boolean is_owner, int blog_category_no, int currentPage) {
 		Map<String, Object> map = new HashMap<>();
 		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
@@ -244,41 +242,6 @@ public class BlogService {
 				tempMap.put("is_owner", is_owner);
 				
 				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
-				
-			}else { // 카테고리 번호가 존재하지 않는 경우
-				for(BlogDTO category : categoryList) {
-					// 대표 카테고리인 경우
-					if(category.getIs_basic() == 1) {
-						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
-							System.out.println("전체 카테고리가 기본 카테고리인 경우");
-							no = blogDTO.getBlog_no();
-							column_name = "blog_no";
-						}else {
-							System.out.println("기본 카테고리가 특정 카테고리인 경우");
-							no = category.getBlog_category_no();
-							column_name = "blog_category_no";
-						}
-						
-						break;
-					}
-				}				
-			}
-			
-			map.put("categoryList", categoryList);
-		}else { // 21.06.30 방문자가 외부인일 경우
-			System.out.println("외부인이 방문했습니다.");
-			
-			// 21.06.02 공개된 카테고리 리스트 가져오기
-			List<BlogDTO> categoryList = selectPublicFromBlog_category(blogDTO.getBlog_no());
-			
-			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
-			if(blog_category_no!= -1) {
-				Map<String, Object> tempMap = new HashMap<>();
-				tempMap.put("blog_category_no", blog_category_no);
-				tempMap.put("is_owner", is_owner);
-				
-				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
-	
 			}else { // 카테고리 번호가 존재하지 않는 경우
 				for(BlogDTO category : categoryList) {
 					// 대표 카테고리인 경우
@@ -294,12 +257,43 @@ public class BlogService {
 							no = category.getBlog_category_no();
 							column_name = "blog_category_no";
 						}
+						break;
+					}
+				}				
+			}
+			map.put("categoryList", categoryList);
+		}else { // 21.06.30 방문자가 외부인일 경우
+			System.out.println("외부인이 방문했습니다.");
+			
+			// 21.06.02 공개된 카테고리 리스트 가져오기
+			List<BlogDTO> categoryList = selectPublicFromBlog_category(blogDTO.getBlog_no());
+			
+			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
+			if(blog_category_no!= -1) {
+				Map<String, Object> tempMap = new HashMap<>();
+				tempMap.put("blog_category_no", blog_category_no);
+				tempMap.put("is_owner", is_owner);
+				
+				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
+			}else { // 카테고리 번호가 존재하지 않는 경우
+				for(BlogDTO category : categoryList) {
+					// 대표 카테고리인 경우
+					if(category.getIs_basic() == 1) {
+						blog_category = category;
 						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
 						break;
 					}
 				}
 			}
-			
 			map.put("categoryList", categoryList);
 		}
 		

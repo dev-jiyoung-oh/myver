@@ -36,7 +36,15 @@
 		<a>${BLOG.blog_title}</a>
 	</div>
 	<div class="col-md-3">
-		<a>${BLOG.blog_nick}</a>
+		<c:if test="${empty BLOG.path or empty BLOG.saved_name}">
+			<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+		</c:if>
+		<c:if test="${!empty BLOG.path and !empty BLOG.saved_name}">
+			<img src="/filepath/${BLOG.path}/${BLOG.saved_name}">
+		</c:if>
+		<br/>
+		<a>${BLOG.blog_nick}</a><br/>
+		<a>(${BLOG.blog_id})</a><br/>
 		<a>${BLOG.blog_info}</a>
 	</div>
 	<div class="col-md-3">

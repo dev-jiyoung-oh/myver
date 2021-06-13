@@ -61,7 +61,8 @@
 	<select id="selectPublicFromBlog_category" parameterType="Integer" resultType="blogDTO">
 		SELECT * 
 		FROM blog_category 
-		WHERE blog_no = #{blog_no} AND is_public = 1
+		WHERE blog_no = #{blog_no}
+			AND is_public = 0
 		ORDER BY category_index
 	</select>
 	
@@ -107,8 +108,8 @@
 			</otherwise>
 		</choose>
 		<if test="!is_owner">
-			AND O.is_public = 1
-			AND C.is_public = 1
+			AND O.is_public = 0
+			AND C.is_public = 0
 		</if>
 			AND O.blog_category_no = C.blog_category_no
 	</select>
@@ -128,8 +129,8 @@
 					</otherwise>
 			  </choose>
 			  <if test="!is_owner">
-					AND C.is_public = 1
-					AND O.is_public = 1
+					AND C.is_public = 0
+					AND O.is_public = 0
 			  </if>
 			  		AND O.blog_category_no = C.blog_category_no
               ORDER BY blog_object_no DESC) AS TB
@@ -152,8 +153,8 @@
 					</otherwise>
 			  </choose>
 			  <if test="!is_owner">
-					AND C.is_public = 1
-					AND O.is_public = 1
+					AND C.is_public = 0
+					AND O.is_public = 0
 			  </if>
 			  		AND O.blog_category_no = C.blog_category_no
               ORDER BY blog_object_no DESC) AS TB

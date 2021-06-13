@@ -39,6 +39,19 @@ blog object
 		<a>${BLOG.blog_nick}</a>
 		<a>${BLOG.blog_info}</a>
 	</div>
+	<div class="col-md-12">
+		<table border="1">
+			<tr>
+				<td>${OBJECT.title}</td>
+				<td>${OBJECT.hits}</td>
+				<td>${OBJECT.date}</td>
+			</tr>
+			<tr>
+				<td colspan="3">${OBJECT.content}</td>
+			</tr>
+		</table>
+	</div>
+	<%-- 
 	<div class="col-md-3">
 		<ul>
 			<c:forEach var="category" items="${CATEGORY}">
@@ -76,6 +89,7 @@ blog object
 			</table>
 		</c:forEach>
 	</div>
+	 --%>
 </div>
 </body>
 </html>

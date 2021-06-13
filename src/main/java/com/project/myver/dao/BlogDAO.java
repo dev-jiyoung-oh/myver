@@ -105,7 +105,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	}
 
 	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기selectBlog_object
-	public BlogDTO selectBlog_object(Map map) {
+	public BlogDTO selectBlog_object(Map<String, Object> map) {
 		return session.selectOne("blog.selectBlog_object", map);
 	}
 
