@@ -44,6 +44,8 @@ public class PageUtil {
 		this(nowPage, totalCount, 10, 5);
 	}*/
 	
+	public PageUtil() {}
+	
 	public PageUtil(int nowPage, int totalCount, int lineCount) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
@@ -71,6 +73,23 @@ public class PageUtil {
 		calcStartNo();
 		calcEndNo();
 	}
+	
+	public PageUtil(int totalCount, int lineCount, int no, String column_name, boolean is_owner, int nowNo) {
+		this.totalCount = totalCount;
+		this.lineCount 	= lineCount;
+		this.pageGroup 	= 10;
+		this.no = no;
+		this.column_name = column_name;
+		this.is_owner = is_owner;
+		
+		calcNowPage(nowNo);
+		calcTotalPage();
+		calcStartPage();
+		calcEndPage();
+		calcStartNo();
+		calcEndNo();
+	}
+	
 	/*
 	public PageUtil(int nowPage, int totalCount, int lineCount, int pageGroup) {
 		this.nowPage 	= nowPage;
@@ -142,7 +161,29 @@ public class PageUtil {
 		}
 	}
 
-
+	// 현재 페이지 계산
+	/* 전체 게시물 개수:18
+	 * lineCount: 5
+	 * 내가 볼 게시글: 13
+	 * 0  5 10 15
+	 * 1  6 11 16
+	 * 2  7 12 17
+	 * 3  8 13 18
+	 * 4  9 14
+	 * 
+	 * 1  2  3  4
+	 * 
+	 *  9/5=1+1=2
+	 * 14/5=2+1=3
+	 * 15/5=3+1=4
+	 * 16/5=3+1=4
+	 * nowPage = nowNo/lineCount + 1;
+	 * */
+	private void calcNowPage(int nowNo) {
+		this.nowPage = nowNo/lineCount + 1;
+	}
+	
+	
 	
 	public String getConame() {
 		return coname;

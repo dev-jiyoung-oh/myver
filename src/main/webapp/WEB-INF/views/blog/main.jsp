@@ -46,11 +46,27 @@
 		<a>${BLOG.blog_nick}</a><br/>
 		<a>(${BLOG.blog_id})</a><br/>
 		<a>${BLOG.blog_info}</a>
+		<c:if test="${BLOG.blog_id eq sessionScope.MID}">
+			<div>
+				<div>
+					<a href="">관리</a>
+					·
+					<a href="#">통계</a>
+				</div>
+				<div>
+					<a href="#">글쓰기</a>
+				</div>
+			</div>
+		</c:if>
 	</div>
 	<div class="col-md-3">
 		<ul>
 			<c:forEach var="category" items="${CATEGORY_LIST}">
-				<li>${category.category_name}</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}">
+						${category.category_name}
+					</a>
+				</li>
 			</c:forEach>
 		</ul>
 	</div>
@@ -91,7 +107,7 @@
 		</ul>
 	</div>
 	<div class="col-md-12">
-		<a>${CATEGORY.category_name} ${CATEGORY_TOTAL}개의 글 ${CATEGORY.blog_category_no}</a>
+		<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a> <a>${CATEGORY_TOTAL}개의 글</a>
 		<table border="1">
 			<tr>
 				<td>글제목</td>
@@ -100,7 +116,11 @@
 			</tr>
 			<c:forEach var="list" items="${LIST}">
 				<tr>
-					<td>${list.title}</td>
+					<td>
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}">
+							${list.title}
+						</a>
+					</td>
 					<td>${list.hits}</td>
 					<td>${list.date}</td>
 				</tr>
@@ -108,18 +128,22 @@
 		</table>
 	</div>
 	<div class="col-md-12">
-		<c:forEach var="object" items="${OBJECT}">
+		<c:forEach var="object" items="${OBJECTS}">
 			<table border="1">
 				<tr>
-					<td colspan="3">${object.category_name} ${object.blog_category_no}</td>
+					<td colspan="2">
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${object.blog_category_no}">
+							${object.category_name}
+						</a>
+					</td>
 				</tr>
 				<tr>
 					<td>${object.title}</td>
-					<!-- <td>${object.hits}</td> -->
+					<%-- <td>${object.hits}</td> --%>
 					<td>${object.date}</td>
 				</tr>
 				<tr>
-					<td colspan="3">${object.content}</td>
+					<td colspan="2">${object.content}</td>
 				</tr>
 			</table>
 		</c:forEach>

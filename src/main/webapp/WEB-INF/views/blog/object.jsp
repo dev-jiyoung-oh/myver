@@ -36,30 +36,66 @@ blog object
 		<a>${BLOG.blog_title}</a>
 	</div>
 	<div class="col-md-3">
-		<a>${BLOG.blog_nick}</a>
+		<c:if test="${empty BLOG.path or empty BLOG.saved_name}">
+			<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+		</c:if>
+		<c:if test="${!empty BLOG.path and !empty BLOG.saved_name}">
+			<img src="/filepath/${BLOG.path}/${BLOG.saved_name}">
+		</c:if>
+		<br/>
+		<a>${BLOG.blog_nick}</a><br/>
+		<a>(${BLOG.blog_id})</a><br/>
 		<a>${BLOG.blog_info}</a>
 	</div>
-	<div class="col-md-12">
-		<table border="1">
-			<tr>
-				<td>${OBJECT.title}</td>
-				<td>${OBJECT.hits}</td>
-				<td>${OBJECT.date}</td>
-			</tr>
-			<tr>
-				<td colspan="3">${OBJECT.content}</td>
-			</tr>
-		</table>
-	</div>
-	<%-- 
 	<div class="col-md-3">
 		<ul>
-			<c:forEach var="category" items="${CATEGORY}">
-				<li>${category.category_name}</li>
+			<c:forEach var="category" items="${CATEGORY_LIST}">
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}">
+						${category.category_name}
+					</a>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
+	<div class="col-md-3">
+		내가 추가한
+		<ul>
+			<c:forEach var="following" items="${FOLLOWING}">
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${following.blog_id}">
+						<c:if test="${empty following.path or empty following.saved_name}">
+							<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+						</c:if>
+						<c:if test="${!empty following.path and !empty following.saved_name}">
+							<img src="/filepath/${following.path}/${following.saved_name}">
+						</c:if>
+					</a>
+					<a href="${pageContext.request.contextPath}/blog/${following.blog_id}">${following.blog_nick}</a>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
+	<div class="col-md-3">
+		나를 추가한
+		<ul>
+			<c:forEach var="follower" items="${FOLLOWER}">
+				<li>
+					<a href="${pageContext.request.contextPath}/blog/${follower.blog_id}">
+						<c:if test="${empty follower.path or empty follower.saved_name}">
+							<img src="${pageContext.request.contextPath}/resources/img/icons/no_thumbnail.png">
+						</c:if>
+						<c:if test="${!empty follower.path and !empty follower.saved_name}">
+							<img src="/filepath/${follower.path}/${follower.saved_name}">
+						</c:if>
+					</a>
+					<a href="${pageContext.request.contextPath}/blog/${follower.blog_id}">${follower.blog_nick}</a>
+				</li>
 			</c:forEach>
 		</ul>
 	</div>
 	<div class="col-md-12">
+		<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a> <a>${CATEGORY_TOTAL}개의 글</a>
 		<table border="1">
 			<tr>
 				<td>글제목</td>
@@ -68,7 +104,11 @@ blog object
 			</tr>
 			<c:forEach var="list" items="${LIST}">
 				<tr>
-					<td>${list.title}</td>
+					<td>
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}">
+							${list.title}
+						</a>
+					</td>
 					<td>${list.hits}</td>
 					<td>${list.date}</td>
 				</tr>
@@ -76,20 +116,24 @@ blog object
 		</table>
 	</div>
 	<div class="col-md-12">
-		<c:forEach var="object" items="${OBJECT}">
-			<table border="1">
-				<tr>
-					<td>${object.title}</td>
-					<td>${object.hits}</td>
-					<td>${object.date}</td>
+		<table border="1">
+			<tr>
+					<td colspan="2">
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${OBJECT.blog_category_no}">
+							${OBJECT.category_name}
+						</a>
+					</td>
 				</tr>
-				<tr>
-					<td colspan="3">${object.content}</td>
-				</tr>
-			</table>
-		</c:forEach>
+			<tr>
+				<td>${OBJECT.title}</td>
+				<%-- <td>${OBJECT.hits}</td> --%>
+				<td>${OBJECT.date}</td>
+			</tr>
+			<tr>
+				<td colspan="2">${OBJECT.content}</td>
+			</tr>
+		</table>
 	</div>
-	 --%>
 </div>
 </body>
 </html>

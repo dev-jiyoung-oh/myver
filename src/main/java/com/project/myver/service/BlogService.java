@@ -218,7 +218,12 @@ public class BlogService {
 		map.put("blog_object_no", blog_object_no);
 		map.put("is_owner",is_owner);
 		
-		return blogDAO.selectBlog_object(map);
+		BlogDTO blogDTO = blogDAO.selectBlog_object(map);
+		
+		// 21.06.14 'blog_category_no'에 해당하는 'category_name' 가져와서 set
+		blogDTO.setCategory_name(blogDAO.selectCategory_nameByBlog_category_noFromBlog_category(blogDTO.getBlog_category_no()));
+		
+		return blogDTO;
 	}
 	
 	// 21.06.12 블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
@@ -235,13 +240,24 @@ public class BlogService {
 			// 21.05.23 카테고리 리스트 가져오기
 			List<BlogDTO> categoryList = selectAllFromBlog_category(blogDTO.getBlog_no());
 			
-			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
-			if(blog_category_no!= -1) {
-				Map<String, Object> tempMap = new HashMap<>();
-				tempMap.put("blog_category_no", blog_category_no);
-				tempMap.put("is_owner", is_owner);
-				
-				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
+			
+			if(blog_category_no!= -1) { // 21.06.12 카테고리 번호가 주어진 경우
+				for(BlogDTO category : categoryList) {
+					if(category.getBlog_category_no() == blog_category_no) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}
 			}else { // 카테고리 번호가 존재하지 않는 경우
 				for(BlogDTO category : categoryList) {
 					// 대표 카테고리인 경우
@@ -270,11 +286,22 @@ public class BlogService {
 			
 			// 21.06.12 카테고리 번호가 존재하는 경우 해당하는 카테고리의 정보를 가져오기
 			if(blog_category_no!= -1) {
-				Map<String, Object> tempMap = new HashMap<>();
-				tempMap.put("blog_category_no", blog_category_no);
-				tempMap.put("is_owner", is_owner);
-				
-				blog_category = blogDAO.selectByBlog_category_noFromBlog_category(tempMap);
+				for(BlogDTO category : categoryList) {
+					if(category.getBlog_category_no() == blog_category_no) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}
 			}else { // 카테고리 번호가 존재하지 않는 경우
 				for(BlogDTO category : categoryList) {
 					// 대표 카테고리인 경우
@@ -319,6 +346,130 @@ public class BlogService {
 		map.put("totalCount", totalCount);
 		map.put("lists", lists);
 		map.put("objects", objects);
+		
+		return map;
+	}
+
+
+	// 21.06.14 블로그 글 보기 - 카테고리, 목록 가져오기
+	public Map<String, Object> selectCategoryAndList(BlogDTO blogDTO, BlogDTO object, boolean is_owner, int blog_category_no) {
+		Map<String, Object> map = new HashMap<>();
+		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
+		int no = -1;			 // blog_category_no 혹은 blog_no가 들어갈 예정
+		BlogDTO blog_category = null;
+		
+		// 방문자가 블로그 주인일 경우
+		if(is_owner){
+			System.out.println("주인이 방문했습니다.");
+			
+			// 21.05.23 모든 카테고리 리스트 가져오기
+			List<BlogDTO> categoryList = selectAllFromBlog_category(blogDTO.getBlog_no());
+			
+			// 21.06.12 카테고리 번호가 존재하지 않는 경우, 해당하는 게시글의 카테고리의 정보를 가져오기
+			if(blog_category_no== -1) {
+				int object_category_no = object.getBlog_category_no();
+				
+				for(BlogDTO category : categoryList) {
+					if(category.getBlog_category_no() == object_category_no) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}
+			}else { // 카테고리 번호가 존재하는 경우
+				for(BlogDTO category : categoryList) {
+					// 대표 카테고리인 경우
+					if(category.getBlog_category_no() == blog_category_no) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}				
+			}
+			map.put("categoryList", categoryList);
+		}else { // 21.05.30 방문자가 외부인일 경우
+			System.out.println("외부인이 방문했습니다.");
+			
+			// 21.06.02 공개된 카테고리 리스트 가져오기
+			List<BlogDTO> categoryList = selectPublicFromBlog_category(blogDTO.getBlog_no());
+			
+			// 21.06.12 카테고리 번호가 존재하지 않는 경우, 해당하는 게시글의 카테고리의 정보를 가져오기
+			if(blog_category_no == -1) {
+				int object_category_no = object.getBlog_category_no();
+				
+				for(BlogDTO category : categoryList) {
+					if(category.getBlog_category_no() == object_category_no) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}
+			}else { // 카테고리 번호가 존재하지 않는 경우
+				for(BlogDTO category : categoryList) {
+					// 대표 카테고리인 경우
+					if(category.getIs_basic() == 1) {
+						blog_category = category;
+						
+						if(category.getAll_category()==1) { //전체 카테고리가 기본 카테고리인 경우
+							System.out.println("전체 카테고리가 기본 카테고리인 경우");
+							no = blogDTO.getBlog_no();
+							column_name = "blog_no";
+						}else {
+							System.out.println("기본 카테고리가 특정 카테고리인 경우");
+							no = category.getBlog_category_no();
+							column_name = "blog_category_no";
+						}
+						break;
+					}
+				}
+			}
+			map.put("categoryList", categoryList);
+		}
+		
+		// 존재하지 않은 카테고리에 들어가려고 하는 경우/ 외부인이 비공개인 카테고리에 들어가려고 하는 경우
+		if(blog_category == null) {
+			return null;
+		}
+		
+		// 21.05.27 블로그 글 테이블에서 'blog_no' 혹은 'blog_category_no'에 해당하는 개수 가져오기
+		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, is_owner);
+		
+		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(totalCount,lineCount,no,column_name,is_owner,nowNo)
+		PageUtil listInfo = new PageUtil(totalCount,blog_category.getList_line(),no,column_name,is_owner,object.getBlog_object_no());
+		
+		// 21.05.27 목록 내용 가져오기
+		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);
+		
+		map.put("blog_category", blog_category);
+		map.put("totalCount", totalCount);
+		map.put("lists", lists);
 		
 		return map;
 	}

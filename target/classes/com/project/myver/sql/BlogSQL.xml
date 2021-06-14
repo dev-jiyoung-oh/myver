@@ -32,6 +32,7 @@
 	</select>
 	
 	
+	
 	<!-- 'blog_visit'table ==================================================================== -->
 	<!-- 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 -->
 	<select id="todayBlogVisitCount" parameterType="Integer" resultType="Integer">
@@ -40,6 +41,21 @@
 		WHERE blog_no = #{blog_no}
 			AND DATE_FORMAT(DATE, "%Y-%m-%d") = CURDATE()
 	</select>
+	
+	<!-- 21.06.09 블로그 방문자 정보 추가 -->
+	<insert id="insertBlog_visit" parameterType="blogDTO">
+		INSERT INTO blog_visit (blog_no, blog_object_no, visitor_no, date
+		<if test="query != null">
+			, query
+		</if>
+		)
+		VALUES (#{blog_no}, #{blog_object_no}, #{visitor_no}, SYSDATE()
+		<if test="query != null">
+			, #{query}
+		</if>
+		)
+	</insert>
+	
 	
 	
 	<!-- 'blog_category'table ================================================================ -->
@@ -76,6 +92,14 @@
 		</if>
 	</select>
 	
+	<!-- 21.06.14 'blog_category_no'에 해당하는 'category_name' 가져오기 -->
+	<select id="selectCategory_nameByBlog_category_noFromBlog_category" parameterType="Integer" resultType="String">
+		SELECT category_name
+		FROM blog_category
+		WHERE blog_category_no = #{blog_category_no}
+	</select>
+	
+	
 	
 	<!-- 'blog_neighbor'table ================================================================== -->
 	<!-- 21.05.24 내가 추가한 이웃 리스트 가져오기 -->
@@ -91,6 +115,7 @@
 		FROM blog_neighbor
 		WHERE neighbor_member_no = #{member_no}
 	</select>
+	
 	
 	
 	<!-- 'blog_object'table =================================================================== -->
@@ -170,20 +195,6 @@
 		where blog_object_no = #{blog_object_no}
 	</update>
 
-	<!-- 21.06.09 블로그 방문자 정보 추가 -->
-	<insert id="insertBlog_visit" parameterType="blogDTO">
-		INSERT INTO blog_visit (blog_no, blog_object_no, visitor_no, date
-		<if test="query != null">
-			, query
-		</if>
-		)
-		VALUES (#{blog_no}, #{blog_object_no}, #{visitor_no}, SYSDATE()
-		<if test="query != null">
-			, #{query}
-		</if>
-		)
-	</insert>
-	
 	<!-- 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기 -->
 	<select id="selectBlog_object" parameterType="Map" resultType="blogDTO">
 		SELECT * FROM blog_object 

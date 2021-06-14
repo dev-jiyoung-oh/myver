@@ -113,7 +113,7 @@ public class BlogController {
 		
 		//방문자
 		String visitor_id = (String)session.getAttribute("MID");
-		int visitor_no = 0;
+		int visitor_no = -1;
 		
 		// 방문자 회원 번호
 		if(visitor_id != null) {
@@ -151,7 +151,7 @@ public class BlogController {
 		mv.addObject("CATEGORY", map.get("blog_category"));
 		mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
 		mv.addObject("LIST", (List)map.get("lists"));
-		mv.addObject("OBJECT", (List)map.get("objects"));
+		mv.addObject("OBJECTS", (List)map.get("objects"));
 
 		mv.setViewName("blog/main");
 		
@@ -185,7 +185,7 @@ public class BlogController {
 	//방문자 id
 	String visitor_id = (String)session.getAttribute("MID");
 	
-	int visitor_no = 0;
+	int visitor_no = -1;
 	
 	// 방문자 member_no
 	if(visitor_id != null) {
@@ -196,7 +196,7 @@ public class BlogController {
 	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_member_no);
 	
 	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
-	boolean is_owner = blog_id.equals(visitor_id); // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
+	boolean is_owner = blog_member_no == visitor_no; // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
 	BlogDTO object = blogSVC.selectBlog_object(blogDTO.getBlog_no(), blog_object_no, is_owner);
 	
 	// 해당 블로그에 해당 게시글이 존재하지 않는 경우
@@ -209,16 +209,16 @@ public class BlogController {
 	
 	// 카테고리 리스트 가져오기
 	
-	// ★★★★★ 카테고리 리스트, 목록 리스트 가져오기
-	Map<String,Object> map  = blogSVC.selectCategoryAndListAndObject(blogDTO, is_owner, object);
+	// 21.06.14 블로그 글 보기 - 카테고리, 목록 가져오기
+	Map<String,Object> map  = blogSVC.selectCategoryAndList(blogDTO, object, is_owner, blog_category_no);
 	
-	/* ★★★★★ 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
+	// 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
 	if(map == null) {
 		System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
 		mv.setViewName("blog/error_to_main");
 		mv.addObject("BLOG", blogDTO);
 		return mv;
-	}*/
+	}
 	
 	// 외부인이 방문한 경우
 	if(!is_owner) { 
@@ -238,12 +238,10 @@ public class BlogController {
 	mv.addObject("FOLLOWER", followerList);
 	mv.addObject("OBJECT", object);
 	
-	// ★★★★★
-//	mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
-//	mv.addObject("CATEGORY", map.get("blog_category"));
-//	mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
-//	mv.addObject("LIST", (List)map.get("lists"));
-//	//mv.addObject("OBJECT", (List)map.get("objects"));
+	mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
+	mv.addObject("CATEGORY", map.get("blog_category"));
+	mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
+	mv.addObject("LIST", (List)map.get("lists"));
 	
 	mv.setViewName("blog/object");
 	

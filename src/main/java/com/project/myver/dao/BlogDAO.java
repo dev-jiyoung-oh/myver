@@ -37,12 +37,20 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectBlog_idAndNickAndImg_noFromBlog", member_no);
 	}
 	
+	
+	
 	// 'blog_visit'table =========================================
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
 	public int todayBlogVisitCount(int blog_no) {
 		return session.selectOne("blog.todayBlogVisitCount", blog_no);
 	}
 
+	// 21.06.09 블로그 방문자 정보 추가
+	public void insertBlog_visit(BlogDTO blogDTO) {
+		session.insert("blog.insertBlog_visit", blogDTO);
+	}
+		
+	
 	
 	// 'blog_category'table ========================================
 	// 21.05.28 블로그 기본 카테고리('전체보기') 생성insertDefaultBlogCategory
@@ -60,9 +68,14 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectList("blog.selectPublicFromBlog_category", blog_no);
 	}
 	
-	// 21.06.12 'blog_category_no'에 해당하는 정보 가져오기
+	// 21.06.12 'blog_category_no'에 해당하는 정보 가져오기 ======아직 사용안하는...
 	public BlogDTO selectByBlog_category_noFromBlog_category(Map map) {
 		return session.selectOne("blog.selectByBlog_category_noFromBlog_category", map);
+	}
+	
+	// 21.06.14 'blog_category_no'에 해당하는 'category_name' 가져오기
+	public String selectCategory_nameByBlog_category_noFromBlog_category(int blog_category_no) {
+		return session.selectOne("blog.selectCategory_nameByBlog_category_noFromBlog_category", blog_category_no);
 	}
 	
 	
@@ -77,6 +90,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectList("blog.selectFollowerListFromBlog_neighbor", member_no);
 	}
 
+	
 	
 	// 'blog_object'table =================================================
 	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
@@ -99,12 +113,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		session.update("blog.updateBlogObjectHits", blog_object_no);
 	}
 
-	// 21.06.09 블로그 방문자 정보 추가
-	public void insertBlog_visit(BlogDTO blogDTO) {
-		session.insert("blog.insertBlog_visit", blogDTO);
-	}
-
-	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기selectBlog_object
+	// 21.06.10 'blog_no' 혹은 'blog_object_no'에 일치하는 'blog_object' 가져오기
 	public BlogDTO selectBlog_object(Map<String, Object> map) {
 		return session.selectOne("blog.selectBlog_object", map);
 	}

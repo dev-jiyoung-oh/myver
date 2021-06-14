@@ -8,6 +8,8 @@ public class BlogDTO {
 	// 기본 생성자
 	public BlogDTO(){}
 	
+	// 기타
+	private CommentDTO commentDTO;	//블로그 댓글
 	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
@@ -283,7 +285,12 @@ public class BlogDTO {
 	public void setSaved_name(String saved_name) {
 		this.saved_name = saved_name;
 	}
-	
+	public CommentDTO getCommentDTO() {
+		return commentDTO;
+	}
+	public void setCommentDTO(CommentDTO commentDTO) {
+		this.commentDTO = commentDTO;
+	}
 	
 	
 	@Override
