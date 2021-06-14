@@ -85,7 +85,7 @@ public class BlogController {
 	}
 	
 	// 21.05.19 블로그 메인
-	// 21.06.04 블로그table에는 blogId, 방문자는 logNo, 방문자는 세션에 저장해서~~~, 
+	// ★★★★★ 댓글, 좋아요 기능 추가해야함!
 	@RequestMapping(value = "/{blog_id}")
 	public ModelAndView blogMain(HttpSession session, 
 				     ModelAndView mv, 
@@ -158,7 +158,7 @@ public class BlogController {
 		return mv;
 	}
 	
-    // 21.06.05 글 번호에 해당하는 내용 가져오기. 글에 해당하는 카테고리 정보 가져와서 목록/글 페이지 정보 만들고 리스트 가져오기 && 방문자 처리
+	// ★★★★★ 댓글, 좋아요 기능 추가해야함!
     // 21.05.30 블로그 글 보기	
     @RequestMapping(value = "/{blog_id}/{blog_object_no}")	
     public ModelAndView blogObject(HttpSession session, 
@@ -167,86 +167,110 @@ public class BlogController {
 				   @PathVariable("blog_object_no") int blog_object_no, 
 				   @RequestParam(value="query", defaultValue="") String query,
 				   @RequestParam(value="blog_category_no", defaultValue="-1") int blog_category_no) {	
-	if(blog_id.length() == 0) {
-		mv.setViewName("blog/home");
-		return mv;
-	}
-	
-	// 블로그 주인 회원 번호
-	int blog_member_no = memSVC.selectMember_noById(blog_id);
-	
-	// 블로그가 존재하지 않는 경우 <- member id(blog_member_no)가 존재하지 않는 경우(혹은 member id가 관리자인 경우)
-	if(blog_member_no == 0) { 
-		System.out.println("member id == 0");
-		mv.setViewName("blog/no_blog");
-		return mv;
-	}
-	
-	//방문자 id
-	String visitor_id = (String)session.getAttribute("MID");
-	
-	int visitor_no = -1;
-	
-	// 방문자 member_no
-	if(visitor_id != null) {
-		visitor_no = memSVC.selectMember_noById(visitor_id);
-	}
-	
-	// member_no로 블로그 정보 가져오기
-	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_member_no);
-	
-	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
-	boolean is_owner = blog_member_no == visitor_no; // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
-	BlogDTO object = blogSVC.selectBlog_object(blogDTO.getBlog_no(), blog_object_no, is_owner);
-	
-	// 해당 블로그에 해당 게시글이 존재하지 않는 경우
-	if(object == null) {
-		System.out.println("해당 블로그에 존재하지 않는 게시글입니다.");
-		mv.setViewName("blog/no_blog_object");
-		mv.addObject("BLOG", blogDTO);
-		return mv;
-	}
-	
-	// 카테고리 리스트 가져오기
-	
-	// 21.06.14 블로그 글 보기 - 카테고리, 목록 가져오기
-	Map<String,Object> map  = blogSVC.selectCategoryAndList(blogDTO, object, is_owner, blog_category_no);
-	
-	// 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
-	if(map == null) {
-		System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
-		mv.setViewName("blog/error_to_main");
-		mv.addObject("BLOG", blogDTO);
-		return mv;
-	}
-	
-	// 외부인이 방문한 경우
-	if(!is_owner) { 
-		// 21.06.09 게시글 조회수 업데이트(증가)
-		blogSVC.updateBlogObjectHits(blog_object_no, session);
+		if(blog_id.length() == 0) {
+			mv.setViewName("blog/home");
+			return mv;
+		}
 		
-		// 21.06.09 블로그 방문자 정보 추가
-		blogSVC.insertBlog_visit(blogDTO.getBlog_no(), blog_object_no, visitor_no, query, session);
-	}
+		// 블로그 주인 회원 번호
+		int blog_member_no = memSVC.selectMember_noById(blog_id);
+		
+		// 블로그가 존재하지 않는 경우 <- member id(blog_member_no)가 존재하지 않는 경우(혹은 member id가 관리자인 경우)
+		if(blog_member_no == 0) { 
+			System.out.println("member id == 0");
+			mv.setViewName("blog/no_blog");
+			return mv;
+		}
+		
+		//방문자 id
+		String visitor_id = (String)session.getAttribute("MID");
+		
+		int visitor_no = -1;
+		
+		// 방문자 member_no
+		if(visitor_id != null) {
+			visitor_no = memSVC.selectMember_noById(visitor_id);
+		}
+		
+		// member_no로 블로그 정보 가져오기
+		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_member_no);
+		
+		// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
+		boolean is_owner = blog_member_no == visitor_no; // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
+		BlogDTO object = blogSVC.selectBlog_object(blogDTO.getBlog_no(), blog_object_no, is_owner);
+		
+		// 해당 블로그에 해당 게시글이 존재하지 않는 경우
+		if(object == null) {
+			System.out.println("해당 블로그에 존재하지 않는 게시글입니다.");
+			mv.setViewName("blog/no_blog_object");
+			mv.addObject("BLOG", blogDTO);
+			return mv;
+		}
+		
+		// 카테고리 리스트 가져오기
+		
+		// 21.06.14 블로그 글 보기 - 카테고리, 목록 가져오기
+		Map<String,Object> map  = blogSVC.selectCategoryAndList(blogDTO, object, is_owner, blog_category_no);
+		
+		// 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
+		if(map == null) {
+			System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
+			mv.setViewName("blog/error_to_main");
+			mv.addObject("BLOG", blogDTO);
+			return mv;
+		}
+		
+		// 외부인이 방문한 경우
+		if(!is_owner) { 
+			// 21.06.09 게시글 조회수 업데이트(증가)
+			blogSVC.updateBlogObjectHits(blog_object_no, session);
+			
+			// 21.06.09 블로그 방문자 정보 추가
+			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), blog_object_no, visitor_no, query, session);
+		}
+		
+		// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
 	
-	// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
-	List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
-	List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
-
-	mv.addObject("BLOG", blogDTO);
-	mv.addObject("FOLLOWING", followingList);
-	mv.addObject("FOLLOWER", followerList);
-	mv.addObject("OBJECT", object);
-	
-	mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
-	mv.addObject("CATEGORY", map.get("blog_category"));
-	mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
-	mv.addObject("LIST", (List)map.get("lists"));
-	
-	mv.setViewName("blog/object");
-	
-	return mv;
+		mv.addObject("BLOG", blogDTO);
+		mv.addObject("FOLLOWING", followingList);
+		mv.addObject("FOLLOWER", followerList);
+		mv.addObject("OBJECT", object);
+		
+		mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
+		mv.addObject("CATEGORY", map.get("blog_category"));
+		mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
+		mv.addObject("LIST", (List)map.get("lists"));
+		
+		mv.setViewName("blog/object");
+		
+		return mv;
     }
 
-	
+    // 21.06.15 블로그 관리 페이지
+    @RequestMapping(value = "/admin/{blog_id}/{menu}")	
+    public ModelAndView blogConfig(HttpSession session, 
+				   ModelAndView mv, 
+				   @PathVariable("blog_id") String blog_id,
+				   @PathVariable("menu") String menu) {
+    	String visitor_id = (String)session.getAttribute("MID");
+    	
+    	if(blog_id.equals(visitor_id)) {
+    		// 로그인 창으로 보내기~
+    	}
+    	
+    	/* menu가 없으면 basic_setting jsp페이지로~
+    	 * menu에 맞게 보내기
+    	 * 종류) config(기본 설정)/content(메뉴,글,동영상 관리)/stat(내 블로그 통계) 
+    	   - config의 경우
+    	   1) 블로그 정보 : blog_id로 'blog' 정보 가져오기
+    	   2) 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
+    	   3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
+    	   4) 블로그 초기화
+    	 */
+    	
+    	
+    	return mv;
+    }
 }
