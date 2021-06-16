@@ -62,9 +62,9 @@ public class BlogService {
 		return blogDTO;
 	}
 	
-	// 21.05.19 member_no로 블로그 정보 가져오기
-	public BlogDTO selectAllFromBlog(int member_no) {
-		return blogDAO.selectAllFromBlog(member_no);
+	// 21.05.19 member_id로 블로그 정보 가져오기
+	public BlogDTO selectAllFromBlog(String member_id) {
+		return blogDAO.selectAllFromBlog(member_id);
 	}
 
 	

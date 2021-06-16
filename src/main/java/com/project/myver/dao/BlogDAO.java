@@ -22,14 +22,14 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return blogDTO.getBlog_no();
 	}
 
-	// 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보
+	// 21.05.19 블로그 홈에서 보일 'member_id'에 해당하는 블로그 정보
 	public BlogDTO selectBlogHomeDataFromBlog(int member_no) {
 		return session.selectOne("blog.selectBlogHomeDataFromBlog", member_no);
 	}
 	
 	// 21.05.19 'member_no'로 모든 블로그 정보 가져오기
-	public BlogDTO selectAllFromBlog(int member_no) {
-		return session.selectOne("blog.selectAllFromBlog", member_no);
+	public BlogDTO selectAllFromBlog(String member_id) {
+		return session.selectOne("blog.selectAllFromBlog", member_id);
 	}
 
 	// 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_id, blog_nick, blog_img_no)

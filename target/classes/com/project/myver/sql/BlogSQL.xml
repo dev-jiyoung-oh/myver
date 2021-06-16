@@ -17,11 +17,11 @@
 		WHERE member_no = #{member_no}
 	</select>
 	
-	<!-- 21.05.19 'member_no'로 블로그 정보 가져오기 -->
-	<select id="selectAllFromBlog" parameterType="Integer" resultType="blogDTO">
+	<!-- 21.05.19 'member_id'로 블로그 정보 가져오기 -->
+	<select id="selectAllFromBlog" parameterType="String" resultType="blogDTO">
 		SELECT * 
 		FROM blog 
-		WHERE member_no = #{member_no}
+		WHERE blog_id = #{blog_id}
 	</select>
 	
 	<!-- 21.05.25 'member_no'로 블로그 이웃 정보 가져오기 (blog_id, blog_nick, blog_img_no) -->

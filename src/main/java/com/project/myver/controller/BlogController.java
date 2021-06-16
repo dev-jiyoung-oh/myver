@@ -108,8 +108,8 @@ public class BlogController {
 			return mv;
 		}
 		
-		// 21.05.19 member_no(blog_member_no)로 블로그 정보 가져오기
-		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_member_no);
+		// 21.05.19 member_no(blog_id)로 블로그 정보 가져오기
+		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
 		
 		//방문자
 		String visitor_id = (String)session.getAttribute("MID");
@@ -192,8 +192,8 @@ public class BlogController {
 			visitor_no = memSVC.selectMember_noById(visitor_id);
 		}
 		
-		// member_no로 블로그 정보 가져오기
-		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_member_no);
+		// blog_id로 블로그 정보 가져오기
+		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
 		
 		// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
 		boolean is_owner = blog_member_no == visitor_no; // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
@@ -256,18 +256,53 @@ public class BlogController {
 				   @PathVariable("menu") String menu) {
     	String visitor_id = (String)session.getAttribute("MID");
     	
-    	if(blog_id.equals(visitor_id)) {
+    	if(visitor_id==null || !blog_id.equals(visitor_id)) {
     		// 로그인 창으로 보내기~
     	}
     	
+    	// 21.06.16 menu - config(기본 설정)
+    	if(menu==null || menu.length()==0 || menu.equals("config")) {
+    		// 1) 블로그 정보 : blog_id로 'blog' 정보 가져오기
+    		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
+    		
+    		int blog_member_no = blogDTO.getMember_no();
+    		
+    		// 2) 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
+    		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
+    		
+    		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
+    		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
+    	// menu - content(메뉴,글,동영상 관리)
+    	}else if(menu.equals("content")) {
+    		//
+		// menu - stat(내 블로그 통계)
+    	}else if(menu.equals("stat")) {
+    		
+    	}
     	/* menu가 없으면 basic_setting jsp페이지로~
     	 * menu에 맞게 보내기
-    	 * 종류) config(기본 설정)/content(메뉴,글,동영상 관리)/stat(내 블로그 통계) 
-    	   - config의 경우
+    	 * 종류) config(기본 설정)/content(메뉴,글 관리)/stat(내 블로그 통계)
+    	   - config(기본 설정)
     	   1) 블로그 정보 : blog_id로 'blog' 정보 가져오기
     	   2) 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
     	   3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     	   4) 블로그 초기화
+    	   
+    	   - content(메뉴,글 관리)
+    	   1) 상단 메뉴 설정
+    	   2) 카테고리 설정
+    	   3) 게시글 관리
+    	   4) 댓글 관리
+    	   
+    	   - stat(내 블로그 통계) ----> 이건 한번에 다 가져오지 말고 그때그때 가져와야 할 것 같다.
+    	   1) 조회수
+    	   2) 방문 횟수
+    	   3) 검색어 분석
+    	   4) 시간대 분석
+    	   5) 성별·연령별 분포
+    	   6) 조회수 순위
+    	   7) 좋아요수 순위
+    	   8) 댓글수 순위
     	 */
     	
     	
