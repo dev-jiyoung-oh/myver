@@ -274,7 +274,12 @@ public class BlogController {
     		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
     	// menu - content(메뉴,글,동영상 관리)
     	}else if(menu.equals("content")) {
-    		//
+    		// 1) 상단 메뉴 설정 
+     	    // 2) 카테고리 설정
+    		// -> 카테고리 리스트 가져오기
+    		
+     	    // 3) 게시글 관리 -> 글 목록 가져오기
+     	    // 4) 댓글 관리 -> 모든 	댓글 가져오기
 		// menu - stat(내 블로그 통계)
     	}else if(menu.equals("stat")) {
     		
@@ -295,6 +300,7 @@ public class BlogController {
     	   4) 댓글 관리
     	   
     	   - stat(내 블로그 통계) ----> 이건 한번에 다 가져오지 말고 그때그때 가져와야 할 것 같다.
+    	   0) 오늘
     	   1) 조회수
     	   2) 방문 횟수
     	   3) 검색어 분석
