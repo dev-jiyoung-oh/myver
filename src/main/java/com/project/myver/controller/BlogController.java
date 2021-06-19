@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.project.myver.dto.BlogDTO;
+import com.project.myver.dto.CommentDTO;
 import com.project.myver.dto.FileDTO;
 import com.project.myver.dto.MemberDTO;
 import com.project.myver.dto.MemoDTO;
@@ -260,30 +261,43 @@ public class BlogController {
     		// 로그인 창으로 보내기~
     	}
     	
+    	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
+		int blog_member_no = blogDTO.getMember_no();
+		int blog_no = blogDTO.getBlog_no();
+    	
     	// 21.06.16 menu - config(기본 설정)
     	if(menu==null || menu.length()==0 || menu.equals("config")) {
-    		// 1) 블로그 정보 : blog_id로 'blog' 정보 가져오기
-    		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
-    		
-    		int blog_member_no = blogDTO.getMember_no();
+    		// 1) 블로그 정보 : blog_id로 'blog' 정보 가져오기 <- 위에서 이미 가져옴
     		
     		// 2) 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
     		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
     		
     		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
-    	// menu - content(메뉴,글,동영상 관리)
+    	
+		// 21.06.19 menu - content(메뉴,글,동영상 관리)
     	}else if(menu.equals("content")) {
     		// 1) 상단 메뉴 설정 
      	    // 2) 카테고리 설정
     		// -> 카테고리 리스트 가져오기
+    		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blog_no);
     		
      	    // 3) 게시글 관리 -> 글 목록 가져오기
-     	    // 4) 댓글 관리 -> 모든 	댓글 가져오기
+    		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
+    		// 1. 페이지에 따라 비동기로 가져오는거 처리해야함
+    		// 2. 아이디로 검색하는것도 비동기 처리해야함
+    		int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
+    		PageUtil pageInfo = new PageUtil(1,totalCount,20,blog_no,"blog_no",true);
+    		List<BlogDTO> objectList = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
+     	    
+    		// 4) 댓글 관리 -> 모든 	댓글 가져오기
+    		List<CommentDTO> commentList = blogSVC.selectCommentByBlog_noFromBlog_comment(blog_no);
+    		
 		// menu - stat(내 블로그 통계)
     	}else if(menu.equals("stat")) {
     		
     	}
+    	
     	/* menu가 없으면 basic_setting jsp페이지로~
     	 * menu에 맞게 보내기
     	 * 종류) config(기본 설정)/content(메뉴,글 관리)/stat(내 블로그 통계)
@@ -310,7 +324,6 @@ public class BlogController {
     	   7) 좋아요수 순위
     	   8) 댓글수 순위
     	 */
-    	
     	
     	return mv;
     }

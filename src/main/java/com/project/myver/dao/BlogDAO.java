@@ -9,6 +9,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.myver.dto.BlogDTO;
+import com.project.myver.dto.CommentDTO;
 import com.project.myver.util.PageUtil;
 
 public class BlogDAO extends SqlSessionDaoSupport {
@@ -116,6 +117,13 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	// 21.06.10 'blog_no' 혹은 'blog_object_no'에 일치하는 'blog_object' 가져오기
 	public BlogDTO selectBlog_object(Map<String, Object> map) {
 		return session.selectOne("blog.selectBlog_object", map);
+	}
+
+	
+	// 'blog_comment' & 'blog_object' table ==============================================
+	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
+	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
+		return session.selectList("blog.selectCommentByBlog_noFromBlog_comment", blog_no);
 	}
 
 	

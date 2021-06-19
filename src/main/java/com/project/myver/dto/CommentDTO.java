@@ -7,6 +7,7 @@ public class CommentDTO {
 	// 'blog_comment' table
 	private int blog_comment_no;		//블로그 댓글 번호
 	private int blog_object_no;			//블로그 글 번호
+	private int blog_no;				//블로그 번호
 	
 	// 'blog_comment' table & 'cafe_comment'table
 	private int parent_comment_no;		//부모 댓글 번호
@@ -19,7 +20,7 @@ public class CommentDTO {
 	
 	// 'blog_comment_like' table
 	private int blog_comment_like_no;	//블로그 댓글 좋아요 번호
-
+	
 	
 	
 	// Getters and Setters
@@ -39,6 +40,14 @@ public class CommentDTO {
 		this.blog_object_no = blog_object_no;
 	}
 
+	public int getBlog_no() {
+		return blog_no;
+	}
+
+	public void setBlog_no(int blog_no) {
+		this.blog_no = blog_no;
+	}
+	
 	public int getParent_comment_no() {
 		return parent_comment_no;
 	}
@@ -103,11 +112,13 @@ public class CommentDTO {
 		this.blog_comment_like_no = blog_comment_like_no;
 	}
 
+	
+	
 	@Override
 	public String toString() {
-		return "CommentDTO - blog [blog_comment_no=" + blog_comment_no + ", blog_object_no=" + blog_object_no
-				+ ", parent_comment_no=" + parent_comment_no + ", comment_index=" + comment_index + ", id=" + id
-				+ ", nick=" + nick + ", comment=" + comment + ", date=" + date + ", likes=" + likes
+		return "CommentDTO [blog_comment_no=" + blog_comment_no + ", blog_object_no=" + blog_object_no + ", blog_no="
+				+ blog_no + ", parent_comment_no=" + parent_comment_no + ", comment_index=" + comment_index + ", id="
+				+ id + ", nick=" + nick + ", comment=" + comment + ", date=" + date + ", likes=" + likes
 				+ ", blog_comment_like_no=" + blog_comment_like_no + "]";
 	}
 	

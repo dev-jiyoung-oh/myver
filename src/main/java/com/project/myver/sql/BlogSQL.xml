@@ -206,6 +206,15 @@
 	</select>
 	
 	
+	<!-- 'blog_comment' & 'blog_object' table ================================================== -->
+	<!-- 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기 -->
+	<select id="selectCommentByBlog_noFromBlog_comment" parameterType="Integer" resultType="commentDTO">
+		SELECT C.blog_comment_no, C.blog_object_no, C.blog_no, C.id, C.nick, C.comment, C.date, O.title 
+		FROM blog_comment C, blog_object O 
+		WHERE C.blog_no = #{blog_no}
+			AND C.blog_object_no = O.blog_object_no
+	</select>
+	
 	
 </mapper>
 	
