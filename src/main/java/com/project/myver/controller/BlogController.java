@@ -274,6 +274,8 @@ public class BlogController {
     		
     		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
+
+                mv.setViewName("blog/admin/config");
     	
 		// 21.06.19 menu - content(메뉴,글,동영상 관리)
     	}else if(menu.equals("content")) {
@@ -293,6 +295,8 @@ public class BlogController {
     		// 4) 댓글 관리 -> 모든 	댓글 가져오기
     		List<CommentDTO> commentList = blogSVC.selectCommentByBlog_noFromBlog_comment(blog_no);
     		
+                mv.setViewName("blog/admin/content");
+
 		// menu - stat(내 블로그 통계)
     	}else if(menu.equals("stat")) {
     		
