@@ -7,6 +7,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<script type="text/javascript">
+	$(function(){
+		//id => $('#아이디밸류')
+		//class => $('.클래스밸류')
+		//name => $('[name="네임밸류"]')
+		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
+	
+		$("#blogUpdateBtn").click(function(){
+			var queryString = $("#blogFrm").serialize();
+			 
+	        $.ajax({
+	            type : 'post',
+	            url : '${pageContext.request.contextPath}/blog/blogUpdate',
+	            data : queryString,
+	            dataType : 'json',
+	            error: function(xhr, status, error){
+	                //alert(error);
+	            },
+	            success : function(json){
+	                //alert(json)
+	            }
+	        });
+		})
+	})
+	</script>
 </head>
 <body>
 MYVER 블로그 | 관리
@@ -40,7 +65,7 @@ MYVER 블로그 | 관리
 		</div>
 	</div>
 	<div class="col-md-9">
-		<form>
+		<form id="blogFrm">
 			<h1>블로그 정보</h1>
 			<table>
 				<tr>
@@ -50,28 +75,28 @@ MYVER 블로그 | 관리
 				<tr>
 					<td>블로그명</td>
 					<td>
-						<input type="text" value=""/>
+						<input type="text" name="blog_title" value="${BLOG.blog_title}"/>
 						<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
 					</td>
 				</tr>
 				<tr>
 					<td>별명</td>
 					<td>
-						<input type="text" value=""/>
+						<input type="text" name="blog_nick" value="${BLOG.blog_nick}"/>
 						<p>한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p>
 					</td>
 				</tr>
 				<tr>
 					<td>소개글</td>
 					<td>
-						<textarea rows="" cols=""></textarea>
+						<textarea name="blog_info" rows="" cols="">${BLOG.blog_info}</textarea>
 						<p>블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p>
 					</td>
 				</tr>
 				<tr>
 					<td>내 블로그 주제</td>
 					<td>
-						<select>
+						<select id="blog_topic" name="blog_topic">
 							<option>문학·책</option>
 							<option>영화</option>
 							<option>미술·디자인</option>
@@ -120,7 +145,7 @@ MYVER 블로그 | 관리
 				</tr>
 			</table>
 			<div>
-				<input type="button" value="확인"/>
+				<input type="button" id="blogUpdateBtn" value="확인"/>
 			</div>
 		</form>
 	</div>

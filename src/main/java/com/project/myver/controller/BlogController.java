@@ -275,7 +275,9 @@ public class BlogController {
     		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
 
-                mv.setViewName("blog/admin/config");
+    		mv.addObject("FOLLOWINGS", followingList);
+    		mv.addObject("FOLLOWERS", followerList);
+            mv.setViewName("blog/admin/config");
     	
 		// 21.06.19 menu - content(메뉴,글,동영상 관리)
     	}else if(menu.equals("content")) {
@@ -286,8 +288,8 @@ public class BlogController {
     		
      	    // 3) 게시글 관리 -> 글 목록 가져오기
     		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
-    		// 1. 페이지에 따라 비동기로 가져오는거 처리해야함
-    		// 2. 아이디로 검색하는것도 비동기 처리해야함
+    		//  1 - 페이지에 따라 비동기로 가져오는거 처리해야함
+    		//  2 - 아이디로 검색하는것도 비동기 처리해야함
     		int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
     		PageUtil pageInfo = new PageUtil(1,totalCount,20,blog_no,"blog_no",true);
     		List<BlogDTO> objectList = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
@@ -295,7 +297,10 @@ public class BlogController {
     		// 4) 댓글 관리 -> 모든 	댓글 가져오기
     		List<CommentDTO> commentList = blogSVC.selectCommentByBlog_noFromBlog_comment(blog_no);
     		
-                mv.setViewName("blog/admin/content");
+    		mv.addObject("CATEGORYS", categoryList);
+    		mv.addObject("OBJECTS", objectList);
+    		mv.addObject("COMMENTS", commentList);
+            mv.setViewName("blog/admin/content");
 
 		// menu - stat(내 블로그 통계)
     	}else if(menu.equals("stat")) {
@@ -328,7 +333,19 @@ public class BlogController {
     	   7) 좋아요수 순위
     	   8) 댓글수 순위
     	 */
+    	mv.addObject("BLOG", blogDTO);
     	
     	return mv;
     }
+    
+    // 21.06.21 블로그 정보 수정
+    @RequestMapping(value = "/admin/updateBlog", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateBlog(BlogDTO blogDTO) {
+		System.out.println("updateBlog - blogDTO: "+blogDTO.blogToString());
+		
+		
+		
+		return null;
+	}
 }
