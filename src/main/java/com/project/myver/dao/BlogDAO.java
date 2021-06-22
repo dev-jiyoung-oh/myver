@@ -38,6 +38,10 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectBlog_idAndNickAndImg_noFromBlog", member_no);
 	}
 	
+	// 21.06.22 블로그 정보 수정
+	public int blogUpdate(BlogDTO blogDTO) {
+		return session.update("blog.blogUpdate", blogDTO);
+	}
 	
 	
 	// 'blog_visit'table =========================================
@@ -125,6 +129,8 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return session.selectList("blog.selectCommentByBlog_noFromBlog_comment", blog_no);
 	}
+
+	
 
 	
 	

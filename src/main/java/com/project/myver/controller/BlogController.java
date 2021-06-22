@@ -343,9 +343,20 @@ public class BlogController {
 	@ResponseBody
 	public String updateBlog(BlogDTO blogDTO) {
 		System.out.println("updateBlog - blogDTO: "+blogDTO.blogToString());
+		String result = "";
 		
+		/* ★★★ 업로드한 이미지가 있는 경우 이미지 업로드...하고 번호 가져와서 blogDTO에 set ★★★ */
 		
+		int cnt = blogSVC.blogUpdate(blogDTO);
 		
-		return null;
+		if(cnt==1) {
+			System.out.println("updateBlog - 데이터 업데이트 성공");
+			result = "success";
+		}else {
+			System.out.println("updateBlog - cnt: "+cnt);
+			result = "fail";
+		}
+		
+		return result;
 	}
 }

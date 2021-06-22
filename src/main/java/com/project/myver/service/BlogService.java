@@ -316,6 +316,11 @@ public class BlogService {
 		return blogDAO.selectAllFromBlog(member_id);
 	}
 
+	// 21.06.22 블로그 정보 수정
+	public int blogUpdate(BlogDTO blogDTO) {
+		return blogDAO.blogUpdate(blogDTO);
+	}
+		
 	
 	// 'blog_visit'table ===================================================
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
@@ -481,5 +486,7 @@ public class BlogService {
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return blogDAO.selectCommentByBlog_noFromBlog_comment(blog_no);
 	}
+
+	
 	
 }

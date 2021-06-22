@@ -31,6 +31,17 @@
 		WHERE member_no = #{member_no}
 	</select>
 	
+	<!-- 21.06.22 블로그 정보 수정 -->
+	<update id="blogUpdate">
+		update blog 
+		SET blog_title = #{blog_title},
+			blog_nick = #{blog_nick},
+			blog_info = #{blog_info},
+			blog_topic = #{blog_topic},
+			blog_img_no = #{blog_img_no} 
+		where blog_id = #{blog_id}
+	</update>
+	
 	
 	
 	<!-- 'blog_visit'table ==================================================================== -->
