@@ -64,6 +64,7 @@ MYVER 블로그 | 관리
 			</ul>   
 		</div>
 	</div>
+	
 	<div class="col-md-9">
 		<form id="blogFrm">
 			<h1>블로그 정보</h1>
@@ -149,6 +150,63 @@ MYVER 블로그 | 관리
 			</div>
 		</form>
 	</div>
+	
+	<div class="col-md-9">
+		<form id="blogFrm">
+			<h1>내가 추가한 이웃</h1>
+			<table>
+				<tr>
+					<td><input type="checkbox"/></td>
+					<td>
+						<select>
+							<option selected>내가 이웃으로 추가한 사람 전체</option>
+							<option>상대도 나를 추가한 사람</option>
+							<option>나만 상대를 추가한 사람</option>
+						</select>
+					</td>
+					<td>추가일</td>
+				</tr>
+				<c:forEach items="${FOLLOWINGS}" var="following">
+					<tr>
+						<td><input type="checkbox"/></td>
+						<td>${following.blog_nick} | 
+							<a href="${pageContext.request.contextPath}/blog/${following.blog_nick}">${following.blog_title}</a>
+						</td>
+						<td>${following.date}</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</form>
+	</div>
+	
+	<div class="col-md-9">
+		<form id="blogFrm">
+			<h1>나를 추가한 이웃</h1>
+			<table>
+				<tr>
+					<td><input type="checkbox"/></td>
+					<td>
+						<select>
+							<option selected>나를 이웃으로 추가한 사람 전체</option>
+							<option>나도 이웃으로 추가한 사람</option>
+							<option>상대만 나를 추가한 사람</option>
+						</select>
+					</td>
+					<td>추가일</td>
+				</tr>
+				<c:forEach items="${FOLLOWERS}" var="follower">
+					<tr>
+						<td><input type="checkbox"/></td>
+						<td>${follower.blog_nick} | 
+							<a href="${pageContext.request.contextPath}/blog/${follower.blog_nick}">${follower.blog_title}</a>
+						</td>
+						<td>${follower.date}</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</form>
+	</div>
+	
 </div>
 </body>
 </html>

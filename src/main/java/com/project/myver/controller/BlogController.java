@@ -258,7 +258,8 @@ public class BlogController {
     	String visitor_id = (String)session.getAttribute("MID");
     	
     	if(visitor_id==null || !blog_id.equals(visitor_id)) {
-    		// 로그인 창으로 보내기~
+    		// ★★★★★★ 로그인 창으로 보내기~ ★★★★★★★★★★★★★★★★★★★★★★★★
+    		
     	}
     	
     	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
@@ -275,6 +276,9 @@ public class BlogController {
     		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
 
+    		for(BlogDTO b : followerList) {
+    			System.out.println(b.toString());
+    		}
     		mv.addObject("FOLLOWINGS", followingList);
     		mv.addObject("FOLLOWERS", followerList);
             mv.setViewName("blog/admin/config");
@@ -346,6 +350,7 @@ public class BlogController {
 		String result = "";
 		
 		/* ★★★ 업로드한 이미지가 있는 경우 이미지 업로드...하고 번호 가져와서 blogDTO에 set ★★★ */
+		//boolean imgCange = false;
 		
 		int cnt = blogSVC.blogUpdate(blogDTO);
 		

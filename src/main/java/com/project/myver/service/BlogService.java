@@ -26,15 +26,16 @@ public class BlogService {
 	private ImageService imgSVC;
 
 	// 기타 함수 =====================================================
-	// 21.05.25 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_id, blog_nick, blog_img_no)
-	public void setBlog_idAndNickAndImg_no(BlogDTO blogDTO, String followingOrFollower) {
+	// 21.05.25 'blogDTO.member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_title, blog_id, blog_nick, blog_img_no)
+	public void setBlog_titleAndidAndNickAndImg_no(BlogDTO blogDTO, String followingOrFollower) {
 		BlogDTO temp = null;
 		if(followingOrFollower.equals("following")) {
-			temp = blogDAO.selectBlog_idAndNickAndImg_noFromBlog(blogDTO.getNeighbor_member_no());
+			temp = blogDAO.selectBlog_titleAndidAndNickAndImg_noFromBlog(blogDTO.getNeighbor_member_no());
 		}else {
-			temp = blogDAO.selectBlog_idAndNickAndImg_noFromBlog(blogDTO.getMember_no());
+			temp = blogDAO.selectBlog_titleAndidAndNickAndImg_noFromBlog(blogDTO.getMember_no());
 		}
 		
+		blogDTO.setBlog_title(temp.getBlog_title());
 		blogDTO.setBlog_id(temp.getBlog_id());
 		blogDTO.setBlog_nick(temp.getBlog_nick());
 		blogDTO.setBlog_img_no(temp.getBlog_img_no());
@@ -352,8 +353,8 @@ public class BlogService {
 		List<BlogDTO> blogList = blogDAO.selectFollowingListFromBlog_neighbor(member_no);
 		
 		for(BlogDTO blogDTO : blogList) {
-			// 'blogDTO.neighber_member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_id, blog_nick, blog_img_no)
-			setBlog_idAndNickAndImg_no(blogDTO, "following");
+			// 'blogDTO.neighber_member_no'로 블로그 이웃 정보 가져와서 blogDTO 값 초기화 (blog_title, blog_id, blog_nick, blog_img_no)
+			setBlog_titleAndidAndNickAndImg_no(blogDTO, "following");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
 			if(blogDTO.getBlog_img_no() != 0) {
@@ -370,12 +371,13 @@ public class BlogService {
 		
 		for(BlogDTO blogDTO : blogList) {
 			// 'blogDTO.member_no'로  blog_title, blog_nick, blog_img_no 가져와서 blogDTO 값 초기화
-			setBlog_idAndNickAndImg_no(blogDTO, "follwer");
+			setBlog_titleAndidAndNickAndImg_no(blogDTO, "follwer");
 			
 			// 'blogDTO.blog_img_no'로 'image'테이블에서 path, saved_name 가져와서 blogDTO 값 초기화
 			if(blogDTO.getBlog_img_no() != 0) {
 				imgSVC.setPathAndSaved_nameFromImage(blogDTO);
 			}
+			System.out.println(blogDTO.toString());
 		}
 		
 		return blogList;
