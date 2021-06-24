@@ -306,6 +306,18 @@ public class BlogController {
     		mv.addObject("COMMENTS", commentList);
             mv.setViewName("blog/admin/content");
 
+            for(BlogDTO category : categoryList) {
+            	System.out.println(category.blog_categoryToString());
+            }
+            System.out.println("===========");
+            for(BlogDTO object : objectList) {
+            	System.out.println(object.blog_objectToString());
+            }
+            System.out.println("===========");
+            for(CommentDTO category : commentList) {
+            	System.out.println(category.toString());
+            }
+            System.out.println("===========");
 		// menu - stat(내 블로그 통계)
     	}else if(menu.equals("stat")) {
     		

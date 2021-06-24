@@ -316,7 +316,7 @@ public class BlogDTO {
 	}
 	
 	public String blog_categoryToString() {
-		return "BlogDTO - blog_category [blog_category_no=\" + blog_category_no" + ", blog_no=" + blog_no
+		return "BlogDTO - blog_category [blog_category_no=" + blog_category_no + ", blog_no=" + blog_no
 				+ ", category_index=" + category_index + ", parent_category_no=" + parent_category_no 
 				+ ", category_name=" + category_name + ", is_public=" + is_public + ", topic=" + topic 
 				+ ", type=" + type + ", show_list=" + show_list + ", list_line=" + list_line 
