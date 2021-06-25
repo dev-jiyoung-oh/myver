@@ -149,7 +149,7 @@ public class BlogService {
 		
 		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,is_owner)
 		PageUtil listInfo = new PageUtil(currentPage,totalCount,blog_category.getList_line(),no,column_name,is_owner);
-		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blog_category.getObjects_per_page(),no,column_name,is_owner);
+		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blogDTO.getObjects_per_page(),no,column_name,is_owner);
 		
 		// 21.05.27 목록 내용 가져오기
 		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);

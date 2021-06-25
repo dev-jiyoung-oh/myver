@@ -17,6 +17,7 @@ public class CommentDTO {
 	private String comment;				//댓글 내용
 	private Date date;					//작성일
 	private int likes;					//댓글 좋아요수
+	private String title;				//글 제목(댓글이 달린)
 	
 	// 'blog_comment_like' table
 	private int blog_comment_like_no;	//블로그 댓글 좋아요 번호
@@ -111,15 +112,23 @@ public class CommentDTO {
 	public void setBlog_comment_like_no(int blog_comment_like_no) {
 		this.blog_comment_like_no = blog_comment_like_no;
 	}
+	
+	public String getTitle() {
+		return title;
+	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	
 	
+
 	@Override
 	public String toString() {
 		return "CommentDTO [blog_comment_no=" + blog_comment_no + ", blog_object_no=" + blog_object_no + ", blog_no="
 				+ blog_no + ", parent_comment_no=" + parent_comment_no + ", comment_index=" + comment_index + ", id="
-				+ id + ", nick=" + nick + ", comment=" + comment + ", date=" + date + ", likes=" + likes
-				+ ", blog_comment_like_no=" + blog_comment_like_no + "]";
+				+ id + ", nick=" + nick + ", comment=" + comment + ", date=" + date + ", likes=" + likes + ", title="
+				+ title + ", blog_comment_like_no=" + blog_comment_like_no + "]";
 	}
 	
 }

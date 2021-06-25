@@ -20,6 +20,7 @@ public class BlogDTO {
 	private String blog_info;		//블로그 소개글
 	private String blog_topic;		//블로그 주제
 	private int blog_img_no;		//블로그 소개 이미지 번호
+	private int objects_per_page; 	//페이지당 글 개수(1,3,5,10)
 	
 	// 'blog_category' table
 	private int blog_category_no;	//블로그 카테고리 번호
@@ -31,7 +32,6 @@ public class BlogDTO {
 	private int type;				//유형(블로그형:0, 앨범형:1)
 	private int show_list;			//목록열기여부(열기:0, 닫기:1)
 	private int list_line;		//목록의 글 개수(닫은 경우:0, 연 경우:5/10/15/20/30)
-	private int objects_per_page; //페이지당 글 개수(1,3,5,10)
 	private int is_basic;			//대표 여부(아님:0, 대표:1)
 	private int is_upper;			//블로그 상단 표시 여부(아님:0, 표시:1)
 	private int all_category;		//카테고리 전체보기 여부(아님:0, 맞음:1)
@@ -312,7 +312,7 @@ public class BlogDTO {
 	public String blogToString() {
 		return "BlogDTO - blog [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_id=" + blog_id + ", blog_title=" + blog_title + ", blog_nick="
 				+ blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic + ", blog_img_no=" + blog_img_no 
-				+ ", path=" + path + ", saved_name=" + saved_name + "]";
+				+ ", objects_per_page=" + objects_per_page + ", path=" + path + ", saved_name=" + saved_name + "]";
 	}
 	
 	public String blog_categoryToString() {
@@ -320,8 +320,7 @@ public class BlogDTO {
 				+ ", category_index=" + category_index + ", parent_category_no=" + parent_category_no 
 				+ ", category_name=" + category_name + ", is_public=" + is_public + ", topic=" + topic 
 				+ ", type=" + type + ", show_list=" + show_list + ", list_line=" + list_line 
-				+ ", objects_per_page=" + objects_per_page + ", is_basic=" + is_basic 
-				+ ", is_upper=" + is_upper + ", all_category=" + all_category + "]";
+				+ ", is_basic=" + is_basic + ", is_upper=" + is_upper + ", all_category=" + all_category + "]";
 	}
 	
 	public String blog_visitToString() {
@@ -332,8 +331,8 @@ public class BlogDTO {
 	
 	public String blog_objectToString() {
 		return "BlogDTO - blog_object [blog_object_no=" + blog_object_no+ ", blog_category_no=" + blog_category_no 
-				+ ", title=" + title + ", content=" + content + ", date=" + date + ", is_public=" + is_public
-				+ ", hits=" + hits + ", likes=" + likes + "]";
+				+ ",category_name= " + category_name + ", title=" + title + ", content=" + content + ", date=" + date
+				+ ", is_public=" + is_public + ", hits=" + hits + ", likes=" + likes + "]";
 	}
 	
 	public String blog_object_likeToString() {

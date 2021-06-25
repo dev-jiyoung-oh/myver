@@ -14,7 +14,15 @@
 		//name => $('[name="네임밸류"]')
 		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
 	
-		$("#blogUpdateBtn").click(function(){
+		$("#categoryUpdateBtn").click(function(){
+			var objects_per_page = document.getElementsByName("objects_per_page");
+			  
+	        for (var i=0; i<objects_per_page.length; i++) {
+	            if (objects_per_page[i].checked == true) {
+	                alert(objects_per_page[i].value);
+	            }
+	        }
+			/*
 			var queryString = $("#blogFrm").serialize();
 			 
 	        $.ajax({
@@ -28,8 +36,10 @@
 	            success : function(json){
 	                //alert(json)
 	            }
-	        });
+	        });*/
 		})
+		
+		$(":radio[name='objects_per_page'][value='${BLOG.objects_per_page}']").prop('checked', true);
 	})
 	</script>
 </head>
@@ -54,14 +64,14 @@ MYVER 블로그 | 관리
 		<div>
 			<div>글 관리</div>
 			<ul>
-				<li>게시글 관리</li>
-				<li>댓글 관리</li>
+				<li>게시글</li>
+				<li>댓글</li>
 			</ul>   
 		</div>
 	</div>
 	<div class="col-md-9">
 		<form id="upperCategoryFrm">
-			<h1>상단 메뉴 설정</h1>
+			<h1>상단메뉴 설정</h1>
 			<table>
 				<tr>
 					<td>
@@ -105,11 +115,22 @@ MYVER 블로그 | 관리
 	
 	<div class="col-md-9">
 		<form id="categoryFrm">
-			<h1>상단 메뉴 설정</h1>
+			<h1>카테고리 설정</h1>
+			<table>
+				<tr>
+					<td>페이지당 글</td>
+					<td>
+						<input type="radio" name="objects_per_page" value="1">1개 
+						<input type="radio" name="objects_per_page" value="3">3개 
+						<input type="radio" name="objects_per_page" value="5">5개 
+						<input type="radio" name="objects_per_page" value="10">10개 
+					</td>
+				</tr>
+			</table>
 			<table>
 				<tr>
 					<td>
-						<div>블로그 카테고리</div>
+						<div>카테고리 관리·설정</div>
 						<div>
 							<ul>
 								<c:forEach var="category" items="${CATEGORYS}">
@@ -172,6 +193,79 @@ MYVER 블로그 | 관리
 			<div>
 				<input type="button" id="categoryUpdateBtn" value="확인"/>
 			</div>
+		</form>
+	</div>
+	
+	<div class="col-md-9">
+		<form id="categoryFrm">
+			<h1>게시글</h1>
+			<div>
+				<select>
+					<option>전체</option>
+					<option>제목</option>
+					<option>내용</option>
+				</select>
+				<input type="text">
+				<input type="button" value="검색">
+				<select>
+					<c:forEach var="category" items="${CATEGORYS}">
+						<option>${category.category_name}</option>
+					</c:forEach>
+				</select>
+				<input type="button" value="삭제">
+			</div>
+			<table>
+				<tr>
+					<td><input type="checkbox"></td>
+					<td>카테고리</td>
+					<td>제목</td>
+					<td>작성일</td>
+				</tr>
+				<c:forEach var="object" items="${OBJECTS}">
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>${object.category_name}</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${object.blog_object_no}">${object.title}</a>
+							<br/>${object.content}
+						</td>
+						<td>
+							${object.date}
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</form>
+	</div>
+	
+	<div class="col-md-9">
+		<form id="categoryFrm">
+			<h1>댓글</h1>
+			<div>
+				<input type="text">
+				<input type="button" value="ID 검색">
+				<input type="button" value="전체보기">
+				<input type="button" value="삭제">
+			</div>
+			<table>
+				<tr>
+					<td><input type="checkbox"></td>
+					<td>작성자</td>
+					<td>내용</td>
+					<td>작성일</td>
+				</tr>
+				<c:forEach var="comment" items="${COMMENTS}">
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>${comment.nick}<br/>(${comment.id})</td>
+						<td>
+							<a href="${pageContext.request.contextPath}/blog/${comment.nick}/${comment.blog_object_no}">${comment.title}</a>
+							<br/>${comment.comment}
+						</td>
+						<td>${comment.date}</td>
+					</tr>
+				</c:forEach>
+			</table>
 		</form>
 	</div>
 </div>

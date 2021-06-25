@@ -177,7 +177,7 @@
 	<!-- 21.05.27 게시글 내용 가져오기 -->
 	<select id="selectObjectDetailByNoFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
 		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, O.blog_category_no, category_name, title, content, DATE, O.is_public, hits, likes
+  		FROM (SELECT blog_object_no, O.blog_category_no, category_name, title, content, date, O.is_public, hits, likes
           	  FROM blog_object AS O, blog_category AS C
           	  WHERE
           	  <choose>
