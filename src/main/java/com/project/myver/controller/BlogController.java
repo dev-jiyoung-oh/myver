@@ -333,8 +333,8 @@ public class BlogController {
     	   4) 블로그 초기화
     	   
     	   - content(메뉴,글 관리)
-    	   1) 상단 메뉴 설정
-    	   2) 카테고리 설정
+    	   1) 상단 메뉴 설정 (/topmenu)
+    	   2) 카테고리 설정 (/category)
     	   3) 게시글 관리
     	   4) 댓글 관리
     	   
@@ -364,7 +364,7 @@ public class BlogController {
     }
     
     // 21.06.21 블로그 정보 수정
-    @RequestMapping(value = "/admin/updateBlog", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin.update/blog", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateBlog(BlogDTO blogDTO) {
 		System.out.println("updateBlog - blogDTO: "+blogDTO.blogToString());

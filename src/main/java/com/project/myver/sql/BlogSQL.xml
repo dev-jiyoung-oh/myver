@@ -37,8 +37,7 @@
 		SET blog_title = #{blog_title},
 			blog_nick = #{blog_nick},
 			blog_info = #{blog_info},
-			blog_topic = #{blog_topic},
-			blog_img_no = #{blog_img_no} 
+			blog_topic = #{blog_topic}
 		where blog_id = #{blog_id}
 	</update>
 	
