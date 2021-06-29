@@ -290,6 +290,7 @@ public class BlogService {
 	}
 		
 		
+	
 	// 'blog'table ============================================================
 	// 21.05.19 블로그 생성하고 'blog_no' 리턴
 	public int insertBlog(int member_no, String member_id, String blog_nick) {
@@ -323,11 +324,13 @@ public class BlogService {
 	}
 		
 	
+	
 	// 'blog_visit'table ===================================================
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
 	public int todayBlogVisitCount(int blog_no) {
 		return blogDAO.todayBlogVisitCount(blog_no);
 	}	
+	
 	
 	
 	// 'blog_category'table ==================================================
@@ -346,6 +349,17 @@ public class BlogService {
 		return blogDAO.selectPublicFromBlog_category(blog_no);
 	}
 
+	// 21.06.29 'blog_no' 해당하는 카테고리의 'blog_category_no','category_name' 가져오기
+	public List<BlogDTO> selectBlog_category_noAndCategory_name(int blog_no) {
+		return blogDAO.selectBlog_category_noAndCategory_name(blog_no);
+	}
+
+	// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기
+	public List<BlogDTO> selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(int blog_no) {
+		return blogDAO.selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(blog_no);
+	}
+	
+	
 	
 	// 'blog_neighbor'table ==================================================
 	// 21.05.24 내가 추가한 이웃 리스트 가져오기
@@ -383,6 +397,7 @@ public class BlogService {
 		return blogList;
 	}
 
+	
 	
 	// 'blog_object'table =================================================
 	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
@@ -483,11 +498,14 @@ public class BlogService {
 	}
 
 	
+	
 	// 'blog_comment' & 'blog_object' table ==============================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return blogDAO.selectCommentByBlog_noFromBlog_comment(blog_no);
 	}
+
+	
 
 	
 	

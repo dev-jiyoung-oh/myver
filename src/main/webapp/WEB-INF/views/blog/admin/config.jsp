@@ -21,12 +21,10 @@
 	            type : 'post',
 	            url : '${pageContext.request.contextPath}/blog/admin.update/blog',
 	            data : queryString,
-	            dataType : 'json',
 	            error: function(xhr, status, error){
 	                alert(error);
 	            },
 	            success : function(json){
-	                //alert(json)
 	                alert("성공적으로 반영되었습니다.");
 	            }
 	        });
@@ -149,8 +147,8 @@ MYVER 블로그 | 관리
 			<div>
 				<input type="button" id="blogUpdateBtn" value="확인"/>
 			</div>
-			"${Blog.blog_id}"
-			<input type="hidden" name="blog_id" value="${Blog.blog_id}">
+			
+			<input type="hidden" name="blog_id" value="${BLOG.blog_id}">
 		</form>
 	</div>
 	

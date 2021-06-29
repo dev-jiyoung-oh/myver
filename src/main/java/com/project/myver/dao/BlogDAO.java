@@ -83,6 +83,16 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectCategory_nameByBlog_category_noFromBlog_category", blog_category_no);
 	}
 	
+	// 21.06.29 'blog_no' 해당하는 카테고리의 'blog_category_no','category_name' 가져오기
+	public List<BlogDTO> selectBlog_category_noAndCategory_name(int blog_no) {
+		return session.selectList("blog.selectBlog_category_noAndCategory_name", blog_no);
+	}
+	
+	// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper
+	public List<BlogDTO> selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(int blog_no) {
+		return session.selectList("blog.selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper", blog_no);
+	}
+	
 	
 	// 'blog_neighbor'table =========================================
 	// 21.05.24 내가 추가한 이웃 리스트 가져오기(member_no 리스트)
@@ -124,11 +134,14 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	}
 
 	
+	
 	// 'blog_comment' & 'blog_object' table ==============================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return session.selectList("blog.selectCommentByBlog_noFromBlog_comment", blog_no);
 	}
+
+	
 
 	
 

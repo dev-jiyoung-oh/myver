@@ -11,7 +11,8 @@
 <body>
 <form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-	<input type="hidden" name="loginRedirect" value="${loginRedirect}" />
+	<input type="hidden" name="loginRedirect" value="<%= request.getParameter("loginRedirect") %>" />
+
 	<table>
 		<c:if test="${not empty exceptionMsgName}">
 			<tr>

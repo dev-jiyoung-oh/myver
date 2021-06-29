@@ -165,7 +165,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 				result = 1;
 			}else {
 				if(savedRequest != null) {
-					result =2;
+					result = 2;
 				}else {
 					String refererUrl = request.getHeader("REFERER");
 					

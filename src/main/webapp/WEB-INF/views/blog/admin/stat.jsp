@@ -55,23 +55,38 @@ MYVER 블로그 | 관리
 	</div>
 	<div class="col-md-3">
 		<div>
-			<div>메뉴 관리</div>
+			<div>오늘</div>
 			<ul>
-				<li>상단메뉴 설정</li>
-				<li>카테고리 설정</li>
+				<li>일간 현황</li>
 			</ul>   
 		</div>
 		<div>
-			<div>글 관리</div>
+			<div>방문 분석</div>
 			<ul>
-				<li>게시글</li>
-				<li>댓글</li>
+				<li>조회수</li>
+				<li>방문 횟수</li>
+			</ul>   
+		</div>
+		<div>
+			<div>사용자 분석</div>
+			<ul>
+				<li>검색어 분석</li>
+				<li>시간대 분석</li>
+				<li>성별·연령별 분포</li>
+			</ul>   
+		</div>
+		<div>
+			<div>순위</div>
+			<ul>
+				<li>조회수 순위</li>
+				<li>좋아요수 순위</li>
+				<li>댓글수 순위</li>
 			</ul>   
 		</div>
 	</div>
 	<div class="col-md-9">
 		<form id="upperCategoryFrm">
-			<h1>상단메뉴 설정</h1>
+			<h1>일간 현황</h1>
 			<table>
 				<tr>
 					<td>
