@@ -37,9 +37,15 @@ MYVER 블로그 | 관리
 <div class="row">
 	<div class="col-md-12">
 		<ul>
-			<li>기본 설정</li>
-			<li>메뉴·글·동영상 관리</li>
-			<li>내 블로그 통계</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config">기본 설정</a>
+				</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">메뉴·글·동영상 관리</a>
+				</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">내 블로그 통계</a>
+			</li>
 		</ul>
 	</div>
 	<div class="col-md-3">

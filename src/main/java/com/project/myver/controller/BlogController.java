@@ -327,6 +327,8 @@ public class BlogController {
     		// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기
     		List<BlogDTO> categoryList = blogSVC.selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(blog_no);
     		
+    		System.out.println(categoryList);
+    		
     		mv.addObject("CATEGORYS_FOR_UPPER", categoryList);
     		
 		// 2) 카테고리 설정 (category)
@@ -398,23 +400,23 @@ public class BlogController {
     	}
     	
     	/* stat(내 블로그 통계) ----> 이건 한번에 다 가져오지 말고 그때그때 가져와야 할 것 같다.
-    	   0) 오늘 (/today)
+    	   1) 오늘 (/today)
 	      - 날짜 받아오기(없는 경우 오늘 날짜)
-    	   1) 조회수 (/visit_pv) ~~ 글 조회수
+    	   2) 조회수 (/visit_pv) ~~ 글 조회수
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
 	      - 전체/이웃/기타
-    	   2) 방문 횟수 (/visit) ~~ 블로그 방문 횟수
+    	   3) 방문 횟수 (/visit) ~~ 블로그 방문 횟수
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
 	      - 전체/이웃/기타
-    	   3) 검색어 분석(/referer)
+    	   4) 검색어 분석(/referer)
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   4) 시간대 분석 (/hour_cv)--할지말지 고민중~~~
-    	   5) 성별·연령별 분포 (/demo) --이것두 고민중~~~
-    	   6) 조회수 순위 (/rank_pv)
+    	   5) 시간대 분석 (/hour_cv)--할지말지 고민중~~~
+    	   6) 성별·연령별 분포 (/demo) --이것두 고민중~~~
+    	   7) 조회수 순위 (/rank_pv)
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   7) 좋아요수 순위 (/rank_likes)
+    	   8) 좋아요수 순위 (/rank_likes)
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   8) 댓글수 순위 (/rank_comment)
+    	   9) 댓글수 순위 (/rank_comment)
 	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
     	 */
     	
@@ -422,11 +424,19 @@ public class BlogController {
 		int blog_member_no = blogDTO.getMember_no();
 		int blog_no = blogDTO.getBlog_no();
     	
+		// 1) 오늘 (/today)
+		// - 날짜 받아오기(없는 경우 오늘 날짜)
     	if(menu.equals("today")) {
+    		//
+		// 2) 조회수 (/visit_pv) ~~ 글 조회수
+  	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+  	    // - 전체/이웃/기타
+    	}else if(menu.equals("/visit_pv")){
     		
     	}
     	
     	mv.addObject("BLOG", blogDTO);
+    	mv.setViewName("blog/admin/stat");
     	
     	return mv;
     }

@@ -48,27 +48,43 @@ MYVER 블로그 | 관리
 <div class="row">
 	<div class="col-md-12">
 		<ul>
-			<li>기본 설정</li>
-			<li>메뉴·글·동영상 관리</li>
-			<li>내 블로그 통계</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config">기본 설정</a>
+				</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">메뉴·글·동영상 관리</a>
+				</li>
+			<li>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">내 블로그 통계</a>
+			</li>
 		</ul>
 	</div>
 	<div class="col-md-3">
 		<div>
 			<div>메뉴 관리</div>
 			<ul>
-				<li>상단메뉴 설정</li>
-				<li>카테고리 설정</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">상단메뉴 설정</a>
+				</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/category">카테고리 설정</a>
+				</li>
 			</ul>   
 		</div>
 		<div>
 			<div>글 관리</div>
 			<ul>
-				<li>게시글</li>
-				<li>댓글</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/object">게시글</a>
+				</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/comment">댓글</a>
+				</li>
 			</ul>   
 		</div>
 	</div>
+	
+	<c:if test="${!empty CATEGORYS_FOR_UPPER}">
 	<div class="col-md-9">
 		<form id="upperCategoryFrm">
 			<h1>상단메뉴 설정</h1>
@@ -78,17 +94,15 @@ MYVER 블로그 | 관리
 						<div>블로그 카테고리</div>
 						<div>
 							<ul>
-								<c:if test="${!empty CATEGORYS_FOR_UPPER}">
 								<c:forEach var="category" items="${CATEGORYS_FOR_UPPER}">
 									<li>
 										<c:if test="${category.parent_category_no != 0}">--</c:if>
 										${category.category_name}
-										<c:if test="${is_public == 1}">
+										<c:if test="${category.is_public == 1}">
 											<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">
 										</c:if>
 									</li>
 								</c:forEach>
-								</c:if>
 							</ul>
 						</div>
 					</td>
@@ -99,13 +113,16 @@ MYVER 블로그 | 관리
 						<div>선택한 메뉴</div>
 						<div>
 							<ul>
-								<c:if test="${!empty CATEGORYS_FOR_UPPER}">
 								<c:forEach var="category" items="${CATEGORYS_FOR_UPPER}">
 									<c:if test="${category.is_upper == 1}">
-										<li>${category.category_name}</li>
+										<li>
+										${category.category_name}
+										<c:if test="${category.is_public == 1}">
+											<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">
+										</c:if>
+										</li>
 									</c:if>
 								</c:forEach>
-								</c:if>
 							</ul>
 						</div>
 					</td>
@@ -116,7 +133,9 @@ MYVER 블로그 | 관리
 			</div>
 		</form>
 	</div>
+	</c:if>
 	
+	<c:if test="${!empty CATEGORYS}">
 	<div class="col-md-9">
 		<form id="categoryFrm">
 			<h1>카테고리 설정</h1>
@@ -137,7 +156,6 @@ MYVER 블로그 | 관리
 						<div>카테고리 관리·설정</div>
 						<div>
 							<ul>
-								<c:if test="${!empty CATEGORYS}">
 								<c:forEach var="category" items="${CATEGORYS}">
 									<li>
 										<c:if test="${category.parent_category_no != 0}">--</c:if>
@@ -147,7 +165,6 @@ MYVER 블로그 | 관리
 										</c:if>
 									</li>
 								</c:forEach>
-								</c:if>
 							</ul>
 						</div>
 					</td>
@@ -201,7 +218,9 @@ MYVER 블로그 | 관리
 			</div>
 		</form>
 	</div>
+	</c:if>
 	
+	<c:if test="${!empty CATEGORYS_FOR_OBJECT}">
 	<div class="col-md-9">
 		<form id="categoryFrm">
 			<h1>게시글</h1>
@@ -214,11 +233,9 @@ MYVER 블로그 | 관리
 				<input type="text">
 				<input type="button" value="검색">
 				<select>
-					<c:if test="${!empty CATEGORYS_FOR_OBJECT}">
 					<c:forEach var="category" items="${CATEGORYS_FOR_OBJECT}">
 						<option value="${category.blog_category_no}">${category.category_name}</option>
 					</c:forEach>
-					</c:if>
 				</select>
 				<input type="button" value="삭제">
 			</div>
@@ -247,7 +264,9 @@ MYVER 블로그 | 관리
 			</table>
 		</form>
 	</div>
+	</c:if>
 	
+	<c:if test="${!empty COMMENTS}">
 	<div class="col-md-9">
 		<form id="categoryFrm">
 			<h1>댓글</h1>
@@ -264,7 +283,6 @@ MYVER 블로그 | 관리
 					<td>내용</td>
 					<td>작성일</td>
 				</tr>
-				<c:if test="${!empty COMMENTS}">
 				<c:forEach var="comment" items="${COMMENTS}">
 					<tr>
 						<td><input type="checkbox"></td>
@@ -276,10 +294,10 @@ MYVER 블로그 | 관리
 						<td>${comment.date}</td>
 					</tr>
 				</c:forEach>
-				</c:if>
 			</table>
 		</form>
 	</div>
+	</c:if>
 </div>
 </body>
 </html>
