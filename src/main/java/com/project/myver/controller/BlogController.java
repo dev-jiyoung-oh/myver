@@ -2,6 +2,7 @@ package com.project.myver.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -427,7 +428,30 @@ public class BlogController {
 		// 1) 오늘 (/today)
 		// - 날짜 받아오기(없는 경우 오늘 날짜)
     	if(menu.equals("today")) {
-    		//
+    		/* 오늘 날짜에 해당하는
+    		 * 1. 총 조회수
+    		 * 2. 총 댓글수
+    		 * 3. 총 좋아요수
+    		 * 4. 총 이웃증감수
+    		 * 
+    		 * 5. 오늘날짜+14일 전의 "조회수" 가져오기
+    		 * DB는 한 번만 다녀오고 (== 14일 전 이후 데이터 가져와서) for문을 돌리자. 
+    		 * blog_object의 조회수 날짜별로 더해서 가져오기(sql에서 group by절?)
+    		 *  +) 현재 시간 sysdate() 가져오기
+    		 * 
+    		 * 6. 게시물 조회수 순위
+    		 * 오늘의 조회수 높은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
+    		 * 
+    		 * 7. 게시물 댓글수 순위
+    		 * 오늘 달린 댓글수 많은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
+    		 * 
+    		 * 8. 검색어 유입 경로
+    		 * 오늘의 검색어 일치하는 거 있으면 count해서 높은 순으로 검색어,count 가져오기.(최대 10개) 
+    		 */
+    		Calendar cal = Calendar.getInstance();
+    		System.out.println(cal.get(cal.YEAR)+"."+(cal.get(cal.MONTH)+1)+"."+cal.get(cal.DATE));
+    		cal.add(cal.DATE, -14);
+    		System.out.println(cal.get(cal.YEAR)+"."+(cal.get(cal.MONTH)+1)+"."+cal.get(cal.DATE));
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
   	    // - 전체/이웃/기타
