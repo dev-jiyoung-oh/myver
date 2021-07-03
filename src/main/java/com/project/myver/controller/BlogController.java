@@ -453,6 +453,9 @@ public class BlogController {
     		 * 8. 검색어 유입 경로
     		 * 오늘의 검색어 일치하는 거 있으면 count해서 높은 순으로 검색어,count 가져오기.(최대 10개) 
     		 */
+    		int todayHit = blogSVC.todayObjectHitFromBlog_visit(blog_no);
+    		int todayCommentCount = blogSVC.todayCommentCount(blog_no);
+    		
     		Calendar cal = Calendar.getInstance();
     		System.out.println(cal.get(cal.YEAR)+"."+(cal.get(cal.MONTH)+1)+"."+cal.get(cal.DATE));
     		cal.add(cal.DATE, -14);

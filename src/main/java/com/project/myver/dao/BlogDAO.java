@@ -54,6 +54,11 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public void insertBlog_visit(BlogDTO blogDTO) {
 		session.insert("blog.insertBlog_visit", blogDTO);
 	}
+	
+	// 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수
+	public int todayObjectHitFromBlog_visit(int blog_no) {
+		return session.selectOne("blog.todayObjectHitFromBlog_visit", blog_no);
+	}
 		
 	
 	
@@ -133,6 +138,14 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectBlog_object", map);
 	}
 
+	
+	
+	// 'blog_comment' table ===================================================
+	// 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기
+	public int todayCommentCount(int blog_no) {
+		return session.selectOne("blog.todayCommentCount", blog_no);
+	}
+	
 	
 	
 	// 'blog_comment' & 'blog_object' table ==============================================

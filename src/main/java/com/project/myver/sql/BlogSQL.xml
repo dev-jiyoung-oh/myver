@@ -48,8 +48,17 @@
 	<select id="todayBlogVisitCount" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(blog_visit_no)
 		FROM blog_visit
-		WHERE blog_no = #{blog_no}
-			AND DATE_FORMAT(DATE, "%Y-%m-%d") = CURDATE()
+		WHERE date > CURDATE()
+			AND blog_no = #{blog_no}
+	</select>
+	
+	<!-- 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수 -->
+	<select id="todayObjectHitFromBlog_visit" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(blog_visit_no) 
+		FROM blog_visit 
+		WHERE date > CURDATE() 
+			AND blog_no = 0 
+			AND blog_object_no != -1
 	</select>
 	
 	<!-- 21.06.09 블로그 방문자 정보 추가 -->
@@ -230,6 +239,18 @@
 				AND is_public = 0
 			</if>
 	</select>
+	
+	
+	
+	<!-- 'blog_comment' table =========================================== -->
+	<!-- 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기 -->
+	<select id="todayCommentCount" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(blog_comment_no) 
+		FROM blog_comment 
+		WHERE DATE > CURDATE() 
+			AND blog_no = #{blog_no}
+	</select>
+	
 	
 	
 	<!-- 'blog_comment' & 'blog_object' table ================================================== -->

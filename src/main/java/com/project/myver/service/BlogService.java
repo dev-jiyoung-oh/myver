@@ -1,6 +1,8 @@
 package com.project.myver.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -288,6 +290,50 @@ public class BlogService {
 		
 		return map;
 	}
+	
+	// 
+	public Map<String,Integer> totalHitOfLast15Days(String endDay, int blog_no){
+		//날짜 형식
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+		Calendar cal = Calendar.getInstance();
+		String startDay;
+
+		// 들어온 날짜가 없는 경우
+		if(endDay.length()==0 || endDay.equals("")) {
+			endDay = dateFormat.format(cal.getTime());
+			startDay = dateFormat.format(cal.getTime());
+		}else {
+			cal.setTime(dateFormat.parse(endDay));
+			startDay = dateFormat.format(cal.getTime());
+		}
+		
+		cal.add(Calendar.DATE, -14);
+		startDay = dateFormat.format(cal.getTime());
+		
+		
+		
+		/*
+		 종료날짜: 금일-1일 셋팅
+		 실행 조건이 특정일로부터 금일의 하루전까지 출력
+		 만약 현재날짜라면 cal.add(Calendar.DATE, 1); 해줘야 함
+		 */
+
+		//시작 날짜 셋팅
+		cal.set ( 2016, 1, 25 );
+		
+		//while 비교를 위한 날짜 선언
+		String nextDay = "";
+
+		while(!nowDay.equals(nextDay)){
+			//실행 해당 작업을 해준다. 테스트라 그냥 출력만
+			System.out.println(dateFormat.format(cal.getTime()));
+
+			cal.add(Calendar.DATE, 1); //하루하루 더해준다.
+			nextDay = dateFormat.format(cal.getTime()); //비교를 위한 값 셋팅
+
+		}
+	}
 		
 		
 	
@@ -330,6 +376,11 @@ public class BlogService {
 	public int todayBlogVisitCount(int blog_no) {
 		return blogDAO.todayBlogVisitCount(blog_no);
 	}	
+	
+	// 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수
+	public int todayObjectHitFromBlog_visit(int blog_no) {
+		return blogDAO.todayObjectHitFromBlog_visit(blog_no);
+	}
 	
 	
 	
@@ -499,13 +550,19 @@ public class BlogService {
 
 	
 	
+	// 'blog_comment' table ===================================================
+	// 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기
+	public int todayCommentCount(int blog_no) {
+		return blogDAO.todayCommentCount(blog_no);
+	}
+	
+	
+	
 	// 'blog_comment' & 'blog_object' table ==============================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return blogDAO.selectCommentByBlog_noFromBlog_comment(blog_no);
 	}
-
-	
 
 	
 	
