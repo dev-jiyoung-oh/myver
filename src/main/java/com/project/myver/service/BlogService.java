@@ -1,5 +1,6 @@
 package com.project.myver.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -291,48 +292,60 @@ public class BlogService {
 		return map;
 	}
 	
-	// 
-	public Map<String,Integer> totalHitOfLast15Days(String endDay, int blog_no){
-		//날짜 형식
+	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기
+	public List<BlogDTO> totalHitOfLast15Days(String endDay, int blog_no){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-
 		Calendar cal = Calendar.getInstance();
 		String startDay;
+		Map<String, Object> map = new HashMap<>();
+		map.put("blog_no", blog_no);
 
 		// 들어온 날짜가 없는 경우
 		if(endDay.length()==0 || endDay.equals("")) {
 			endDay = dateFormat.format(cal.getTime());
-			startDay = dateFormat.format(cal.getTime());
-		}else {
-			cal.setTime(dateFormat.parse(endDay));
-			startDay = dateFormat.format(cal.getTime());
 		}
 		
+		try {
+			cal.setTime(dateFormat.parse(endDay));
+		} catch (ParseException e) {
+			e.printStackTrace();
+			System.out.println("endDay를 Date타입으로 변경하기 실패!");
+			return null;
+		}
 		cal.add(Calendar.DATE, -14);
 		startDay = dateFormat.format(cal.getTime());
+		map.put("startDay", startDay);
 		
+		System.out.println("startDay: "+startDay+", endDay: "+endDay);
 		
+		ArrayList<BlogDTO> timeList = new ArrayList<>();
+		Map<String,Integer> timeMap = new HashMap<>();
+		int index = 0;
 		
-		/*
-		 종료날짜: 금일-1일 셋팅
-		 실행 조건이 특정일로부터 금일의 하루전까지 출력
-		 만약 현재날짜라면 cal.add(Calendar.DATE, 1); 해줘야 함
-		 */
-
-		//시작 날짜 셋팅
-		cal.set ( 2016, 1, 25 );
-		
-		//while 비교를 위한 날짜 선언
-		String nextDay = "";
-
-		while(!nowDay.equals(nextDay)){
-			//실행 해당 작업을 해준다. 테스트라 그냥 출력만
-			System.out.println(dateFormat.format(cal.getTime()));
-
-			cal.add(Calendar.DATE, 1); //하루하루 더해준다.
-			nextDay = dateFormat.format(cal.getTime()); //비교를 위한 값 셋팅
-
+		while(!startDay.equals(endDay)){
+			BlogDTO temp = new BlogDTO();
+			temp.setStr_date(startDay);
+			timeList.add(temp);
+			timeMap.put(startDay, index++);
+			cal.add(Calendar.DATE, 1);
+			startDay = dateFormat.format(cal.getTime());
 		}
+		BlogDTO temp = new BlogDTO();
+		temp.setStr_date(endDay);
+		timeList.add(temp);
+		timeMap.put(endDay, index);
+		
+		List<BlogDTO> resultList = blogDAO.totalHitOfLast15Days(map);
+		
+		for(BlogDTO result : resultList) {
+			timeList.set(timeMap.get(result.getStr_date()), result);
+		}
+		
+		for(BlogDTO t : timeList) {
+			System.out.println(t.getStr_date()+" "+t.getHits());
+		}
+		
+		return timeList;
 	}
 		
 		

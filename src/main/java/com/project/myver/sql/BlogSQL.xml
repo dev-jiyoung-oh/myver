@@ -46,7 +46,7 @@
 	<!-- 'blog_visit'table ==================================================================== -->
 	<!-- 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 -->
 	<select id="todayBlogVisitCount" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(blog_visit_no)
+		SELECT COUNT(*)
 		FROM blog_visit
 		WHERE date > CURDATE()
 			AND blog_no = #{blog_no}
@@ -54,7 +54,7 @@
 	
 	<!-- 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수 -->
 	<select id="todayObjectHitFromBlog_visit" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(blog_visit_no) 
+		SELECT COUNT(*) 
 		FROM blog_visit 
 		WHERE date > CURDATE() 
 			AND blog_no = 0 
@@ -74,6 +74,16 @@
 		</if>
 		)
 	</insert>
+	
+	<!-- 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기 -->
+	<select id="totalHitOfLast15Days" parameterType="Map" resultType="blogDTO">
+		SELECT DATE_FORMAT(DATE, '%Y.%m.%d') as str_date, COUNT(*) as hits
+		FROM blog_visit
+		WHERE DATE > #{startDay}
+			AND blog_no = #{blog_no}
+			AND blog_object_no != -1
+		GROUP BY str_date
+	</select>
 	
 	
 	
@@ -156,7 +166,7 @@
 	<!-- 'blog_object'table =================================================================== -->
 	<!-- 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기 -->
 	<select id="selectTotalCountByNoFromBlog_object" parameterType="Map" resultType="Integer">
-		SELECT COUNT(blog_object_no) 
+		SELECT COUNT(*) 
 		FROM blog_object AS O, blog_category AS C
 		WHERE 
 		<choose>
@@ -245,7 +255,7 @@
 	<!-- 'blog_comment' table =========================================== -->
 	<!-- 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기 -->
 	<select id="todayCommentCount" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(blog_comment_no) 
+		SELECT COUNT(*) 
 		FROM blog_comment 
 		WHERE DATE > CURDATE() 
 			AND blog_no = #{blog_no}

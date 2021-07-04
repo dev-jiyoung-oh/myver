@@ -433,13 +433,12 @@ public class BlogController {
     		 * 2. 총 댓글수
     		 * 3. 총 좋아요수
     		 * 4. 총 이웃증감수
-    		 * 
     		 * 5. 오늘날짜+14일 전의 "조회수" 가져오기
     		 * DB는 한 번만 다녀오고 (== 14일 전 이후 데이터 가져와서) for문을 돌리자. 
     		 * blog_object의 조회수 날짜별로 더해서 가져오기
     		 *  +) 현재 시간 sysdate() 가져오기
-    		 * 인자 요소: 검색 시작 날짜, blog_no, 
-    		 * 결과 요소: 검색한 시간(sysdate), list(날짜,조회수)
+    		 * 인자 요소: 검색 시작 날짜(오늘 날짜), blog_no, 
+    		 * 결과 요소: 검색한 시간(sysdate), Map(날짜,조회수)
     		 * ==== 년.월.일 나눠야할텐데... 아니면 그냥 뷰에서 포맷으로?
     		 * ==== list(날짜, 조회수) Map에 감싸기.
     		 * 그리고 날짜 생성해서 for문 돌면서 해당하는 날짜 없으면 map.put(날짜,0);
@@ -453,13 +452,31 @@ public class BlogController {
     		 * 8. 검색어 유입 경로
     		 * 오늘의 검색어 일치하는 거 있으면 count해서 높은 순으로 검색어,count 가져오기.(최대 10개) 
     		 */
+    		// 21.07.03 1. 오늘의 블로그글 조회수
     		int todayHit = blogSVC.todayObjectHitFromBlog_visit(blog_no);
+    		
+    		// 21.07.03 2. 오늘의 블로그 댓글수
     		int todayCommentCount = blogSVC.todayCommentCount(blog_no);
     		
-    		Calendar cal = Calendar.getInstance();
-    		System.out.println(cal.get(cal.YEAR)+"."+(cal.get(cal.MONTH)+1)+"."+cal.get(cal.DATE));
-    		cal.add(cal.DATE, -14);
-    		System.out.println(cal.get(cal.YEAR)+"."+(cal.get(cal.MONTH)+1)+"."+cal.get(cal.DATE));
+    		// 3. 총 좋아요수★★★★★★★★★★★★★★★★★★★
+    		// 4. 총 이웃증감수★★★★★★★★★★★★★★★★★★★★★★★
+    		
+    		// 21.07.04 5. 오늘날짜+14일 전의 "조회수" 가져오기
+    		List<BlogDTO> totalHitOfLast15Days = blogSVC.totalHitOfLast15Days("", blog_no);
+    		if(totalHitOfLast15Days == null) {
+    			System.out.println("나중에 처리하기~~");
+    		}
+    		mv.addObject("HITS_OF_15DAYS", totalHitOfLast15Days);
+    		
+    		List<String> s_list = new ArrayList<>();
+    		s_list.add("2021.07.03");
+    		s_list.add("2021.07.04");
+    		List<Integer> i_list = new ArrayList<>();
+    		i_list.add(10);
+    		i_list.add(7);
+    		mv.addObject("s_list", s_list);
+    		mv.addObject("i_list", i_list);
+    		
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
   	    // - 전체/이웃/기타

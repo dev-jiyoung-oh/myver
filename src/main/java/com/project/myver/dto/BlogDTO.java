@@ -10,6 +10,7 @@ public class BlogDTO {
 	
 	// 기타
 	private CommentDTO commentDTO;	//블로그 댓글
+	String str_date;				//"yyyy.MM.dd"형태의 날짜 문자열
 	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
@@ -290,6 +291,12 @@ public class BlogDTO {
 	}
 	public void setCommentDTO(CommentDTO commentDTO) {
 		this.commentDTO = commentDTO;
+	}
+	public String getStr_date() {
+		return str_date;
+	}
+	public void setStr_date(String str_date) {
+		this.str_date = str_date;
 	}
 	
 	

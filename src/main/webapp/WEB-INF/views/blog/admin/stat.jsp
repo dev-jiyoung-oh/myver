@@ -7,8 +7,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script type="text/javascript">
 	$(function(){
+		// 차트 그리기
+		var labels = [];
+		var datas = [];
+		<c:forEach var="item" items="${HITS_OF_15DAYS}">
+			labels.push("${item.str_date}");
+			datas.push(${item.hits});
+		</c:forEach>
+		
+		var hit_of_15_days_chart = new Chart($("#hit_of_15_days_chart"), {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					data: datas,
+					backgroundColor: 'rgba(94,209,249,0.06)',
+					borderColor: 'rgb(0 199 60)'
+				}]
+			},
+			options: {
+				legend: {
+			        display: false
+			    }
+			}
+		});
+		
+		
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
@@ -132,7 +159,9 @@ MYVER 블로그 | 관리
 			<div>
 				<span>~시간 기준</span>
 			</div>
-			<div>그래프~~</div>
+			<div>그래프~~
+				<canvas id="hit_of_15_days_chart"></canvas>
+			</div>
 			<div>
 				<div>
 					<div>게시물 조회수 순위</div>

@@ -59,7 +59,12 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public int todayObjectHitFromBlog_visit(int blog_no) {
 		return session.selectOne("blog.todayObjectHitFromBlog_visit", blog_no);
 	}
-		
+	
+	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기
+	public List<BlogDTO> totalHitOfLast15Days(Map<String,Object> map) {
+		return session.selectList("blog.totalHitOfLast15Days", map);
+	}
+	
 	
 	
 	// 'blog_category'table ========================================
