@@ -467,15 +467,7 @@ public class BlogController {
     			System.out.println("나중에 처리하기~~");
     		}
     		mv.addObject("HITS_OF_15DAYS", totalHitOfLast15Days);
-    		
-    		List<String> s_list = new ArrayList<>();
-    		s_list.add("2021.07.03");
-    		s_list.add("2021.07.04");
-    		List<Integer> i_list = new ArrayList<>();
-    		i_list.add(10);
-    		i_list.add(7);
-    		mv.addObject("s_list", s_list);
-    		mv.addObject("i_list", i_list);
+    		// 자바랑 스프링 버전 올려서 Calendar 대신 java.time.LocalDate 를 쓰자!!
     		
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
