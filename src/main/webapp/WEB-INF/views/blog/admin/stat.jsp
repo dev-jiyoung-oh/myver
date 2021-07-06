@@ -159,8 +159,14 @@ MYVER 블로그 | 관리
 			<div>
 				<span>~시간 기준</span>
 			</div>
-			<div>그래프~~
-				<canvas id="hit_of_15_days_chart"></canvas>
+			<div> 조회수 그래프
+				<canvas id="hits_of_days_chart"></canvas>
+			</div>
+			<div> 방문횟수 그래프
+				<canvas id="visits_of_days_chart"></canvas>
+			</div>
+			<div> 성별, 연령별 분포 그래프
+				<canvas id="??_of_days_chart"></canvas>
 			</div>
 			<div>
 				<div>
