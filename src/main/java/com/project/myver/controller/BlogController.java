@@ -443,7 +443,7 @@ public class BlogController {
     		 * ==== list(날짜, 조회수) Map에 감싸기.
     		 * 그리고 날짜 생성해서 for문 돌면서 해당하는 날짜 없으면 map.put(날짜,0);
     		 * 
-    		 * 6. 게시물 조회수 순위
+    		 * 6. 게시물 조회수 순위 top5
     		 * 오늘의 조회수 높은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
     		 * 
     		 * 7. 게시물 댓글수 순위
@@ -468,6 +468,9 @@ public class BlogController {
     		}
     		mv.addObject("HITS_OF_15DAYS", totalHitOfLast15Days);
     		// 자바랑 스프링 버전 올려서 Calendar 대신 java.time.LocalDate 를 쓰자!!
+    		
+    		// 21.07.07 6. 게시물 조회수 순위 top5
+    		List<BlogDTO> todayHitTop5Objects = blogSVC.todayHitTop5Objects(blog_no);
     		
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
