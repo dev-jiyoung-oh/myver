@@ -2,6 +2,7 @@ package com.project.myver.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -292,8 +293,10 @@ public class BlogService {
 		return map;
 	}
 	
-	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기
+	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 각 15일의 총 조회수 가져오기
 	public List<BlogDTO> totalHitOfLast15Days(String endDay, int blog_no){
+		LocalDate now = LocalDate.now();
+		//DateTimeFormatter 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 		Calendar cal = Calendar.getInstance();
 		String startDay;

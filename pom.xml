@@ -27,9 +27,10 @@
 	<!-- 21.04.07 자바 버전 원상복귀(1.8 ->1.7) 스프링 버전 원상복귀 (4.3.4 -> 3.2.0) -->
 	<!-- 21.04.14 tiles 버전 추가
 		 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-적용 [우공공] -->
+	<!-- 21.07.08 자바, 스프링 버전 변경. 자바(1.7 0> 1.8) 스프링(3.2.0.RELEASE -> 5.0.7.RELEASE) --> 
 	<properties>
-		<java-version>1.7</java-version>
-		<org.springframework-version>3.2.0.RELEASE</org.springframework-version>
+		<java-version>1.8</java-version>
+		<org.springframework-version>5.0.7.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 		<org.apache.tiles-version>2.2.2</org.apache.tiles-version>
@@ -156,10 +157,11 @@
 			- 수정사항 : mysql 버전 변경 (8.0.11 -> 5.1.47)
 			- 이유 : mysql 5.5 이상은 java 8 버전을 이용해야함. 그러나 현 프로젝트의 버전은 7이라서.
 			- 참고사이트 : https://xinet.kr/?p=1591 -->
+		<!-- 21.07.08 자바버전 변경에 따른 mysql버전변경 (5.1.47 -> 8.0.11)-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
+            <version>8.0.11</version>
         </dependency>
  
         <!-- MyBatis 3.4.1 -->
@@ -336,8 +338,9 @@
 					 	 - 수정사항 : java 버전변경에 따라 메이븐 플러그인에서의 JDK 버전 변경. 1.8 -> 1.7
 					 	 - 이유 : 미일치시 dynamic web module x.x requires java x.x or newer 에러 발생
 					 	 - 참고사이트 : https://blog.naver.com/PostView.nhn?blogId=ajdkfl6445&logNo=221549536647&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView -->
-                    <source>1.7</source>
-                    <target>1.7</target> 
+				 	<!-- 21.07.08 자바 버전 변경에 따라 (1.7 -> 1.8) -->
+                    <source>1.8</source>
+                    <target>1.8</target> 
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

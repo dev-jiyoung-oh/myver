@@ -2,15 +2,15 @@
 
 <!-- 2021.01.17 생성
 	 - Spring의 Bean 정의를 위한 표준 설정 파일 -->
-	 
+<!-- 21.07.08 스프링 버전 변경에 따라 spring-beans랑 spring-security xsd버전 변경 (뒤에 있던 "-3.2" 지움. 시큐리티 5.0 이상은 뒤에 숫자를 안 붙이는 것 같다.)-->
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	   		 xmlns:beans="http://www.springframework.org/schema/beans"
       		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        		 xsi:schemaLocation="
        		 	http://www.springframework.org/schema/beans 
-        		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        		http://www.springframework.org/schema/beans/spring-beans.xsd
           		http://www.springframework.org/schema/security 
-          		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+          		http://www.springframework.org/schema/security/spring-security.xsd">
        
        
        <!--

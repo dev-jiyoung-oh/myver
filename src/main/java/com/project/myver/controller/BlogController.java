@@ -470,7 +470,7 @@ public class BlogController {
     		// 자바랑 스프링 버전 올려서 Calendar 대신 java.time.LocalDate 를 쓰자!!
     		
     		// 21.07.07 6. 게시물 조회수 순위 top5
-    		List<BlogDTO> todayHitTop5Objects = blogSVC.todayHitTop5Objects(blog_no);
+    		//List<BlogDTO> todayHitTop5Objects = blogSVC.todayHitTop5Objects(blog_no);
     		
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
