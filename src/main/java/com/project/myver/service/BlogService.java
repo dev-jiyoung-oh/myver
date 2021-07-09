@@ -583,7 +583,9 @@ public class BlogService {
 	// 21.07.07 6. 게시물 조회수 순위 top5
 	/* 순위는 쿼리 끝나고 blogSVC에서 넣기~
 	 * 1. 일간(데이터가 없으면 오늘)
+	 date between between '****-**-** 00:00:00' and '****-**-** 23:59:59' (https://ourcstory.tistory.com/102)
 	 * 2. 주간(데이터가 없으면 지난 일요일~전주 월요일)
+	 
 	 * 3. 월간(데이터가 없으면 지난 달)
 	 * */
 	public List<BlogDTO> todayHitofObjects(int blog_no) {
