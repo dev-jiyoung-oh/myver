@@ -11,6 +11,7 @@ public class BlogDTO {
 	// 기타
 	private CommentDTO commentDTO;	//블로그 댓글
 	String str_date;				//"yyyy.MM.dd"형태의 날짜 문자열
+	int rank;						//순위
 	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
@@ -297,6 +298,12 @@ public class BlogDTO {
 	}
 	public void setStr_date(String str_date) {
 		this.str_date = str_date;
+	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	
 	

@@ -77,12 +77,14 @@
 	
 	<!-- 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기 -->
 	<select id="totalHitOfLast15Days" parameterType="Map" resultType="blogDTO">
+		<![CDATA[
 		SELECT DATE_FORMAT(DATE, '%Y.%m.%d') as str_date, COUNT(*) as hits
 		FROM blog_visit
-		WHERE DATE > #{startDay}
+		WHERE date > #{startDate} AND date < #{endDate}
 			AND blog_no = #{blog_no}
 			AND blog_object_no != -1
 		GROUP BY str_date
+		]]>
 	</select>
 	
 	

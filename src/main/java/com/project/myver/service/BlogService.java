@@ -2,9 +2,14 @@ package com.project.myver.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -293,50 +298,84 @@ public class BlogService {
 		return map;
 	}
 	
-	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 각 15일의 총 조회수 가져오기
-	public List<BlogDTO> totalHitOfLast15Days(String endDay, int blog_no){
-		LocalDate now = LocalDate.now();
-		//DateTimeFormatter 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-		Calendar cal = Calendar.getInstance();
-		String startDay;
+	/* 특정기간(원하는 일자 ~ 해당하지 않는 일자)의 조회수 순위(+ 제목, 글번호, 조회수, 작성일) 가져오기
+	 * 1. 일간
+	 *    - 원하는 일자 ~ 그 다음 일자
+	 *    - 원하는 일자가 없는 경우 오늘
+	 * 2. 주간
+	 *    - 오늘
+	 *    LocalDate now = LocalDate.now();
+			now.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
+	 * 
+	// 21.07.13 특정기간(원하는 일자 ~ 해당하지 않는 일자)에 해당하는 조회수 순위(+ 제목, 글번호, 조회수, 작성일)
+	public List<BlogDTO> hitRankDuring(String startDate, String endDate, int blog_no){
 		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		map.put("blog_no", blog_no);
+		
+		List<BlogDTO> list = blogDAO.hitRankDuring(map);
+		
+		if(list == null) return null;
+		
+		// 조회수 순으로 내림차순
+		Collections.sort(list, new Comparator<BlogDTO>() {
+			@Override
+			public int compare(BlogDTO o1, BlogDTO o2) {
+				return o2.getHits() - o1.getHits();
+			}
+		});
+		
+		// 조회수 순위 매기기(조회수가 같은 것들은 같은 순위)
+		int rank = 1;
+		int nextRank = 2;
+		list.get(0).setRank(rank);
+		
+		for(int i=1; i<list.size(); i++) {
+			if(list.get(i).getHits() < list.get(i-1).getHits()) {
+				nextRank++;
+			}else { // 이전 것과 조회수가 같은 경우
+				rank = nextRank++;
+			}
+			list.get(i).setRank(rank);
+		}
+		
+		return list;
+	}*/
+	
+	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 각 15일의 총 조회수 가져오기
+	public List<BlogDTO> totalHitOfLast15Days(String endDate_str, int blog_no){
+		String[] endDate_str_arr = endDate_str.split(".");
+		LocalDate endDate = LocalDate.now().plusDays(1);
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+		// 들어온 날짜가 있는 경우
+		if(endDate_str_arr.length > 1) {
+			endDate = LocalDate.of(Integer.parseInt(endDate_str_arr[0]), Integer.parseInt(endDate_str_arr[1]), Integer.parseInt(endDate_str_arr[2])).plusDays(1);
+		}
+		
+		LocalDate startDate = endDate.minusDays(15);
+		String startDate_str = startDate.format(dateTimeFormatter);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate_str);
+		map.put("endDate", endDate_str);
 		map.put("blog_no", blog_no);
 
-		// 들어온 날짜가 없는 경우
-		if(endDay.length()==0 || endDay.equals("")) {
-			endDay = dateFormat.format(cal.getTime());
-		}
+		System.out.println("startDate: "+startDate_str+", endDate: "+endDate_str);
 		
-		try {
-			cal.setTime(dateFormat.parse(endDay));
-		} catch (ParseException e) {
-			e.printStackTrace();
-			System.out.println("endDay를 Date타입으로 변경하기 실패!");
-			return null;
-		}
-		cal.add(Calendar.DATE, -14);
-		startDay = dateFormat.format(cal.getTime());
-		map.put("startDay", startDay);
-		
-		System.out.println("startDay: "+startDay+", endDay: "+endDay);
-		
-		ArrayList<BlogDTO> timeList = new ArrayList<>();
-		Map<String,Integer> timeMap = new HashMap<>();
-		int index = 0;
-		
-		while(!startDay.equals(endDay)){
+		ArrayList<BlogDTO> timeList = new ArrayList<>(); // 날짜 리스트
+		Map<String,Integer> timeMap = new HashMap<>(); // (key: 날짜, value: list의 인덱스)
+		int index = 0; // list의 인덱스(map의 값으로 넣을 것)
+		while(!startDate.equals(endDate)){
 			BlogDTO temp = new BlogDTO();
-			temp.setStr_date(startDay);
+			temp.setStr_date(startDate_str);
 			timeList.add(temp);
-			timeMap.put(startDay, index++);
-			cal.add(Calendar.DATE, 1);
-			startDay = dateFormat.format(cal.getTime());
+			timeMap.put(startDate_str, index++);
+			startDate = startDate.plusDays(1);
+			startDate_str = startDate.format(dateTimeFormatter);
 		}
-		BlogDTO temp = new BlogDTO();
-		temp.setStr_date(endDay);
-		timeList.add(temp);
-		timeMap.put(endDay, index);
+		
 		
 		List<BlogDTO> resultList = blogDAO.totalHitOfLast15Days(map);
 		
@@ -345,7 +384,7 @@ public class BlogService {
 		}
 		
 		for(BlogDTO t : timeList) {
-			System.out.println(t.getStr_date()+" "+t.getHits());
+			System.out.println(t.getStr_date()+" "+t.getHits()+" ");
 		}
 		
 		return timeList;

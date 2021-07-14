@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+<beans:beans
+	xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -11,62 +12,57 @@
 		https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
+
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven /> 
+	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	
-	
+
+
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 		<!-- 21.04.14 추가
-			 - 기존 view resolver의 우선순위를 2로 해줌. (tiles 설정을 위해)
-			 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
-			 <beans:property name="order" value="1" />
+			- 기존 view resolver의 우선순위를 2로 해줌. (tiles 설정을 위해) 
+			- 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
+		<beans:property name="order" value="1" />
 	</beans:bean>
-	
-	
+
+
 	<!-- 21.04.14 추가
 		 - tiles 관련 설정 파일
 		 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
-	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
-        <beans:property name="definitions">
-            <beans:list>
-                <beans:value>/resources/tiles/tiles.xml</beans:value>
-            </beans:list>
-        </beans:property>
-    </beans:bean>
-    
-    
-    <!-- 21.04.14 -->
-    <!-- tiles viewResolver 를 사용해 화면을 표시 -->
-    <beans:bean id="tilesViewResolver"
-        class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
-        <beans:property name="order" value="0" /> <!-- tiles의 우선순위를 1로 해줌 -->
-    </beans:bean>
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:list>
+				<beans:value>/WEB-INF/tiles/tiles.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean> 
+	<beans:bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="order" value="0" /> <!-- Tiles의 우선순위를 1로 해준다. -->
+	</beans:bean>
 	
-	
-	<!-- 21.05.01 
-		 - 다중 파일 업로드 관련
-		 - 출처: https://ktko.tistory.com/entry/Spring-단일파일-다중파일-업로드하기 [KTKO 개발 블로그와 여행 일기] -->
+
+	<!-- 21.05.01 - 다중 파일 업로드 관련 - 출처: https://ktko.tistory.com/entry/Spring-단일파일-다중파일-업로드하기 
+		[KTKO 개발 블로그와 여행 일기] -->
 	<!-- file Upload -->
-    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- 최대 업로드 가능한 바이트 크리 설정... deault(-1)는 무제한 -->
-        <!-- max upload size in bytes -->
-        <!-- <beans:property name="maxUploadSize" value="5242880" /> --> <!-- 5MB -->
-        <!-- max size of file in memory (in bytes) -->
-        <!-- <beans:property name="maxInMemorySize" value="1048576" /> --> <!-- 1MB -->
-    </beans:bean>
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대 업로드 가능한 바이트 크리 설정... deault(-1)는 무제한 -->
+		<!-- max upload size in bytes -->
+		<!-- <beans:property name="maxUploadSize" value="5242880" /> --> <!-- 5MB -->
+		<!-- max size of file in memory (in bytes) -->
+		<!-- <beans:property name="maxInMemorySize" value="1048576" /> --> <!-- 1MB -->
+	</beans:bean>
 
 
-	<context:component-scan base-package="com.project.myver" />
-	
+	<context:component-scan
+		base-package="com.project.myver" />
 
-
-	
 </beans:beans>
