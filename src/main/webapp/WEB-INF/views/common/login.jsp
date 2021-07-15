@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
+<form action="${pageContext.request.contextPath}/login" method="post">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	<input type="hidden" name="loginRedirect" value="<%= request.getParameter("loginRedirect") %>" />
 

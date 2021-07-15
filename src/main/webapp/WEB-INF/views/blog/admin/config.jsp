@@ -15,14 +15,15 @@
 		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
 	
 		$("#blogUpdateBtn").click(function(){
+			alert("버튼 누름!");
 			var queryString = $("#blogFrm").serialize();
 			 
 	        $.ajax({
 	            type : 'post',
-	            url : '${pageContext.request.contextPath}/blog/admin.update/blog',
+	            url : '${pageContext.request.contextPath}/blog.admin.update/blog',
 	            data : queryString,
-	            error: function(xhr, status, error){
-	                alert(error);
+	            error: function(request,status,error){
+	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	            },
 	            success : function(json){
 	                alert("성공적으로 반영되었습니다.");
@@ -155,6 +156,7 @@ MYVER 블로그 | 관리
 			</div>
 			
 			<input type="hidden" name="blog_id" value="${BLOG.blog_id}">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 	

@@ -7,16 +7,18 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.project.myver.dto.BlogDTO;
 import com.project.myver.dto.CommentDTO;
 import com.project.myver.util.PageUtil;
 
+@Repository("blogDAO")
 public class BlogDAO extends SqlSessionDaoSupport {
 	@Autowired
 	SqlSessionTemplate session;
 
-	// 'blog' table =================================================
+	// 'blog' table ===================================================================================================================
 	// 21.05.19 블로그 생성하고 'blog_no' 리턴
 	public int insertBlog(BlogDTO blogDTO) {
 		session.insert("blog.insertBlog", blogDTO);
@@ -44,7 +46,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	}
 	
 	
-	// 'blog_visit'table =========================================
+	// 'blog_visit'table ============================================================================================================
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
 	public int todayBlogVisitCount(int blog_no) {
 		return session.selectOne("blog.todayBlogVisitCount", blog_no);
@@ -61,13 +63,13 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	}
 	
 	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 15일의 총 조회수 가져오기
-	public List<BlogDTO> totalHitOfLast15Days(Map<String,Object> map) {
-		return session.selectList("blog.totalHitOfLast15Days", map);
+	public List<BlogDTO> totalHitOfLast15DaysFromBlog_visit(Map<String,Object> map) {
+		return session.selectList("blog.totalHitOfLast15DaysFromBlog_visit", map);
 	}
 	
 	
 	
-	// 'blog_category'table ========================================
+	// 'blog_category'table ==========================================================================================================
 	// 21.05.28 블로그 기본 카테고리('전체보기') 생성insertDefaultBlogCategory
 	public void insertDefaultBlogCategory(int blog_no) {
 		session.insert("blog.insertDefaultBlogCategory", blog_no);
@@ -83,7 +85,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectList("blog.selectPublicFromBlog_category", blog_no);
 	}
 	
-	// 21.06.12 'blog_category_no'에 해당하는 정보 가져오기 ======아직 사용안하는...
+	// 21.06.12 'blog_category_no'에 해당하는 정보 가져오기 ~~~아직 사용안하는...~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public BlogDTO selectByBlog_category_noFromBlog_category(Map map) {
 		return session.selectOne("blog.selectByBlog_category_noFromBlog_category", map);
 	}
@@ -98,13 +100,13 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectList("blog.selectBlog_category_noAndCategory_name", blog_no);
 	}
 	
-	// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper
+	// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기
 	public List<BlogDTO> selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(int blog_no) {
 		return session.selectList("blog.selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper", blog_no);
 	}
 	
 	
-	// 'blog_neighbor'table =========================================
+	// 'blog_neighbor'table ==========================================================================================================
 	// 21.05.24 내가 추가한 이웃 리스트 가져오기(member_no 리스트)
 	public List<BlogDTO> selectFollowingListFromBlog_neighbor(int member_no) {
 		return session.selectList("blog.selectFollowingListFromBlog_neighbor", member_no);
@@ -117,7 +119,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 
 	
 	
-	// 'blog_object'table =================================================
+	// 'blog_object'table ===============================================================================================================
 	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
 	public int selectTotalCountByNoFromBlog_object(Map map) {
 		return session.selectOne("blog.selectTotalCountByNoFromBlog_object", map);
@@ -145,7 +147,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 
 	
 	
-	// 'blog_comment' table ===================================================
+	// 'blog_comment' table =============================================================================================================
 	// 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기
 	public int todayCommentCount(int blog_no) {
 		return session.selectOne("blog.todayCommentCount", blog_no);
@@ -153,10 +155,18 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	
 	
 	
-	// 'blog_comment' & 'blog_object' table ==============================================
+	// 'blog_comment' & 'blog_object' table ===================================================================================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
 		return session.selectList("blog.selectCommentByBlog_noFromBlog_comment", blog_no);
+	}
+
+	
+	
+	// 'blog_visit' & 'blog_object' table ===================================================================================================
+	// 21.07.13 특정기간(원하는 일자 ~ 해당하지 않는 일자)에 해당하는 조회수 순위(+ 제목, 글번호, 조회수, 작성일)
+	public List<BlogDTO> hitRankDuringFromBlog_visitAndBlog_object(Map<String, Object> map) {
+		return session.selectList("blog.hitRankDuringFromBlog_visitAndBlog_object", map);
 	}
 
 	

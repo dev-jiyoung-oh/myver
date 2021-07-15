@@ -3,9 +3,11 @@ package com.project.myver.dao;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.project.myver.dto.MemberDTO;
 
+@Repository
 public class MemberDAO extends SqlSessionDaoSupport {
 	
 	@Autowired

@@ -400,27 +400,6 @@ public class BlogController {
 			return mv;
     	}
     	
-    	/* stat(내 블로그 통계) ----> 이건 한번에 다 가져오지 말고 그때그때 가져와야 할 것 같다.
-    	   1) 오늘 (/today)
-	      - 날짜 받아오기(없는 경우 오늘 날짜)
-    	   2) 조회수 (/visit_pv) ~~ 글 조회수
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-	      - 전체/이웃/기타
-    	   3) 방문 횟수 (/visit) ~~ 블로그 방문 횟수
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-	      - 전체/이웃/기타
-    	   4) 검색어 분석(/referer)
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   5) 시간대 분석 (/hour_cv)--할지말지 고민중~~~
-    	   6) 성별·연령별 분포 (/demo) --이것두 고민중~~~
-    	   7) 조회수 순위 (/rank_pv)
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   8) 좋아요수 순위 (/rank_likes)
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	   9) 댓글수 순위 (/rank_comment)
-	      - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
-    	 */
-    	
     	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
 		int blog_member_no = blogDTO.getMember_no();
 		int blog_no = blogDTO.getBlog_no();
@@ -428,30 +407,6 @@ public class BlogController {
 		// 1) 오늘 (/today)
 		// - 날짜 받아오기(없는 경우 오늘 날짜)
     	if(menu.equals("today")) {
-    		/* 오늘 날짜에 해당하는
-    		 * 1. 총 조회수(blog_no 필요)
-    		 * 2. 총 댓글수
-    		 * 3. 총 좋아요수
-    		 * 4. 총 이웃증감수
-    		 * 5. 오늘날짜+14일 전의 "조회수" 가져오기
-    		 * DB는 한 번만 다녀오고 (== 14일 전 이후 데이터 가져와서) for문을 돌리자. 
-    		 * blog_object의 조회수 날짜별로 더해서 가져오기
-    		 *  +) 현재 시간 sysdate() 가져오기
-    		 * 인자 요소: 검색 시작 날짜(오늘 날짜), blog_no, 
-    		 * 결과 요소: 검색한 시간(sysdate), Map(날짜,조회수)
-    		 * ==== 년.월.일 나눠야할텐데... 아니면 그냥 뷰에서 포맷으로?
-    		 * ==== list(날짜, 조회수) Map에 감싸기.
-    		 * 그리고 날짜 생성해서 for문 돌면서 해당하는 날짜 없으면 map.put(날짜,0);
-    		 * 
-    		 * 6. 게시물 조회수 순위 top5
-    		 * 오늘의 조회수 높은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
-    		 * 
-    		 * 7. 게시물 댓글수 순위
-    		 * 오늘 달린 댓글수 많은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
-    		 * 
-    		 * 8. 검색어 유입 경로
-    		 * 오늘의 검색어 일치하는 거 있으면 count해서 높은 순으로 검색어,count 가져오기.(최대 10개) 
-    		 */
     		// 21.07.03 1. 오늘의 블로그글 조회수
     		int todayHit = blogSVC.todayObjectHitFromBlog_visit(blog_no);
     		
@@ -462,20 +417,55 @@ public class BlogController {
     		// 4. 총 이웃증감수★★★★★★★★★★★★★★★★★★★★★★★
     		
     		// 21.07.04 5. 오늘날짜+14일 전의 "조회수" 가져오기
-    		List<BlogDTO> totalHitOfLast15Days = blogSVC.totalHitOfLast15Days("", blog_no);
+    		List<BlogDTO> totalHitOfLast15Days = blogSVC.totalHitOfLast15DaysFromBlog_visit("", blog_no);
     		if(totalHitOfLast15Days == null) {
-    			System.out.println("나중에 처리하기~~");
+    			System.out.println("totalHitOfLast15Days == null ~~나중에 처리하기~~");
     		}
     		mv.addObject("HITS_OF_15DAYS", totalHitOfLast15Days);
-    		// 자바랑 스프링 버전 올려서 Calendar 대신 java.time.LocalDate 를 쓰자!!
     		
-    		// 21.07.07 6. 게시물 조회수 순위 top5
-    		//List<BlogDTO> todayHitTop5Objects = blogSVC.todayHitTop5Objects(blog_no);
+    		// 21.07.07 6. 게시물 조회수 순위(top5는 front-end 에서 처리)
+    		List<BlogDTO> todayHitRank = blogSVC.hitRankDuringFromBlog_visitAndBlog_object("", "", blog_no, "daily"); //hitRankDuringFromBlog_visitAndBlog_object(String startDate_str, String endDate_str, int blog_no, String period)
+    		if(todayHitRank == null) {
+    			System.out.println("todayHitRank == null ~~나중에 처리하기~~");
+    		}
+    		mv.addObject("HIT_RANK", todayHitRank);
+    		
+    		// 7. 게시물 댓글수 순위
+    		// - 오늘 달린 댓글수 많은 순으로 순위,제목,조회수,글번호 가져오기. (최대 5개)
+   		 
+   		 	// 8. 검색어 유입 경로
+    		// - 오늘의 검색어 일치하는 거 있으면 count해서 높은 순으로 검색어,count 가져오기.(최대 10개) 
     		
 		// 2) 조회수 (/visit_pv) ~~ 글 조회수
   	    // - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
   	    // - 전체/이웃/기타
-    	}else if(menu.equals("/visit_pv")){
+    	}else if(menu.equals("/hit")){
+    	
+    	// 3) 방문 횟수 (/visit) ~~ 블로그 방문 횟수
+  	    //  - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+  	    //  - 전체/이웃/기타
+    	}else if(menu.equals("/visit")) {
+    	
+      	//   4) 검색어 분석(/referer)
+  	    //  - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+		}else if(menu.equals("/referer")) {
+			
+    	//   5) 시간대 분석 (/hour_cv)--할지말지 고민중~~~
+    	//}else if(menu.equals("/hour_")) {
+		//   6) 성별·연령별 분포 (/demo) --이것두 고민중~~~
+    	//}else if(menu.equals("/")) {
+        	
+      	//   7) 조회수 순위 (/rank_hits)
+  	    //  - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+    	}else if(menu.equals("/rank_hit")) {
+        	
+      	//   8) 좋아요수 순위 (/rank_likes)
+  	    //  - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+    	}else if(menu.equals("/rank_like")) {
+        	
+      	//   9) 댓글수 순위 (/rank_comment)
+  	    //  - 일간(데이터 없는 경우, 일간-오늘) / 주간 / 월간
+    	}else if(menu.equals("/rank_comment")) {
     		
     	}
     	

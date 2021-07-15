@@ -297,98 +297,6 @@ public class BlogService {
 		
 		return map;
 	}
-	
-	/* 특정기간(원하는 일자 ~ 해당하지 않는 일자)의 조회수 순위(+ 제목, 글번호, 조회수, 작성일) 가져오기
-	 * 1. 일간
-	 *    - 원하는 일자 ~ 그 다음 일자
-	 *    - 원하는 일자가 없는 경우 오늘
-	 * 2. 주간
-	 *    - 오늘
-	 *    LocalDate now = LocalDate.now();
-			now.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
-	 * 
-	// 21.07.13 특정기간(원하는 일자 ~ 해당하지 않는 일자)에 해당하는 조회수 순위(+ 제목, 글번호, 조회수, 작성일)
-	public List<BlogDTO> hitRankDuring(String startDate, String endDate, int blog_no){
-		Map<String, Object> map = new HashMap<>();
-		map.put("startDate", startDate);
-		map.put("endDate", endDate);
-		map.put("blog_no", blog_no);
-		
-		List<BlogDTO> list = blogDAO.hitRankDuring(map);
-		
-		if(list == null) return null;
-		
-		// 조회수 순으로 내림차순
-		Collections.sort(list, new Comparator<BlogDTO>() {
-			@Override
-			public int compare(BlogDTO o1, BlogDTO o2) {
-				return o2.getHits() - o1.getHits();
-			}
-		});
-		
-		// 조회수 순위 매기기(조회수가 같은 것들은 같은 순위)
-		int rank = 1;
-		int nextRank = 2;
-		list.get(0).setRank(rank);
-		
-		for(int i=1; i<list.size(); i++) {
-			if(list.get(i).getHits() < list.get(i-1).getHits()) {
-				nextRank++;
-			}else { // 이전 것과 조회수가 같은 경우
-				rank = nextRank++;
-			}
-			list.get(i).setRank(rank);
-		}
-		
-		return list;
-	}*/
-	
-	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 각 15일의 총 조회수 가져오기
-	public List<BlogDTO> totalHitOfLast15Days(String endDate_str, int blog_no){
-		String[] endDate_str_arr = endDate_str.split(".");
-		LocalDate endDate = LocalDate.now().plusDays(1);
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
-		// 들어온 날짜가 있는 경우
-		if(endDate_str_arr.length > 1) {
-			endDate = LocalDate.of(Integer.parseInt(endDate_str_arr[0]), Integer.parseInt(endDate_str_arr[1]), Integer.parseInt(endDate_str_arr[2])).plusDays(1);
-		}
-		
-		LocalDate startDate = endDate.minusDays(15);
-		String startDate_str = startDate.format(dateTimeFormatter);
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("startDate", startDate_str);
-		map.put("endDate", endDate_str);
-		map.put("blog_no", blog_no);
-
-		System.out.println("startDate: "+startDate_str+", endDate: "+endDate_str);
-		
-		ArrayList<BlogDTO> timeList = new ArrayList<>(); // 날짜 리스트
-		Map<String,Integer> timeMap = new HashMap<>(); // (key: 날짜, value: list의 인덱스)
-		int index = 0; // list의 인덱스(map의 값으로 넣을 것)
-		while(!startDate.equals(endDate)){
-			BlogDTO temp = new BlogDTO();
-			temp.setStr_date(startDate_str);
-			timeList.add(temp);
-			timeMap.put(startDate_str, index++);
-			startDate = startDate.plusDays(1);
-			startDate_str = startDate.format(dateTimeFormatter);
-		}
-		
-		
-		List<BlogDTO> resultList = blogDAO.totalHitOfLast15Days(map);
-		
-		for(BlogDTO result : resultList) {
-			timeList.set(timeMap.get(result.getStr_date()), result);
-		}
-		
-		for(BlogDTO t : timeList) {
-			System.out.println(t.getStr_date()+" "+t.getHits()+" ");
-		}
-		
-		return timeList;
-	}
 		
 		
 	
@@ -435,6 +343,55 @@ public class BlogService {
 	// 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수
 	public int todayObjectHitFromBlog_visit(int blog_no) {
 		return blogDAO.todayObjectHitFromBlog_visit(blog_no);
+	}
+	
+	// 21.07.04 'blog_no'로 특정날짜(endDay)까지의 각 15일의 총 조회수 가져오기
+	public List<BlogDTO> totalHitOfLast15DaysFromBlog_visit(String endDate_str, int blog_no){
+		String[] endDate_str_arr = endDate_str.split(".");
+		LocalDate endDate = LocalDate.now().plusDays(1);
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+		
+		// 들어온 날짜가 있는 경우
+		if(endDate_str_arr.length > 1) {
+			endDate = LocalDate.of(Integer.parseInt(endDate_str_arr[0]), Integer.parseInt(endDate_str_arr[1]), Integer.parseInt(endDate_str_arr[2])).plusDays(1);
+		}else {
+			endDate_str = endDate.format(dateTimeFormatter);
+		}
+		
+		LocalDate startDate = endDate.minusDays(15);
+		String startDate_str = startDate.format(dateTimeFormatter);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate_str);
+		map.put("endDate", endDate_str);
+		map.put("blog_no", blog_no);
+		
+		System.out.println("startDate: "+startDate_str+", endDate: "+endDate_str);
+		
+		ArrayList<BlogDTO> timeList = new ArrayList<>(); // 날짜 리스트
+		Map<String,Integer> timeMap = new HashMap<>(); // (key: 날짜, value: list의 인덱스)
+		int index = 0; // list의 인덱스(map의 값으로 넣을 것)
+		while(!startDate.isEqual(endDate)){
+			BlogDTO temp = new BlogDTO();
+			temp.setStr_date(startDate_str);
+			timeList.add(temp);
+			timeMap.put(startDate_str, index++);
+			startDate = startDate.plusDays(1);
+			startDate_str = startDate.format(dateTimeFormatter);
+		}
+		
+		
+		List<BlogDTO> resultList = blogDAO.totalHitOfLast15DaysFromBlog_visit(map);
+		
+		for(BlogDTO result : resultList) {
+			timeList.set(timeMap.get(result.getStr_date()), result);
+		}
+		
+		for(BlogDTO t : timeList) {
+			System.out.println(t.getStr_date()+" "+t.getHits()+" ");
+		}
+		
+		return timeList;
 	}
 	
 	
@@ -619,19 +576,62 @@ public class BlogService {
 		return blogDAO.selectCommentByBlog_noFromBlog_comment(blog_no);
 	}
 
-	// 21.07.07 6. 게시물 조회수 순위 top5
-	/* 순위는 쿼리 끝나고 blogSVC에서 넣기~
-	 * 1. 일간(데이터가 없으면 오늘)
-	 date between between '****-**-** 00:00:00' and '****-**-** 23:59:59' (https://ourcstory.tistory.com/102)
-	 * 2. 주간(데이터가 없으면 지난 일요일~전주 월요일)
-	 
-	 * 3. 월간(데이터가 없으면 지난 달)
-	 * */
-	public List<BlogDTO> todayHitofObjects(int blog_no) {
-		//List
-		return null;
+	
+	
+	// 'blog_visit' & 'blog_object' table ============================================
+	// 21.07.13 특정기간(원하는 일자 ~ 포함되지 않는 일자: 일간/주간/월간)에 해당하는 조회수 순위(+ 제목, 글번호, 조회수, 작성일)
+	public List<BlogDTO> hitRankDuringFromBlog_visitAndBlog_object(String startDate_str, String endDate_str, int blog_no, String period){
+		if(startDate_str.length() == 0 || startDate_str.equals("") || endDate_str.length() == 0 || endDate_str.equals("")) {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			
+			if(period.equals("daily")) {
+				LocalDate startDate = LocalDate.now();
+				startDate_str = startDate.format(dateTimeFormatter); // 오늘
+				endDate_str = startDate.plusDays(1).format(dateTimeFormatter); // 내일
+			}else if(period.equals("weekly")) {
+				LocalDate endDate = LocalDate.now().with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)); // 가장 최근의 지난 일요일
+				endDate_str = endDate.format(dateTimeFormatter);
+				startDate_str = endDate.minusDays(6).format(dateTimeFormatter); // 가장 최근의 지난 일요일의 가장 최근의 지난 월요일
+			}else { // period.equals("monthly")
+				LocalDate lastMonth = LocalDate.now().minusMonths(1); // 지난달
+				startDate_str = lastMonth.with(TemporalAdjusters.firstDayOfMonth()).format(dateTimeFormatter); // 지난달 첫째 날 
+				endDate_str = lastMonth.with(TemporalAdjusters.lastDayOfMonth()).format(dateTimeFormatter); // 지난달 마지막 날
+			}
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate_str);
+		map.put("endDate", endDate_str);
+		map.put("blog_no", blog_no);
+		
+		List<BlogDTO> list = blogDAO.hitRankDuringFromBlog_visitAndBlog_object(map);
+		
+		if(list == null || list.size() == 0) return null;
+		
+		// 조회수 순으로 내림차순
+		Collections.sort(list, new Comparator<BlogDTO>() {
+			@Override
+			public int compare(BlogDTO o1, BlogDTO o2) {
+				return o2.getHits() - o1.getHits();
+			}
+		});
+		
+		// 조회수 순위 매기기(조회수가 같은 것들은 같은 순위)
+		int rank = 1;
+		int nextRank = 2;
+		list.get(0).setRank(rank);
+		
+		for(int i=1; i<list.size(); i++) {
+			if(list.get(i).getHits() < list.get(i-1).getHits()) {
+				rank = nextRank++;
+			}else { // 이전 것과 조회수가 같은 경우
+				nextRank++;
+			}
+			list.get(i).setRank(rank);
+		}
+		
+		return list;
 	}
-
 	
 	
 }

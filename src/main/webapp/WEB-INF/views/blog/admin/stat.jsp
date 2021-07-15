@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +19,7 @@
 			datas.push(${item.hits});
 		</c:forEach>
 		
-		var hit_of_15_days_chart = new Chart($("#hit_of_15_days_chart"), {
+		var hits_of_15_days_chart = new Chart($("#hits_of_15_days_chart"), {
 			type: 'line',
 			data: {
 				labels: labels,
@@ -29,10 +30,12 @@
 				}]
 			},
 			options: {
-				legend: {
-			        display: false
-			    }
-			}
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                }
+            }
 		});
 		
 		
@@ -160,7 +163,7 @@ MYVER 블로그 | 관리
 				<span>~시간 기준</span>
 			</div>
 			<div> 조회수 그래프
-				<canvas id="hits_of_days_chart"></canvas>
+				<canvas id="hits_of_15_days_chart"></canvas>
 			</div>
 			<div> 방문횟수 그래프
 				<canvas id="visits_of_days_chart"></canvas>
@@ -178,15 +181,24 @@ MYVER 블로그 | 관리
 								<th>제목</th>
 								<th>조회수</th>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>제목~~</td>
-								<td>6</td>
-							</tr>
+							<c:if test="${empty HIT_RANK}">
+								<tr>
+									<td colspan="3">해당 기간 내 순위 데이터가 없습니다.</td>
+								</tr>
+							</c:if>
+							<c:forEach var="hit_of_object" items="${HIT_RANK}" end="5">
+								<tr>
+									<td>${hit_of_object.rank} ${hit_of_object.blog_object_no}</td>
+									<td>${hit_of_object.title}</td>
+									<td>${hit_of_object.hits}</td>
+								</tr>
+							</c:forEach>
 						</table>
-						<div>
-							<a>더보기 &gt;</a>
-						</div>
+						<c:if test="${fn:length(HIT_RANK) gt 5}">
+							<div>
+								<a>더보기 &gt;</a>
+							</div>
+						</c:if>
 					</div>
 				</div>
 				<div>

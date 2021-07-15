@@ -92,6 +92,6 @@
 	<bean id="imgSVC" class="com.project.myver.service.ImageService"/>
 	
 	
-	<context:component-scan base-package="com.project.myver" />
+	<!-- <context:component-scan base-package="com.project.myver" /> -->
 	
 </beans>

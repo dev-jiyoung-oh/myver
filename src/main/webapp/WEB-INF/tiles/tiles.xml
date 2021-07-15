@@ -29,10 +29,10 @@
 		 - header, body, footer를 가진 template.jsp라는 기본 레이아웃을 정의.
 		 - 이 정의된 레이아웃의 name속성인 base를 상속하여 추가적으로 여러 tiles를 만들 수 있음. -->
 	<!-- base : 로그인 헤더/푸터 -->
-	<definition name="base" template="./baseLayout.jsp">
-		<put-attribute name="header" value="./header.jsp" />
+	<definition name="base" template="/WEB-INF/tiles/baseLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
 		<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="./footer.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
 	
 	<!-- 2. base를 상속받은것. 
