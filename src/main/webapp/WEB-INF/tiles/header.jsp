@@ -24,8 +24,8 @@
 <%-- 로그인 중일 경우에만 로그아웃 버튼이 보임 --%>
 <sec:authorize access="isAuthenticated()">
 	<form action="${pageContext.request.contextPath}/logout" method="POST"> 
-			<input type="submit" id="logoutBtn" value="Logout" />
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+		<input type="submit" id="logoutBtn" value="Logout" />
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	</form>
 	
 	${sessionScope.MID} 님

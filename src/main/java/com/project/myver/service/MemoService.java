@@ -71,6 +71,16 @@ public class MemoService {
 		return recordSize;
 	}
 
+	// 21.07.16 'memo_no'에 해당하는 레코드의 첨부파일 유무 변경
+	public void updateHas_fileFromMemo(int memo_no, int has_file) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("memo_no", memo_no);
+		map.put("has_file", has_file);
+		
+		memoDAO.updateHas_fileFromMemo(map);
+	}
+	
+	
 	
 	// 'my_memo' table =================================================
 	// 21.05.03 데이터 추가
@@ -83,6 +93,8 @@ public class MemoService {
 		
 		memoDAO.insertMy_memo(memoDTO);
 	}
+	
+	
 	
 	// 테이블 조인 ============================================================
 	/* 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - 'member_no'에 해당하는 모든 데이터 가져오기(my_memo.box별로)
@@ -108,6 +120,7 @@ public class MemoService {
 		
 		return my_memo_list;
 	}
+
 
 	
 }

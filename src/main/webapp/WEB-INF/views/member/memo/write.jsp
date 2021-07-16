@@ -7,6 +7,45 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<script type="text/javascript">
+	$(function(){
+		//id => $('#아이디밸류')
+		//class => $('.클래스밸류')
+		//name => $('[name="네임밸류"]')
+		var savedFiles = [];
+
+		$('[name="file"]').change(function () {      
+		  	if($('#write_file_content').css('display') == 'none'){
+		  		$('#write_file_content').show();
+		  	}
+			
+			var fileList = this.files; 
+			var arr = new Array();
+			var html = '';
+			
+		  	for(var i = 0; i < fileList.length; i++) {
+		    	var file = fileList[i];
+		    	savedFiles.push(file);
+		    	arr.push({name : file.name, size: file.size});
+		  	}
+		  	
+		  	for(key in arr){
+		  		html += '<tr><td><input type="checkbox"></td>';
+		  		html += '<td>' + arr[key].name + '</td>';
+		  		html += '<td>' + arr[key].size + '</td></tr>';
+		  	}
+		  				
+	    	$('#write_file_content_table').append(html);
+		});
+		
+		/*var formData = new FormData();
+
+		  for(var i=0;i<storedFiles.length;i++) {
+		  	 formData.append("files", storedFiles[i]);
+		  }*/
+		  
+	})
+	</script>
 </head>
 <body>
 <div class="row">
@@ -29,7 +68,22 @@
             </tr>
             <tr>
                 <td>파일첨부</td>
-                <td><input multiple="multiple" type="file"  class="" name="file"></td>
+                <td>
+                	<div>
+                		<input multiple="multiple" type="file"  class="" name="file">
+             		</div>
+             		<div style="display:none;" id="write_file_content">
+             			<table id="write_file_content_table">
+             				<tr>
+             					<td>
+             						<input type="checkbox">
+             					</td>
+             					<td>파일명</td>
+             					<td>용량</td>
+             				</tr>
+             			</table>
+             		</div>
+             	</td>
             </tr>
             <tr>
                 <td colspan="2"><textarea rows="10" cols="50" name="content" class=""></textarea></td>

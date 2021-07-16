@@ -1,6 +1,9 @@
 package com.project.myver.dto;
 
 import java.sql.Date;
+import java.util.Arrays;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class FileDTO {
 	
@@ -16,6 +19,10 @@ public class FileDTO {
 	}
 
 
+	// 기타
+	private MultipartFile[] file_array;	// 파일 배열
+
+
 	// 'file' table
 	private int file_no;			// 파일 번호
 	private int  area;				// 영역 (쪽지1/블로그2/카페3)
@@ -27,6 +34,8 @@ public class FileDTO {
 	private int can_delete;			// 삭제 가능 여부 (불가능0/가능1)
 	
 	
+	
+	// get&set method
 	public int getFile_no() {
 		return file_no;
 	}
@@ -75,14 +84,21 @@ public class FileDTO {
 	public void setCan_delete(int can_delete) {
 		this.can_delete = can_delete;
 	}
-	
+	public MultipartFile[] getFile_array() {
+		return file_array;
+	}
+	public void setFile_array(MultipartFile[] file_array) {
+		this.file_array = file_array;
+	}
 	
 
+	
+	// toString()
 	@Override
 	public String toString() {
-		return "FileDTO [file_no=" + file_no + ", area=" + area + ", original_name=" + original_name + ", saved_name="
-				+ saved_name + ", path=" + path + ", file_size=" + file_size + ", date=" + date
-				+ ", can_delete=" + can_delete + "]";
+		return "FileDTO [file_array=" + Arrays.toString(file_array) + ", file_no=" + file_no + ", area=" + area
+				+ ", original_name=" + original_name + ", saved_name=" + saved_name + ", path=" + path + ", file_size="
+				+ file_size + ", date=" + date + ", can_delete=" + can_delete + "]";
 	}
 	
 }
