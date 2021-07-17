@@ -161,7 +161,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		if(!"".equals(targetUrlParameter)) {
 			String targetUrl = request.getParameter(targetUrlParameter);
 			
-			if(StringUtils.hasText(targetUrl)) {
+			if(StringUtils.hasText(targetUrl) && !targetUrl.equals("null")) {
 				result = 1;
 			}else {
 				if(savedRequest != null) {

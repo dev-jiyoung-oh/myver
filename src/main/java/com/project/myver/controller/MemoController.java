@@ -74,7 +74,8 @@ public class MemoController {
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public ModelAndView memoWrite(
 				ModelAndView mv,
-				FileDTO fileDTO,
+				//FileDTO fileDTO,
+				MultipartFile[] file_array,
 				MemoDTO memoDTO) {
 		System.out.println(memoDTO.memoToString());
 
@@ -89,7 +90,7 @@ public class MemoController {
 			memo_no = memoSVC.insertMemo(memoDTO);
 			memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 			
-			MultipartFile[] file_array = fileDTO.getFile_array();
+			//MultipartFile[] file_array = fileDTO.getFile_array();
 			
 			if(file_array != null) System.out.println("file_array == null");
 			for(MultipartFile file : file_array) {
