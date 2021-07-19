@@ -59,7 +59,8 @@ public class MemoController {
 	}
 	
 	// 21.04.29 쪽지 작성 폼
-	@RequestMapping(value = "/write", method = RequestMethod.GET)
+	@RequestMapping(value = "/write", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	@ResponseBody
 	public ModelAndView memoWriteFrm(ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		

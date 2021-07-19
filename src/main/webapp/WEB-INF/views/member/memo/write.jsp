@@ -45,11 +45,11 @@
 		  				
 	    	$('#write_file_content_table').append(html);
 	    	
-	    	alert(saveFiles.length);
+	    	/*alert(saveFiles.length);
 	    	for(var i=0; i<saveFiles.length; i++){
 	    		var file = saveFiles[i];
 	    		alert(i+' '+file.name+' '+file.size);
-	    	}
+	    	}*/
 		});
 		
 		// 전체 체크/체크 해제 ====================================================================
@@ -82,11 +82,50 @@
 			}
 		})
 		
+		// 글 작성 제출 ====================================================================
 		$('#submit_btn').click(function(){
+			// 받는사람 없는 경우 처리
+			if(!$('#receiver_id').val()){
+				alert('받는 사람이 지정되지 않았습니다.<br>받는 사람 아이디를 입력해 주세요.');
+				return false;
+			}
+			
+			// 제목 없는 경우 처리
+	  		if(!$('#title').val()){
+	  			if(confirm('제목이 지정되지 않았습니다. 제목 없이 메일을 보내시겠습니까?')){
+		  			$('#title').val('(제목 없음)');
+	  			}else{
+	  				return false;
+	  			}
+	  		}
+			
 			var formData = $('#write_frm').serializeArray();
-			formData.push({ name: "file_array", value: saveFiles });
+			formData.push({ name: "file_array", value: saveFiles }); // 파일 첨부
+			var formsubmit = JSON.stringify(objectifyForm(formData));
+
+			$.ajax({
+	            type : 'post',
+	            url : '${pageContext.request.contextPath}/memo/write',
+	            accept : "application/json", 
+	            contentType : "application/json; charset=utf-8", 
+	            dataType : "json",
+	            data : formsubmit,
+	            error: function(request,status,error){
+	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	            },
+	            success : function(json){
+	                alert("성공적으로 반영되었습니다. 이후 페이지 처리~");
+	            }
+	        });
 		})
 		
+		function objectifyForm(formArray) {//serializeArray data function 
+			var returnArray = {}; 
+			for (var i = 0; i < formArray.length; i++) { 
+				returnArray[formArray[i]['name']] = formArray[i]['value']; 
+			} 
+			return returnArray; 
+		}//출처: https://stratosphere.tistory.com/211 [StratoSphere Stream]
 		
 		/*var formData = new FormData();
 
@@ -110,7 +149,7 @@
           <table class="table table-striped">
             <tr>
                 <td>받는사람</td>
-                <td><input type="text"  class="" name="receiver_id"></td>
+                <td><input type="text"  class="" name="receiver_id" id="receiver_id"></td>
             </tr>
             <tr>
                 <td>제목</td>
