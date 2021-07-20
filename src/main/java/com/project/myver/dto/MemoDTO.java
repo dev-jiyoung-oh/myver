@@ -1,11 +1,17 @@
 package com.project.myver.dto;
 
 import java.sql.Date;
+import java.util.Arrays;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class MemoDTO {
 	
+	// 기타
+	//private MultipartFile[] file_array;	// 파일 배열
+	
 	// 'memo' table
-	private int memo_no;		  // 쪽지 번호
+	private int memo_no = -1;		  // 쪽지 번호
 	private String writer_id;	  // 작성자 아이디
 	private String writer_name;	  // 작성자 이름
 	private String receiver_id;	  // 수신자 아이디
@@ -146,6 +152,13 @@ public class MemoDTO {
 	public void setMemo_set_no(int memo_set_no) {
 		this.memo_set_no = memo_set_no;
 	}
+	/*public MultipartFile[] getFile_array() {
+		return file_array;
+	}
+	public void setFile_array(MultipartFile[] file_array) {
+		this.file_array = file_array;
+	}*/
+	
 	
 	
 	// toString()
@@ -153,7 +166,7 @@ public class MemoDTO {
 		return "MemoDTO - memo [memo_no=" + memo_no + ", writer_id=" + writer_id + ", writer_name=" + writer_name
 				+ ", receiver_id=" + receiver_id + ", receiver_name=" + receiver_name + ", title=" + title
 				+ ", content=" + content + ", date=" + date + ", has_file=" + has_file
-				+ ", memo_size=" + memo_size + "]";
+				+ ", memo_size=" + memo_size + ", file_array=" + "]";
 	}
 	
 	public String my_memoToString() { // 'my_memo" table toString

@@ -99,36 +99,76 @@
 	  			}
 	  		}
 			
-			var formData = $('#write_frm').serializeArray();
-			formData.push({ name: "file_array", value: saveFiles }); // 파일 첨부
-			var formsubmit = JSON.stringify(objectifyForm(formData));
+			//var arr = $('#write_frm').serializeArray();
+			//arr.push({ name: "file_array", value: saveFiles }); // 파일 첨부
+			//var data = serializeObject(arr);
+			// var param = {"memberId":memberId, "memberPass":memberPass}
+			/*var arr = $('#write_frm').serializeArray();
+			arr.push({name: 'file_array', value: saveFiles});
 
+			var obj = {};
+            for(var i=0; i<arr.length; i++){    
+                obj[arr[i].name] = arr[i].value;
+            };*/
+			/*for(var i =0; i< arr.length; i++){    
+			    var param_name = arr[i].name;
+			    var param_value = arr[i].value;
+			    alert(param_name+" : "+param_value);
+			}
+			for (var key in data) {
+			  alert(key + " => " + data[key]);
+			}
+			return false;*/
+			/*var data = { 
+	            	'writer_id' : $('#writer_id').val(),
+	            	'receiver_id' : $('#receiver_id').val(),
+	            	'title' : $('#title').val(),
+	            	'content' : $('#content').val(),
+	            	'file_array' : saveFiles
+	            	};*/
+           	var form = $("#write_frm");
+           	var formData = new FormData(form[0]);
+           	for (var i = 0; i < saveFiles.length; i++) {
+				formData.append('file_array', saveFiles[i]);
+			}
+           	//formData.append('file_array', saveFiles);
+			
 			$.ajax({
 	            type : 'post',
 	            url : '${pageContext.request.contextPath}/memo/write',
-	            accept : "application/json", 
-	            contentType : "application/json; charset=utf-8", 
-	            dataType : "json",
-	            data : formsubmit,
+				enctype : 'multipart/form-data',
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+	            data : formData,
 	            error: function(request,status,error){
 	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	            },
-	            success : function(json){
+	            success : function(data){
 	                alert("성공적으로 반영되었습니다. 이후 페이지 처리~");
 	            }
 	        });
 		})
 		
-		function objectifyForm(formArray) {//serializeArray data function 
-			var returnArray = {}; 
-			for (var i = 0; i < formArray.length; i++) { 
-				returnArray[formArray[i]['name']] = formArray[i]['value']; 
-			} 
-			return returnArray; 
-		}//출처: https://stratosphere.tistory.com/211 [StratoSphere Stream]
+		function serializeObject(arr) {
+		    var obj = null;
+		    try {
+	            if (arr) {
+	                obj = {};
+	                
+	                for(var i=0; i<arr.length; i++){    
+	                    obj[arr[i].name] = arr[i].value;
+	                };
+	            }
+		    } catch (e) {
+		        alert(e.message);
+		    }
+		 
+		    return obj;
+		};// 출처: https://cofs.tistory.com/184 [CofS]
+		
 		
 		/*var formData = new FormData();
-
 		for(var i=0;i<storedFiles.length;i++) {
 			formData.append("files", storedFiles[i]);
 		}*/
@@ -142,7 +182,7 @@
     <div class="col-md-8">
         <h2 class="text-center">게시글 쓰기</h2>
         <form action="${pageContext.request.contextPath}/memo/write" method="POST" id="write_frm" enctype="multipart/form-data">
-          <input type="hidden" name="writer_id" value="${sessionScope.MID}" />
+          <input type="hidden" name="writer_id" id="writer_id" value="${sessionScope.MID}" />
           <input type="hidden" name="writer_name" value="" />
           <input type="hidden" name="receiver_name" value="" />
           <input type="hidden" name="date" value="" />
@@ -178,7 +218,7 @@
              	</td>
             </tr>
             <tr>
-                <td colspan="2"><textarea rows="10" cols="50" name="content" class=""></textarea></td>
+                <td colspan="2"><textarea rows="10" cols="50" name="content" id="content" class=""></textarea></td>
             </tr>
             <tr>
                  

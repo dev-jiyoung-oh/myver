@@ -19,9 +19,6 @@ public class FileDTO {
 	}
 
 
-	// 기타
-	private MultipartFile[] file_array;	// 파일 배열
-
 
 	// 'file' table
 	private int file_no;			// 파일 번호
@@ -84,19 +81,13 @@ public class FileDTO {
 	public void setCan_delete(int can_delete) {
 		this.can_delete = can_delete;
 	}
-	public MultipartFile[] getFile_array() {
-		return file_array;
-	}
-	public void setFile_array(MultipartFile[] file_array) {
-		this.file_array = file_array;
-	}
 	
 
 	
 	// toString()
 	@Override
 	public String toString() {
-		return "FileDTO [file_array=" + Arrays.toString(file_array) + ", file_no=" + file_no + ", area=" + area
+		return "FileDTO [file_no=" + file_no + ", area=" + area
 				+ ", original_name=" + original_name + ", saved_name=" + saved_name + ", path=" + path + ", file_size="
 				+ file_size + ", date=" + date + ", can_delete=" + can_delete + "]";
 	}

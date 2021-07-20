@@ -59,8 +59,7 @@ public class MemoController {
 	}
 	
 	// 21.04.29 쪽지 작성 폼
-	@RequestMapping(value = "/write", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	@ResponseBody
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public ModelAndView memoWriteFrm(ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		
@@ -72,12 +71,12 @@ public class MemoController {
 	}
 	
 	// 21.05.01 쪽지 작성
-	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public ModelAndView memoWrite(
+	@RequestMapping(value = "/write", method = RequestMethod.POST) //, produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String memoWrite(
 				ModelAndView mv,
-				//FileDTO fileDTO,
-				MultipartFile[] file_array,
-				MemoDTO memoDTO) {
+				MemoDTO memoDTO,
+				MultipartFile[] file_array) {
 		System.out.println(memoDTO.memoToString());
 
 		int memo_no =-1; 					// 쪽지 번호
@@ -91,9 +90,9 @@ public class MemoController {
 			memo_no = memoSVC.insertMemo(memoDTO);
 			memo_size += memoSVC.selectRecordSizeFromMemo(memo_no); // 해당 레코드의 크기 가져와 memo_size에 추가
 			
-			//MultipartFile[] file_array = fileDTO.getFile_array();
-			
-			if(file_array != null) System.out.println("file_array == null");
+			if(file_array == null) { 
+				System.out.println("file_array == null");
+			}else {
 			for(MultipartFile file : file_array) {
 				System.out.println("첨부파일 - "+file.getOriginalFilename()+" "+file.getSize());
 				String oriName = file.getOriginalFilename();
@@ -125,7 +124,7 @@ public class MemoController {
 			if(has_file) {
 				memoSVC.updateHas_fileFromMemo(memo_no, 1);
 			}
-			
+			}
 			if(memo_no != -1) {
 				// 21.05.03 memo_no에 해당하는 레코드의 쪽지 크기 수정
 				memoSVC.updateMemo_size(memo_no, memo_size);
@@ -184,12 +183,14 @@ public class MemoController {
 		
 		// 오류 발생시 실패 페이지 / 오류 미발생시 성공 페이지
 		if(memoWrite_success) {
-			mv.setViewName("member/memo/write_success");
+			//mv.setViewName("member/memo/write_success");
+			return "글 작성 성공";
 		}else {
-			mv.setViewName("member/memo/write_fail");
+			//mv.setViewName("member/memo/write_fail");
+			return "글 작성 실패";
 		}
 		
-		return mv;
+		//return mv;
 	}
 	
 	// 21.05.05 쪽지 팝업 폼(아이디랑 비밀번호 입력하는 폼)
