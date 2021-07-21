@@ -79,6 +79,8 @@ public class MemoController {
 				MultipartFile[] file_array) {
 		System.out.println(memoDTO.memoToString());
 
+		// writer_id가 null인 경우 로그인 페이지로~★★★★★★
+		
 		int memo_no =-1; 					// 쪽지 번호
 		double memo_size = 0D;				// 쪽지 크기
 		boolean has_file = false; 			// 파일 유무
@@ -93,38 +95,39 @@ public class MemoController {
 			if(file_array == null) { 
 				System.out.println("file_array == null");
 			}else {
-			for(MultipartFile file : file_array) {
-				System.out.println("첨부파일 - "+file.getOriginalFilename()+" "+file.getSize());
-				String oriName = file.getOriginalFilename();
-				
-				if(oriName==null || oriName.length()==0) {
-					System.out.println("파일이 없어요~");
-					continue;
+				for(MultipartFile file : file_array) {
+					System.out.println("첨부파일: "+file.getOriginalFilename()+" "+file.getSize());
+					String oriName = file.getOriginalFilename();
+					
+					if(oriName==null || oriName.length()==0) {
+						System.out.println("파일이 없어요~");
+						continue;
+					}
+					
+					memo_size += file.getSize(); // memo_size에 파일 크기 더하기
+					
+					// 21.05.02 2. 첨부파일 upload 폴더에 저장 (return값의 [0]:저장명, [1]:저장경로)
+					String[] saved_nameAndPath = fileSVC.upload(file, 0, memoDTO.getWriter_id()); // 2번째 파라미터 - 0: 쪽지 영역
+					
+					// 21.05.02 3. 'file' table에 데이터 삽입하고 파일번호 가져오기 (종류 0:쪽지) 
+					int file_no = fileSVC.insert(new FileDTO(0, file.getOriginalFilename(), saved_nameAndPath[0], saved_nameAndPath[1], file.getSize()));
+					memo_size += fileSVC.selectRecordSize(file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
+					
+					// 21.05.02 4. 'memo_file' table에 데이터 삽입 (첨부순서:file_seq) 후 쪽지 첨부파일 번호 가져오기
+					int memo_file_no = memoSVC.insertMemo_file(memo_no,file_index,file_no);
+					memo_size += memoSVC.selectRecordSizeFromMemo_file(memo_file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
+					
+					if(!has_file) { has_file = true; }
+					
+					file_index++;
 				}
-				
-				memo_size += file.getSize(); // memo_size에 파일 크기 더하기
-				
-				// 21.05.02 2. 첨부파일 upload 폴더에 저장 (return값의 [0]:저장명, [1]:저장경로)
-				String[] saved_nameAndPath = fileSVC.upload(file, 0, memoDTO.getWriter_id()); // 2번째 파라미터 - 0: 쪽지 영역
-				
-				// 21.05.02 3. 'file' table에 데이터 삽입하고 파일번호 가져오기 (종류 0:쪽지) 
-				int file_no = fileSVC.insert(new FileDTO(0, file.getOriginalFilename(), saved_nameAndPath[0], saved_nameAndPath[1], file.getSize()));
-				memo_size += fileSVC.selectRecordSize(file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
-				
-				// 21.05.02 4. 'memo_file' table에 데이터 삽입 (첨부순서:file_seq) 후 쪽지 첨부파일 번호 가져오기
-				int memo_file_no = memoSVC.insertMemo_file(memo_no,file_index,file_no);
-				memo_size += memoSVC.selectRecordSizeFromMemo_file(memo_file_no); // 해당 레코드의 크기 가져와 memo_size에 추가
-				
-				if(!has_file) { has_file = true; }
-				
-				file_index++;
 			}
-			
+
 			// 21.07.16 첨부 파일이 있는 경우, 쪽지의 'has_file'을 1로 변경
 			if(has_file) {
 				memoSVC.updateHas_fileFromMemo(memo_no, 1);
 			}
-			}
+			
 			if(memo_no != -1) {
 				// 21.05.03 memo_no에 해당하는 레코드의 쪽지 크기 수정
 				memoSVC.updateMemo_size(memo_no, memo_size);
@@ -184,10 +187,10 @@ public class MemoController {
 		// 오류 발생시 실패 페이지 / 오류 미발생시 성공 페이지
 		if(memoWrite_success) {
 			//mv.setViewName("member/memo/write_success");
-			return "글 작성 성공";
+			return "success";
 		}else {
 			//mv.setViewName("member/memo/write_fail");
-			return "글 작성 실패";
+			return "fail";
 		}
 		
 		//return mv;

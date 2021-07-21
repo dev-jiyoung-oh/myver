@@ -15,7 +15,7 @@
 		var saveFiles = [];
 
 		// 파일 첨부 ====================================================================
-		$('[name="file"]').change(function () {      
+		$('#file').change(function () {      
 		  	if($('#write_file_content').css('display') == 'none'){
 		  		$('#write_file_content').show();
 		  	}
@@ -98,81 +98,35 @@
 	  				return false;
 	  			}
 	  		}
-			
-			//var arr = $('#write_frm').serializeArray();
-			//arr.push({ name: "file_array", value: saveFiles }); // 파일 첨부
-			//var data = serializeObject(arr);
-			// var param = {"memberId":memberId, "memberPass":memberPass}
-			/*var arr = $('#write_frm').serializeArray();
-			arr.push({name: 'file_array', value: saveFiles});
 
-			var obj = {};
-            for(var i=0; i<arr.length; i++){    
-                obj[arr[i].name] = arr[i].value;
-            };*/
-			/*for(var i =0; i< arr.length; i++){    
-			    var param_name = arr[i].name;
-			    var param_value = arr[i].value;
-			    alert(param_name+" : "+param_value);
+           	var formData = new FormData(); // var formData = new FormData($("#write_frm")[0]); 로 하면 400 오류 발생....why...
+           	for (var i=0; i<saveFiles.length; i++) {
+				formData.append("file_array", saveFiles[i]);
 			}
-			for (var key in data) {
-			  alert(key + " => " + data[key]);
-			}
-			return false;*/
-			/*var data = { 
-	            	'writer_id' : $('#writer_id').val(),
-	            	'receiver_id' : $('#receiver_id').val(),
-	            	'title' : $('#title').val(),
-	            	'content' : $('#content').val(),
-	            	'file_array' : saveFiles
-	            	};*/
-           	var form = $("#write_frm");
-           	var formData = new FormData(form[0]);
-           	for (var i = 0; i < saveFiles.length; i++) {
-				formData.append('file_array', saveFiles[i]);
-			}
-           	//formData.append('file_array', saveFiles);
-			
+           	formData.append("writer_id", $('#writer_id').val());
+           	formData.append("receiver_id", $('#receiver_id').val());
+           	formData.append("title", $('#title').val());
+           	formData.append("content", $('#content').val());
+           	
 			$.ajax({
 	            type : 'post',
 	            url : '${pageContext.request.contextPath}/memo/write',
 				enctype : 'multipart/form-data',
 				processData : false,
 				contentType : false,
-				dataType : 'json',
 	            data : formData,
 	            error: function(request,status,error){
 	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	            },
 	            success : function(data){
-	                alert("성공적으로 반영되었습니다. 이후 페이지 처리~");
+	            	if(data == "success"){
+		                alert("성공적으로 반영되었습니다. 이후 페이지 처리~");
+	            	}else{
+		                alert("파일 전송 실패. 이후 페이지 처리~");
+	            	}
 	            }
 	        });
 		})
-		
-		function serializeObject(arr) {
-		    var obj = null;
-		    try {
-	            if (arr) {
-	                obj = {};
-	                
-	                for(var i=0; i<arr.length; i++){    
-	                    obj[arr[i].name] = arr[i].value;
-	                };
-	            }
-		    } catch (e) {
-		        alert(e.message);
-		    }
-		 
-		    return obj;
-		};// 출처: https://cofs.tistory.com/184 [CofS]
-		
-		
-		/*var formData = new FormData();
-		for(var i=0;i<storedFiles.length;i++) {
-			formData.append("files", storedFiles[i]);
-		}*/
-		  
 	})
 	</script>
 </head>
@@ -181,7 +135,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h2 class="text-center">게시글 쓰기</h2>
-        <form action="${pageContext.request.contextPath}/memo/write" method="POST" id="write_frm" enctype="multipart/form-data">
+        <form id="write_frm">
           <input type="hidden" name="writer_id" id="writer_id" value="${sessionScope.MID}" />
           <input type="hidden" name="writer_name" value="" />
           <input type="hidden" name="receiver_name" value="" />
@@ -199,7 +153,7 @@
                 <td>파일첨부</td>
                 <td>
                 	<div>
-                		<input multiple="multiple" type="file"  class="" name="file">
+                		<input multiple="multiple" type="file" class="" id="file">
              		</div>
              		<div style="display:none;" id="write_file_content">
              			<table id="write_file_content_table">

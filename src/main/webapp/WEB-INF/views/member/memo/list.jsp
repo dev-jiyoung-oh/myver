@@ -63,7 +63,7 @@ function getContent(n, e){
 </script>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
 <div class="row">
 	<div id="nav_snb" class="col-md-4" style="width: 251px;">
 		<div class="btn_workset">
@@ -98,89 +98,105 @@ function getContent(n, e){
 		<div id="lnb_scroll_area" class="svc_menu_area scrl">
 			<div id="svc_menu_content">
 				<h2 class="btdnd">메일함</h2>
-				<div class="tdst_menu">
-					<ul>
-						<td class="">
-                            <span class="item_wrap bu1">
-                                <i class="ico_mbox"></i><a href="#" title="전체 쪽지">받은쪽지함</a>
-                                <a id="btnArrange" href="#" class=""><span>정리하기</span></a>
-                            </span>
-                            <span>
-                            	<i class="ico_mbox"></i><a href="#" class="" title="개인 쪽지">개인쪽지</a>
-                                <a href="#" class="article">
-                                	<span class="btdnd">안읽은 쪽지 수</span>
-                                	<em class="">125</em>
-                               	</a>
-                               	<i class="ico_mbox"></i><a href="#" class="" title="카페 단체">카페단체</a>
-                                <a href="#" class="article">
-                                	<span class="btdnd">안읽은 쪽지 수</span>
-                                	<em class="">3</em>
-                               	</a>
-                            </span>
-						</td>
-						<td id="" class="">
-                            <span class="">
-                                <i class="ico_mbox"></i><a href="#" class="" title="보낸 쪽지함">보낸쪽지함</a>
-                                <a id="btnArrange" href="#" class=""><span>내게쓰기</span></a>
-                            </span>
-						</td>
-						<td id="" class="">
-                            <span class="">
-                                <i class="ico_mbox"></i><a href="#" class="" title="내게 쓴 쪽지함">내게쓴쪽지함</a>
-                                <a id="btnArrange" href="#" class=""><span>수신확인</span></a>
-                            </span>
-						</td>
-						<td id="" class="">
-                            <span class="">
-                                <i class="ico_mbox"></i><a href="#" class="" title="쪽지 보관함">쪽지보관함</a>
-                            </span>
-						</td>
-						<td id="" class="">
-                            <span class="">
-                                <i class="ico_mbox"></i><a href="#" class="" title="스팸 쪽지함">스팸쪽지함</a>
-                                <a id="btnArrange" href="#" class=""><span>비우기</span></a>
-                            </span>
-						</td>
-						<td id="" class="">
-                            <span class="">
-                                <i class="ico_mbox"></i><a href="#" class="" title="휴지통">휴지통</a>
-                                <a href="#" class="article">
-                                	<span class="btdnd">안읽은 쪽지 수</span>
-                                	<em class="">10</em>
-                               	</a>
-                                <a id="btnArrange" href="#" class=""><span>비우기</span></a>
-                            </span>
-						</td>
-               
-					</ul>
-				</div>
+				<ul class="nav flex-column">
+					<li class="nav flex-column">
+                        <i class="ico_mbox"></i>
+                        <a href="#" title="전체 쪽지" class="nav-link list-group-item-action">
+                        	받은쪽지함
+                           	<span id="btnArrange" href="#" class="badge badge-light" title="정리하기">
+                            	정리하기
+                          	</span>
+                        </a>
+                       	<ul class="nav flex-column">
+                         </ul>
+					</li>
+                 	<li class="nav flex-column">
+                   		<i class="ico_mbox"></i>
+                   		<a href="#" title="개인 쪽지" class="nav-link list-group-item-action ml-3">
+                   			개인쪽지
+                    		<a class="font-weight-bold text-success" title="안읽은 쪽지 수">125</a>
+                   		</a>
+                  	</li>
+                  	<li class="nav flex-column">
+                   		<i class="ico_mbox"></i>
+                   		<a href="#" title="카페 단체" class="nav-link list-group-item-action ml-3">
+                   			카페단체
+                    		<a class="font-weight-bold text-success" title="안읽은 쪽지 수">3</a>
+                   		</a>
+                  	</li>
+					<li id="" class="nav-item">
+                        <span class="">
+                            <i class="ico_mbox"></i>
+                            <a href="#" class="" title="보낸 쪽지함">보낸쪽지함</a>
+                            <a id="btnArrange" href="#" class=""><span>내게쓰기</span></a>
+                        </span>
+					</li>
+					<li id="" class="nav-item">
+                        <span class="">
+                            <i class="ico_mbox"></i>
+                            <a href="#" class="" title="내게 쓴 쪽지함">
+                           		내게쓴쪽지함
+                           		<span>수신확인</span>
+                           </a>
+                        </span>
+					</li>
+					<li id="" class="nav-item">
+                           <span class="">
+                               <i class="ico_mbox"></i><a href="#" class="" title="쪽지 보관함">쪽지보관함</a>
+                           </span>
+					</li>
+					<li id="" class="nav-item">
+                           <span class="">
+                               <i class="ico_mbox"></i><a href="#" class="" title="스팸 쪽지함">스팸쪽지함</a>
+                               <a id="btnArrange" href="#" class=""><span>비우기</span></a>
+                           </span>
+					</li>
+					<li id="" class="nav-item">
+                           <span class="">
+                               <i class="ico_mbox"></i><a href="#" class="" title="휴지통">휴지통</a>
+                               <a href="#" class="article">
+                               	<span class="btdnd">안읽은 쪽지 수</span>
+                               	<em class="">10</em>
+                              	</a>
+                               <a id="btnArrange" href="#" class=""><span>비우기</span></a>
+                           </span>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
 
 	<div class="col-md-8">
-		<table border="1" id="">
+		<ol id="">
 			<c:forEach var="memo" items="${MEMOLIST}">
-				<tr class="list|${memo.memo_no}">
-					<c:if test="${memo.box==2}"><td>발신</td></c:if>
-					<c:if test="${memo.box==0}"><td>개인</td></c:if>
-					<td><input type="checkbox"></td>
-					<td>
-						<c:if test="${memo.is_important==0}">안중요</c:if>
-						<c:if test="${memo.is_important==1}">중요</c:if>
-					</td>
-					<td>
-						<c:if test="${memo.is_read==0}">안읽음</c:if>
-						<c:if test="${memo.is_read==1}">읽음</c:if>
-					</td>
-					<td>${memo.writer_id} &lt;${memo.writer_name}&gt;</td>
-					<!-- <td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td> -->
-					<td onclick="getContent(${memo.memo_no}, event)">${memo.title}</td>
-					<td>${memo.date}</td>
-					<td>${memo.memo_size}</td>
-				</tr>
+				<li class="list|${memo.memo_no}">
+					<ul class="list-group list-group-horizontal">
+						<li class="list-group-item">
+							<c:if test="${memo.box==2}">발신</c:if>
+							<c:if test="${memo.box==0}">개인</c:if>
+						</li>
+						<li class="list-group-item">
+							<input type="checkbox">
+						</li>
+						<li class="list-group-item">
+							<c:if test="${memo.is_important==0}">안중요</c:if>
+							<c:if test="${memo.is_important==1}">중요</c:if>
+						</li>
+						<li class="list-group-item">
+							<c:if test="${memo.is_read==0}">안읽음</c:if>
+							<c:if test="${memo.is_read==1}">읽음</c:if>
+						</li>
+						<li class="list-group-item">
+							${memo.writer_id} &lt;${memo.writer_name}&gt;
+						</li>
+						<!-- <td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td> -->
+						<li name="list_title" class="list-group-item">${memo.title}</li>
+						<li class="list-group-item">${memo.date}</li>
+						<li class="list-group-item">${memo.memo_size}</li>
+					</ul>
+				</li>
 			</c:forEach>
-		</table>
+		</ol>
 		
 		<table border="1" id="read_table">
 			<tr>
@@ -206,8 +222,60 @@ function getContent(n, e){
 				</td>
 			</tr>
 		</table>
-	</div>			
-				
+	</div>
+	
+	<div class="col-md-8">
+        <h2 class="text-center">게시글 쓰기</h2>
+        <form id="write_frm">
+          <input type="hidden" name="writer_id" id="writer_id" value="${sessionScope.MID}" />
+          <input type="hidden" name="writer_name" value="" />
+          <input type="hidden" name="receiver_name" value="" />
+          <input type="hidden" name="date" value="" />
+          <table class="table table-striped">
+            <tr>
+                <td>받는사람</td>
+                <td><input type="text"  class="" name="receiver_id" id="receiver_id"></td>
+            </tr>
+            <tr>
+                <td>제목</td>
+                <td><input type="text"  class="" name="title" id="title"></td>
+            </tr>
+            <tr>
+                <td>파일첨부</td>
+                <td>
+                	<div>
+                		<input multiple="multiple" type="file" class="" id="file">
+             		</div>
+             		<div style="display:none;" id="write_file_content">
+             			<table id="write_file_content_table">
+             				<tr>
+             					<td>
+             						<input type="checkbox" id="all_file_check">
+             					</td>
+             					<td>파일명</td>
+             					<td>용량</td>
+             				</tr>
+             			</table>
+             		</div>
+             		<div>
+             			<input value="삭제" type="button" id="delete_file_btn">
+             		</div>
+             	</td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea rows="10" cols="50" name="content" id="content" class=""></textarea></td>
+            </tr>
+            <tr>
+                 
+                <td colspan="2"  class="text-center">
+                    <input id="submit_btn" type="button" value="보내기" class="btn btn-success">
+                    <input type="reset" value="다시작성" class="btn btn-warning">
+                </td>
+            </tr>
+             
+          </table>
+        </form>
+    </div>			
 </div>	
 </div>		
 </body>

@@ -62,7 +62,7 @@ public class MemoDAO extends SqlSessionDaoSupport {
 	public int insertMemo_file(MemoDTO memoDTO) {
 		session.insert("memo.insertMemo_file", memoDTO);
 		int memo_file_no = memoDTO.getMemo_file_no();
-		System.out.println("MemoDAO.insertMemo - memo_no : "+memo_file_no);
+		System.out.println("MemoDAO.insertMemo_file - memo_file_no : "+memo_file_no);
 		return memo_file_no;
 	}
 
