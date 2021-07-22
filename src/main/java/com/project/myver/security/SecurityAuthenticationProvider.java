@@ -6,7 +6,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.project.myver.dto.MemberDTO;
@@ -20,7 +19,7 @@ import com.project.myver.dto.MemberDTO;
 public class SecurityAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
-	private UserDetailsService userDetailsSVC;
+	private SecurityUserService securityUserSVC;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
@@ -30,14 +29,17 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 		String id = (String)authentication.getPrincipal();
 		String pw = (String)authentication.getCredentials();
 		
-		MemberDTO user = (MemberDTO)userDetailsSVC.loadUserByUsername(id);
+		MemberDTO user = (MemberDTO)securityUserSVC.loadUserByUsername(id);
 		
 		if(!passwordEncoder.matches(pw,user.getPassword())) {
 			System.out.println("SecurityAuthenticationProvider.authenticate - 비밀번호 틀림~");
 			throw new BadCredentialsException(id);
 		}
 		
-		return new UsernamePasswordAuthenticationToken(id, pw, user.getAuthorities());
+		//return new UsernamePasswordAuthenticationToken(id, pw, user.getAuthorities());
+		System.out.println(user.getAuthorities().toString());
+		return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		
 	}
 
 	@Override

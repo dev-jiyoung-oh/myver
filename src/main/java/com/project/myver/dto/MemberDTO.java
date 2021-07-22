@@ -24,6 +24,7 @@ public class MemberDTO implements UserDetails{
 	private String auth;	// 권한 : 일반 "MEMBER" , 관리자 "ADMIN" 
 	
 	
+	
 	// 기본적인 오버라이딩 메소드들 오버라이딩
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,6 +65,18 @@ public class MemberDTO implements UserDetails{
 
 	
 	// 추가적인 회원 정보 컬럼의 getter, setter
+	public String getId() {
+		return id;
+	}
+
+	public String getPw() {
+		return pw;
+	}
+
+	public void setMember_no(int member_no) {
+		this.member_no = member_no;
+	}
+
 	public int getMember_no() {
 		return member_no;
 	}
@@ -128,12 +141,13 @@ public class MemberDTO implements UserDetails{
 		this.pw = pw;
 	}
 
+	
+	
 	// toString 메소드
 	@Override
 	public String toString() {
 		return "MemberDTO [member_no=" + member_no + ", id=" + id + ", pw=" + pw + ", name=" + name + ", nick=" + nick
 				+ ", phone=" + phone + ", date=" + date + ", log_date=" + log_date + ", auth=" + auth + "]";
 	}
-	
 	
 }

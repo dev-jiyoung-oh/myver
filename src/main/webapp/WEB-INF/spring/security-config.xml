@@ -17,7 +17,7 @@
        <http auto-config="true" use-expressions="true">
        		<csrf disabled="true"/>
        		<!-- <intercept-url pattern="/my/**" access="hasRole('MEMBER')" /> -->
-       		<!-- <intercept-url pattern="/memo/**" access="hasRole('MEMBER')" /> --> <!-- 21.04.26 -->
+       		<intercept-url pattern="/memo/**" access="hasRole('MEMBER')" />
        		<!-- <intercept-url pattern="/**" access="permitAll"/> -->
        		
        		<!-- 로그인 -->
@@ -47,12 +47,12 @@
        		</authentication-provider>
        </authentication-manager>
        
-       <beans:bean id="userService" class="com.project.myver.security.SecurityUserService" />
-       <beans:bean id="userAuthProvider" class="com.project.myver.security.SecurityAuthenticationProvider" />
+       <beans:bean id="userService" class="com.project.myver.security.SecurityUserService" /> <!-- 사용자 정보 설정할 커스텀 Bean -->
+       <beans:bean id="userAuthProvider" class="com.project.myver.security.SecurityAuthenticationProvider" /> <!-- 권한 설정할 커스텀 Bean -->
        <!-- 21.04.17 추가
        		- 패스워드 암호화
        		- 참고사이트 : https://zgundam.tistory.com/54?category=430446 -->
-       <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+       <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" /> 
        
        <!-- 21.04.09 추가 
        		- 로그인 성공 후 처리 핸들러

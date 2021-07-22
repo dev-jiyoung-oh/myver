@@ -9,6 +9,7 @@
 	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.js"></script>
 	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/resources/css/myver.css" rel="stylesheet">
 </head>
 
 <body>
@@ -29,6 +30,10 @@
 	</form>
 	
 	${sessionScope.MID} 님
+	<sec:authentication property="principal" var="user"/>
+	${user.id}
+	${user.nick}
+	${user.auth}
 </sec:authorize>
 
 <%-- 관리자 로그인 시 --%>

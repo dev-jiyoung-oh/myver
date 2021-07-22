@@ -65,18 +65,16 @@ function getContent(n, e){
 <body>
 <div class="container">
 <div class="row">
-	<div id="nav_snb" class="col-md-4" style="width: 251px;">
-		<div class="btn_workset">
-			<a href="${pageContext.request.contextPath}/memo/write" class="">
-				<strong class=""><span>쪽지쓰기</span></strong>
-			</a>
-			<a href="#" class="">
-				<strong class=""><span>내게쓰기</span></strong>
-			</a>
+	<div id="nav_snb" class="col-md-3">
+		<div class="text-center">
+			<div class="btn-group d-flex">
+				<span class="btn btn-success">쪽지쓰기</span>
+				&nbsp;
+				<span class="btn btn-success">내게쓰기</span>
+			</div>
 		</div>
 		
 		<div class="section_typemail">
-			<h3 class="btdnd">쪽지 모아보기</h3>
 			<a href="#" class="" title="안읽은 쪽지">
 				<span class="cnt" id="unreadMailCount">999+</span>
 				<em>안읽음<span class="btdnd">쪽지 목록 보기</span></em>
@@ -97,76 +95,77 @@ function getContent(n, e){
 
 		<div id="lnb_scroll_area" class="svc_menu_area scrl">
 			<div id="svc_menu_content">
-				<h2 class="btdnd">메일함</h2>
 				<ul class="nav flex-column">
-					<li class="nav flex-column">
+					<li class="nav-item">
                         <i class="ico_mbox"></i>
                         <a href="#" title="전체 쪽지" class="nav-link list-group-item-action">
                         	받은쪽지함
-                           	<span id="btnArrange" href="#" class="badge badge-light" title="정리하기">
+                           	<span id="" class="badge badge-custom float-right" title="정리하기">
                             	정리하기
                           	</span>
                         </a>
-                       	<ul class="nav flex-column">
-                         </ul>
 					</li>
-                 	<li class="nav flex-column">
+                 	<li class="nav-item">
                    		<i class="ico_mbox"></i>
-                   		<a href="#" title="개인 쪽지" class="nav-link list-group-item-action ml-3">
+                   		<a href="#" title="개인 쪽지" class="nav-link list-group-item-action pl-2rem">
                    			개인쪽지
-                    		<a class="font-weight-bold text-success" title="안읽은 쪽지 수">125</a>
+                    		<strong class="text-success" title="안읽은 쪽지 수">125</strong>
                    		</a>
                   	</li>
-                  	<li class="nav flex-column">
+                  	<li class="nav-item">
                    		<i class="ico_mbox"></i>
-                   		<a href="#" title="카페 단체" class="nav-link list-group-item-action ml-3">
+                   		<a href="#" title="카페 단체" class="nav-link list-group-item-action pl-2rem">
                    			카페단체
-                    		<a class="font-weight-bold text-success" title="안읽은 쪽지 수">3</a>
+                    		<strong class="text-success" title="안읽은 쪽지 수">3</strong>
                    		</a>
                   	</li>
-					<li id="" class="nav-item">
-                        <span class="">
-                            <i class="ico_mbox"></i>
-                            <a href="#" class="" title="보낸 쪽지함">보낸쪽지함</a>
-                            <a id="btnArrange" href="#" class=""><span>내게쓰기</span></a>
-                        </span>
+					<li class="nav-item">
+                        <i class="ico_mbox"></i>
+                        <a href="#" class="nav-link list-group-item-action" title="보낸 쪽지함">
+                        	보낸쪽지함
+                        	<span class="badge badge-custom float-right" title="내게쓰기">
+                        		내게쓰기
+                        	</span>
+                        </a>
 					</li>
 					<li id="" class="nav-item">
-                        <span class="">
-                            <i class="ico_mbox"></i>
-                            <a href="#" class="" title="내게 쓴 쪽지함">
-                           		내게쓴쪽지함
-                           		<span>수신확인</span>
-                           </a>
-                        </span>
+                        <i class="ico_mbox"></i>
+                        <a href="#" class="nav-link list-group-item-action" title="내게 쓴 쪽지함">
+                       		내게 쓴 쪽지함
+                       		<span class="badge badge-custom float-right" title="수신확인">
+                       			수신확인
+                     		</span>
+                        </a>
 					</li>
 					<li id="" class="nav-item">
-                           <span class="">
-                               <i class="ico_mbox"></i><a href="#" class="" title="쪽지 보관함">쪽지보관함</a>
-                           </span>
+                        <i class="ico_mbox"></i>
+                        <a class="nav-link list-group-item-action" title="쪽지 보관함">쪽지보관함</a>
 					</li>
 					<li id="" class="nav-item">
-                           <span class="">
-                               <i class="ico_mbox"></i><a href="#" class="" title="스팸 쪽지함">스팸쪽지함</a>
-                               <a id="btnArrange" href="#" class=""><span>비우기</span></a>
-                           </span>
+                        <i class="ico_mbox"></i>
+                        <a href="#" class="nav-link list-group-item-action" title="스팸 쪽지함">
+                        	스팸쪽지함
+	                        <span class="badge badge-custom float-right" title="비우기">
+	                          	비우기
+	                        </span>
+                        </a>
 					</li>
 					<li id="" class="nav-item">
-                           <span class="">
-                               <i class="ico_mbox"></i><a href="#" class="" title="휴지통">휴지통</a>
-                               <a href="#" class="article">
-                               	<span class="btdnd">안읽은 쪽지 수</span>
-                               	<em class="">10</em>
-                              	</a>
-                               <a id="btnArrange" href="#" class=""><span>비우기</span></a>
-                           </span>
+                        <i class="ico_mbox"></i>
+                        <a href="#" class="nav-link list-group-item-action" title="휴지통">
+                        	휴지통
+                            <strong class="text-success" title="안읽은 쪽지 수">10</strong>
+                            <span class="badge badge-custom float-right" title="비우기">
+                            	비우기
+                           	</span>
+                        </a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 
-	<div class="col-md-8">
+	<div class="col-md-9">
 		<ol id="">
 			<c:forEach var="memo" items="${MEMOLIST}">
 				<li class="list|${memo.memo_no}">
@@ -190,14 +189,20 @@ function getContent(n, e){
 							${memo.writer_id} &lt;${memo.writer_name}&gt;
 						</li>
 						<!-- <td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td> -->
-						<li name="list_title" class="list-group-item">${memo.title}</li>
+						<li class="list-group-item">
+							<a name="list_title">
+								${memo.title}
+							</a>
+						</li>
 						<li class="list-group-item">${memo.date}</li>
 						<li class="list-group-item">${memo.memo_size}</li>
 					</ul>
 				</li>
 			</c:forEach>
 		</ol>
-		
+	</div>
+	
+	<div class="col-md-9">
 		<table border="1" id="read_table">
 			<tr>
 				<td id="is_important"></td>
@@ -224,7 +229,7 @@ function getContent(n, e){
 		</table>
 	</div>
 	
-	<div class="col-md-8">
+	<div class="col-md-9">
         <h2 class="text-center">게시글 쓰기</h2>
         <form id="write_frm">
           <input type="hidden" name="writer_id" id="writer_id" value="${sessionScope.MID}" />
