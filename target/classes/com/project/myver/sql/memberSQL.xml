@@ -6,7 +6,7 @@
 	<!-- 21.04.18 회원가입 -->
 	<insert id="join" parameterType="memDTO" useGeneratedKeys="true" keyProperty="member_no">
 		insert into member (id, pw, name, nick, phone, date, auth)
-		values (#{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "MEMBER")
+		values (#{id}, #{pw}, #{name}, #{nick}, #{phone}, SYSDATE(), "ROLE_MEMBER")
 	</insert>
 	
 	<!-- 21.04.21 아이디 존재 확인 -->

@@ -21,7 +21,7 @@ public class MemberDTO implements UserDetails{
 	private int phone;		// 전화번호
 	private Date date;		// 가입일
 	private Date log_date;	// 최근접속일
-	private String auth;	// 권한 : 일반 "MEMBER" , 관리자 "ADMIN" 
+	private String auth;	// 권한 : 일반 "ROLE_MEMBER" , 관리자 "ROLE_ADMIN" 
 	
 	
 	
