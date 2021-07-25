@@ -97,8 +97,8 @@ public class MemoDAO extends SqlSessionDaoSupport {
 	}
 	*/
 	// 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - member_no랑 box에 해당하는 데이터 가져오기
-	public ArrayList<MemoDTO> selectMemoAndMy_memo(int member_no) {
-		ArrayList<MemoDTO> my_memo_list = (ArrayList)session.selectList("memo.selectMemoAndMy_memo", member_no);
+	public ArrayList<MemoDTO> selectReceivedFromMemoAndMy_memo(int member_no) {
+		ArrayList<MemoDTO> my_memo_list = (ArrayList)session.selectList("memo.selectReceivedFromMemoAndMy_memo", member_no);
 		return my_memo_list;
 	}
 

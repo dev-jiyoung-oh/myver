@@ -93,6 +93,8 @@ $(function(){
 	  	}
 	  				
     	$('#write_file_content_table').append(html);
+    	
+    	$('#write_file').val(''); // 다중 파일 input 비우기
 	});
 	
 	// 전체 체크/체크 해제 ------------------------------------------------------------------------------------
@@ -170,15 +172,22 @@ $(function(){
             }
         })
         
-        // 글 작성 내용 비우기
-        $('#write_writer_id').val('');
+		write_clear();
+	})
+	
+	$('#write_reset_btn').click(function(){
+		write_clear();
+	})
+	
+    // 글 작성 내용 비우기
+	function write_clear(){
 		$('#write_receiver_id').val('');
 		$('#write_title').val('');
 		$('#write_content').val('');
 		saveFiles = [];
 		$("#write_file_content_table_first_tr").nextAll().remove();
 		$('#write_file_content').css('display', 'none');
-	})
+	}
 	// 글 작성 끝 ==========================================================================================================
 	
 	
@@ -288,42 +297,44 @@ $(function(){
 		</div>
 	</div>
 
+	<c:if test="${!empty RECEIVED_LIST}">
 	<div class="col-md-9">
-		<ol id="">
-			<c:forEach var="memo" items="${MEMOLIST}">
-				<li class="list|${memo.memo_no}">
+		<ul id="">
+			<c:forEach var="received_memo" items="${RECEIVED_LIST}">
+				<li class="list|${received_memo.memo_no}">
 					<ul class="list-group list-group-horizontal">
 						<li class="list-group-item">
-							<c:if test="${memo.box==2}">발신</c:if>
-							<c:if test="${memo.box==0}">개인</c:if>
+							<c:if test="${received_memo.box==2}">발신</c:if>
+							<c:if test="${received_memo.box==0}">개인</c:if>
 						</li>
 						<li class="list-group-item">
 							<input type="checkbox">
 						</li>
 						<li class="list-group-item">
-							<c:if test="${memo.is_important==0}">안중요</c:if>
-							<c:if test="${memo.is_important==1}">중요</c:if>
+							<c:if test="${received_memo.is_important==0}">안중요</c:if>
+							<c:if test="${received_memo.is_important==1}">중요</c:if>
 						</li>
 						<li class="list-group-item">
-							<c:if test="${memo.is_read==0}">안읽음</c:if>
-							<c:if test="${memo.is_read==1}">읽음</c:if>
+							<c:if test="${received_memo.is_read==0}">안읽음</c:if>
+							<c:if test="${received_memo.is_read==1}">읽음</c:if>
 						</li>
 						<li class="list-group-item">
-							${memo.writer_id} &lt;${memo.writer_name}&gt;
+							${received_memo.writer_id} &lt;${received_memo.writer_name}&gt;
 						</li>
 						<!-- <td><a href="${pageContext.request.contextPath}/memo/read?mn=${memo.memo_no}">${memo.title}</a></td> -->
 						<li class="list-group-item">
 							<a name="list_title">
-								${memo.title}
+								${received_memo.title}
 							</a>
 						</li>
-						<li class="list-group-item">${memo.date}</li>
-						<li class="list-group-item">${memo.memo_size}</li>
+						<li class="list-group-item">${received_memo.date}</li>
+						<li class="list-group-item">${received_memo.memo_size}</li>
 					</ul>
 				</li>
 			</c:forEach>
-		</ol>
+		</ul>
 	</div>
+	</c:if>
 	
 	<div class="col-md-9">
 		<table border="1" id="read_table">
@@ -397,7 +408,7 @@ $(function(){
                  
                 <td colspan="2"  class="text-center">
                     <input id="write_submit_btn" type="button" value="보내기" class="btn btn-success">
-                    <input type="reset" value="다시작성" class="btn btn-warning">
+                    <input id="write_reset_btn" type="reset" value="다시작성" class="btn btn-warning">
                 </td>
             </tr>
              

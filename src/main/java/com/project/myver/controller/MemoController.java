@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,21 +39,21 @@ public class MemoController {
 	
 	// 21.04.26 쪽지 리스트
 	@RequestMapping(value = "/list")
-	public ModelAndView memoList(HttpSession session, ModelAndView mv, RedirectView rv) {
-		//String id = memSVC.findIdByPhone(memdto.getPhone());
-		String session_id = (String)session.getAttribute("MID");
-		
-		if(session_id==null) {
+	public ModelAndView memoList(
+			@AuthenticationPrincipal MemberDTO logined,
+			HttpSession session, 
+			ModelAndView mv, 
+			RedirectView rv) {
+		System.out.println("memoList - "+logined.toString());
+		if(logined.getUsername() == null) {
 			rv.setUrl("../login");
 			mv.setView(rv);
 			return mv;
 		}
 		
-		int session_no = memSVC.selectMember_noById(session_id);
+		ArrayList<MemoDTO> my_received_memo_list = memoSVC.selectReceivedFromMemoAndMy_memo(logined.getMember_no());
 		
-		ArrayList<MemoDTO> my_memo_list = memoSVC.selectAllFromMemoAndMy_memo(session_no);
-		
-		mv.addObject("MEMOLIST", my_memo_list);
+		mv.addObject("RECEIVED_LIST", my_received_memo_list);
 		mv.setViewName("member/memo/list");
 		
 		return mv;

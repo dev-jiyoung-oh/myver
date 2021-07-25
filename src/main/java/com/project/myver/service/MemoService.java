@@ -113,10 +113,11 @@ public class MemoService {
 		return list;
 	}
 	*/
-	// 21.05.10 'memo'테이블과 'my_memo'테이블 조인 - 'member_no'에 해당하는 모든 데이터 가져오기
-	public ArrayList<MemoDTO> selectAllFromMemoAndMy_memo(int member_no){
+	// 'memo'table & 'my_memo'table
+	// 21.05.10 'member_no'에 해당하는 '받은 쪽지' 데이터 가져오기
+	public ArrayList<MemoDTO> selectReceivedFromMemoAndMy_memo(int member_no){
 		
-		ArrayList<MemoDTO> my_memo_list = memoDAO.selectMemoAndMy_memo(member_no);
+		ArrayList<MemoDTO> my_memo_list = memoDAO.selectReceivedFromMemoAndMy_memo(member_no);
 		
 		return my_memo_list;
 	}
