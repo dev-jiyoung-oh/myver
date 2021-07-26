@@ -37,6 +37,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 		
 		//return new UsernamePasswordAuthenticationToken(id, pw, user.getAuthorities());
 		//System.out.println(user.getAuthorities().toString());
+		user.setPw("");
 		return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		
 	}

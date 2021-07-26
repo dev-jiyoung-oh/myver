@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,18 +41,19 @@ public class MemoController {
 	// 21.04.26 쪽지 리스트
 	@RequestMapping(value = "/list")
 	public ModelAndView memoList(
-			@AuthenticationPrincipal MemberDTO logined,
-			HttpSession session, 
+			@AuthenticationPrincipal MemberDTO user,
 			ModelAndView mv, 
 			RedirectView rv) {
-		System.out.println("memoList - "+logined.toString());
-		if(logined.getUsername() == null) {
+		System.out.println("memoList - user - "+user.toString());
+		
+		if(user.getUsername() == null) {
+			System.out.println("memoList - 로그인을 안했어유~");
 			rv.setUrl("../login");
 			mv.setView(rv);
 			return mv;
 		}
 		
-		ArrayList<MemoDTO> my_received_memo_list = memoSVC.selectReceivedFromMemoAndMy_memo(logined.getMember_no());
+		ArrayList<MemoDTO> my_received_memo_list = memoSVC.selectReceivedFromMemoAndMy_memo(user.getMember_no());
 		
 		mv.addObject("RECEIVED_LIST", my_received_memo_list);
 		mv.setViewName("member/memo/list");
