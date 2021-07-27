@@ -6,8 +6,8 @@
 	<!-- 'blog'table ========================================================== -->
 	<!-- 21.05.03 블로그 생성 -->
 	<insert id="insertBlog" parameterType="blogDTO" useGeneratedKeys="true" keyProperty="blog_no">
-		INSERT INTO blog (member_no, blog_title, blog_nick)
-		VALUES (#{member_no}, #{blog_title}, #{blog_nick})
+		INSERT INTO blog (member_no, blog_id, blog_title, blog_nick)
+		VALUES (#{member_no}, #{blog_id}, #{blog_title}, #{blog_nick})
 	</insert>
 	
 	<!-- 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보 -->

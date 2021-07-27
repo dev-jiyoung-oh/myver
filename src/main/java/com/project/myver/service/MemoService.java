@@ -37,9 +37,11 @@ public class MemoService {
 	}
 	
 	// 21.05.06 수신자 없어서 쪽지 발송 실패했을 때 작성자에게 쪽지 발송
-	public int insertMemoWhenNoReceiver(MemoDTO failMemoDTO, int writer_no) {
+	public int insertMemoWhenNoReceiver(MemoDTO failMemoDTO, String writer_id) {
 		MemoDTO memoDTO = new MemoDTO();
-		memoDTO.setWriter_id("myver쪽지");
+		memoDTO.setWriter_id("myver_memo");
+		memoDTO.setWriter_name("myver쪽지");
+		memoDTO.setReceiver_id(writer_id);
 		memoDTO.setTitle("[발송실패 안내] " + failMemoDTO.getReceiver_id() + "으로 쪽지가 전송되지 못했습니다.");
 		
 		int memo_no = memoDAO.insertMemo(memoDTO);

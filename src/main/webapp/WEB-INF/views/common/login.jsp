@@ -10,32 +10,44 @@
 </head>
 <body>
 <form action="${pageContext.request.contextPath}/login" method="post">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-	<input type="hidden" name="loginRedirect" value="<%= request.getParameter("loginRedirect") %>" />
-
-	<table>
-		<c:if test="${not empty exceptionMsgName}">
-			<tr>
-				<td><a style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</a></td>
-			</tr>
-		</c:if>
-		<tr>
-			<td><input type="text" name="id" autofocus="autofocus" placeholder="아이디 입력" required="required" value="${id}" /></td>
-		</tr>
-		<tr>
-			<td><input type="password" name="pw" placeholder="비밀번호 입력" required="required" value="${pw}"/></td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="로그인"/></td>
-		</tr>
-		<tr>
-			<td>
-				<a href="${pageContext.request.contextPath}/findId">아이디 찾기</a>
-				<a href="${pageContext.request.contextPath}/findPw">비밀번호 찾기</a>
-				<a href="${pageContext.request.contextPath}/join">회원가입</a>
-			</td>
-		</tr>
-	</table>
+	<div class="row">
+		<div class="col"></div>
+		<div class="col">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			<input type="hidden" name="loginRedirect" value="<%= request.getParameter("loginRedirect") %>" />
+		
+			<c:if test="${not empty exceptionMsgName}">
+				<a style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</a>
+			</c:if>
+			
+			<div class="form-group my-1">
+				<div class="input-group">
+					<input type="text" name="id" autofocus="autofocus" placeholder="아이디 입력" required="required" value="${id}" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group my-1">
+				<div class="input-group">
+					<input type="password" name="pw" placeholder="비밀번호 입력" required="required" value="${pw}" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group my-1">
+				<button type="submit" class="btn btn-primary w-100">로그인</button>
+			</div>
+			
+			<ul class="nav justify-content-center">
+				<li class="nav-item">
+					<a href="${pageContext.request.contextPath}/findId" class="nav-link">아이디 찾기</a>
+				</li>
+				<li class="nav-item">
+					<a href="${pageContext.request.contextPath}/findPw" class="nav-link">비밀번호 찾기</a>
+				</li>
+				<li class="nav-item">
+					<a href="${pageContext.request.contextPath}/join" class="nav-link">회원가입</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col"></div>
+	</div>
 </form>
 </body>
 </html>

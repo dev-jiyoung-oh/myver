@@ -382,19 +382,19 @@ public class BlogController {
     	return mv;
     }
     
- // 21.06.15 내 블로그 관리 페이지
+ // 21.06.15 내 블로그 통계 페이지
     @RequestMapping(value = "/blog.admin/{blog_id}/stat/{menu}")	
     public ModelAndView blogStat(HttpSession session, 
 			       HttpServletRequest request, 
 				   ModelAndView mv, 
+				   RedirectView rv,
 				   @PathVariable("blog_id") String blog_id,
 				   @PathVariable("menu") String menu) {
     	String visitor_id = (String)session.getAttribute("MID");
     	
     	if(visitor_id==null || !blog_id.equals(visitor_id)) {
-    		System.out.println("blogConfig - loginRedirect: "+request.getRequestURI());
+    		System.out.println("BlogController - blogStat() - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
-    		RedirectView rv = new RedirectView();
 			rv.setUrl("/login");
 			mv.setView(rv);
 			return mv;

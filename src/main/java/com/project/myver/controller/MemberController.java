@@ -59,6 +59,13 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		return mv;
 	}
 	
+	// 21.07.27 회원가입 성공 폼
+	@RequestMapping(value = "/joinSuccess")
+	public ModelAndView joinSuccess(ModelAndView mv) {
+		mv.setViewName("common/join/joinSuccess");
+		return mv;
+	}
+	
 	// 21.02.12 로그인폼
 	@RequestMapping(value = "/login")
 	public String loginPage() throws Exception{

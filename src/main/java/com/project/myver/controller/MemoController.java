@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,17 @@ public class MemoController {
 	// 21.04.26 쪽지 리스트
 	@RequestMapping(value = "/list")
 	public ModelAndView memoList(
-			@AuthenticationPrincipal MemberDTO user,
-			ModelAndView mv, 
-			RedirectView rv) {
+				@AuthenticationPrincipal MemberDTO user,
+				ModelAndView mv, 
+				RedirectView rv,
+				HttpServletRequest request) {
 		System.out.println("memoList - user - "+user.toString());
 		
 		if(user.getUsername() == null) {
 			System.out.println("memoList - 로그인을 안했어유~");
-			rv.setUrl("../login");
+			System.out.println("MemoController - memoList() - loginRedirect: "+request.getRequestURI());
+    		mv.addObject("loginRedirect", request.getRequestURI());
+			rv.setUrl("/login");
 			mv.setView(rv);
 			return mv;
 		}
@@ -63,7 +67,8 @@ public class MemoController {
 	
 	// 21.04.29 쪽지 작성 폼
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public ModelAndView memoWriteFrm(ModelAndView mv) {
+	public ModelAndView memoWriteFrm(
+			ModelAndView mv) {
 		//String id = memSVC.findIdByPhone(memdto.getPhone());
 		
 		//mv.addObject("ID",id);
@@ -77,12 +82,18 @@ public class MemoController {
 	@RequestMapping(value = "/write", method = RequestMethod.POST) //, produces = "application/text; charset=utf8")
 	@ResponseBody
 	public String memoWrite(
-				ModelAndView mv,
+				@AuthenticationPrincipal MemberDTO user,
 				MemoDTO memoDTO,
-				MultipartFile[] file_array) {
+				MultipartFile[] file_array,
+				ModelAndView mv,
+				RedirectView rv,
+				HttpServletRequest request) {
 		System.out.println(memoDTO.memoToString());
 
-		// writer_id가 null인 경우 로그인 페이지로~★★★★★★
+		// 작성자 id가 null인 경우
+		if(user.getUsername() == null || memoDTO.getWriter_id() == null) {
+    		return "no_login";
+		}
 		
 		int memo_no =-1; 					// 쪽지 번호
 		double memo_size = 0D;				// 쪽지 크기
@@ -141,13 +152,14 @@ public class MemoController {
 				
 				// 21.05.06 수신자id가 회원 중에 존재하지 않는 경우
 				if(memSVC.getIdCnt(memoDTO.getReceiver_id()) == 0) {
+					System.out.println("수신자가 존재하지 않습니다.");
 					try {
 						// 작성자에게 [발송실패] 쪽지 보내기
-						memoDTO.setMemo_no(memo_no);
-						int memo_noWhenNoReceiver = memoSVC.insertMemoWhenNoReceiver(memoDTO,memSVC.selectMember_noById(memoDTO.getWriter_id()));
+						int memo_noWhenNoReceiver = memoSVC.insertMemoWhenNoReceiver(memoDTO,memoDTO.getWriter_id());
 			
 						// url 바로가기 파일 생성
 						// URL = http://localhost:8080/myver/memo/popup/mn=쪽지번호(실패한 쪽지의 번호)
+						// 미완★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 						FileDTO fileDTOWhenNoReceiver = fileSVC.uploadUrlFile(memo_no, memoDTO.getTitle());
 						
 						// 'file' table에 데이터 삽입하고 파일번호 가져오기

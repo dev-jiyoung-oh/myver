@@ -18,11 +18,6 @@
    </style>
 </head>
 <body>
-
-<a class="hanSansYello">MY</a>
-<a class="hanSansGreen">VER</a>&nbsp;
-<a class="hanSansGreen">블로그</a>
-
 <div class="row">
 	<div class="col-md-12">
 		<a>이웃 블로그</a>
@@ -49,9 +44,9 @@
 		<c:if test="${BLOG.blog_id eq sessionScope.MID}">
 			<div>
 				<div>
-					<a href="">관리</a>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config">관리</a>
 					·
-					<a href="#">통계</a>
+					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">통계</a>
 				</div>
 				<div>
 					<a href="#">글쓰기</a>
