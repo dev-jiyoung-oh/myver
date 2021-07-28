@@ -21,7 +21,7 @@
 </head>
 
 
-<header class="navbar navbar-expand-md navbar-light bg-light">
+<header class="navbar navbar-expand-md navbar-light bg-light border-bottom">
 	<div class="container">
 	    <a class="navbar-brand text-success" href="${pageContext.request.contextPath}/">
 	    	<img src="${pageContext.request.contextPath}/resources/img/myver_logo.png" height="34"/>

@@ -46,15 +46,30 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public ModelAndView join(MemberDTO memDTO, ModelAndView mv) {
 		System.out.println("join - " + memDTO.toString());
-		int member_no = memSVC.join(memDTO);
-
-		// 21.05.19 해당 아이디의 블로그 생성
-		int blog_no = blogSVC.insertBlog(member_no, memDTO.getUsername(), memDTO.getNick());
+		boolean successed = true;
 		
-		// 21.05.28 블로그 기본 카테고리('전체보기') 생성
-		blogSVC.insertDefaultBlogCategory(blog_no);
+		try {
+			// member 테이블에 추가
+			int member_no = memSVC.join(memDTO);
+	
+			// 21.05.19 해당 아이디의 블로그 생성
+			int blog_no = blogSVC.insertBlog(member_no, memDTO.getUsername(), memDTO.getNick());
+			
+			// 21.05.28 블로그 기본 카테고리('전체보기') 생성
+			blogSVC.insertDefaultBlogCategory(blog_no);
+		}catch(Exception e) {
+			System.out.println("회원가입 실패 "+e.getStackTrace());
+			successed = false;
+		}
 		
-		RedirectView rv = new RedirectView("./joinSuccess");
+		RedirectView rv;
+		
+		if(successed) {
+			rv = new RedirectView("./joinSuccess");
+		}else {
+			rv = new RedirectView("./joinFail");
+		}
+		
 		mv.setView(rv);
 		return mv;
 	}
@@ -66,9 +81,19 @@ public class MemberController { //extends SimpleUrlAuthenticationSuccessHandler
 		return mv;
 	}
 	
+	// 21.07.28 회원가입 실패 폼
+	@RequestMapping(value = "/joinFail")
+	public ModelAndView joinSFail(ModelAndView mv) {
+		mv.setViewName("common/join/joinFail");
+		return mv;
+	}
+	
 	// 21.02.12 로그인폼
-	@RequestMapping(value = "/login")
-	public String loginPage() throws Exception{
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginPage(HttpServletRequest request) throws Exception{
+		String referer = request.getHeader("referer");
+		request.getSession().setAttribute("prevPage", referer);
+		System.out.println("이전 페이지: "+referer);
 		return "common/login";
 	}
 	

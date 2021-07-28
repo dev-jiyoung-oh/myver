@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,16 +96,11 @@ public class BlogController {
 				     @RequestParam(value="query", defaultValue="") String query, 
 				     @RequestParam(value="currentPage", defaultValue="1") int currentPage,
 				     @RequestParam(value="blog_category_no", defaultValue="-1") int blog_category_no) {
-		// "myver/blog/"로 들어온 경우 블로그 홈으로 이동
-		if(blog_id.length() == 0) { 
-			mv.setViewName("blog/home");
-			return mv;
-		}
 		
-		// 블로그 주인 회원 번호
-		int blog_member_no = memSVC.selectMember_noById(blog_id);
+		// 블로그 주인 id count 가져오기
+		int idCnt = memSVC.getIdCnt(blog_id);
 		
-		if(blog_member_no == 0) { // member id(blogId)가 존재하지 않는 경우 (혹은 member id가 관리자인 경우)
+		if(idCnt == 0) { // member id(blogId)가 존재하지 않는 경우
 			System.out.println("blog id가 존재하지 않음");
 			mv.setViewName("blog/no_blog");
 			return mv;
@@ -112,6 +108,7 @@ public class BlogController {
 		
 		// 21.05.19 member_no(blog_id)로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
+		
 		
 		//방문자
 		String visitor_id = (String)session.getAttribute("MID");
@@ -142,8 +139,8 @@ public class BlogController {
 		}
 		
 		// 21.05.24 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
-		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
-		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blogDTO.getMember_no());
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blogDTO.getMember_no());
 		
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWING", followingList);
@@ -169,20 +166,23 @@ public class BlogController {
 				   @PathVariable("blog_object_no") int blog_object_no, 
 				   @RequestParam(value="query", defaultValue="") String query,
 				   @RequestParam(value="blog_category_no", defaultValue="-1") int blog_category_no) {	
-		if(blog_id.length() == 0) {
+		
+    	if(blog_id.length() == 0) {
 			mv.setViewName("blog/home");
+			return mv;
+		}
+		
+    	// 블로그 주인 id count 가져오기
+		int idCnt = memSVC.getIdCnt(blog_id);
+		
+		if(idCnt == 0) { // member id(blogId)가 존재하지 않는 경우
+			System.out.println("blog id가 존재하지 않음");
+			mv.setViewName("blog/no_blog");
 			return mv;
 		}
 		
 		// 블로그 주인 회원 번호
 		int blog_member_no = memSVC.selectMember_noById(blog_id);
-		
-		// 블로그가 존재하지 않는 경우 <- member id(blog_member_no)가 존재하지 않는 경우(혹은 member id가 관리자인 경우)
-		if(blog_member_no == 0) { 
-			System.out.println("member id == 0");
-			mv.setViewName("blog/no_blog");
-			return mv;
-		}
 		
 		//방문자 id
 		String visitor_id = (String)session.getAttribute("MID");
@@ -250,12 +250,40 @@ public class BlogController {
 		return mv;
     }
 
+    // 21.07.28 블로그 글 작성 폼
+    @RequestMapping(value = "/blog/{blog_id}/write", method = RequestMethod.GET)	
+    public ModelAndView blogWriteObjectForm(
+    			ModelAndView mv,
+    			RedirectView rv,
+    			@AuthenticationPrincipal MemberDTO user,
+    			@PathVariable("blog_id") String blog_id) {
+    	System.out.println("BlogController - blogWriteObjectForm()");
+    	if(user == null || user.getId() != blog_id) {
+    		//rv.setUrl(url);
+    		//mv.setView(rv);
+    		//return mv;
+    		System.out.println("로그인 아이디 없음, 혹은 블로그 아이디와 현재 로그인된 아이디가 같지 않음.");
+    	}
+    	mv.setViewName("blog/write");
+    	return mv;
+    }
+    
+    // 21.07.28 블로그 글 작성
+    @RequestMapping(value = "/blog/{blog_id}/write", method = RequestMethod.POST)	
+    public ModelAndView blogWriteObject(
+    			ModelAndView mv,
+    			@PathVariable("blog_id") String blog_id) {
+    	System.out.println("BlogController - blogWriteObject()");
+    	mv.setViewName("blog/write");
+    	return mv;
+    }
+    
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
     @RequestMapping(value = "/blog.admin/{blog_id}/config")	
     public ModelAndView blogConfig(HttpSession session, 
-    			   HttpServletRequest request,
-				   ModelAndView mv,
-				   @PathVariable("blog_id") String blog_id) {
+    			HttpServletRequest request,
+				ModelAndView mv,
+				@PathVariable("blog_id") String blog_id) {
     	String visitor_id = (String)session.getAttribute("MID");
     	
     	if(visitor_id==null || !blog_id.equals(visitor_id)) {

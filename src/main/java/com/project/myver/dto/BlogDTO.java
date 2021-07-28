@@ -50,7 +50,7 @@ public class BlogDTO {
 	private String title;			//제목
 	private String content;			//내용
 	//private Date date;			//작성일
-	//private int is_public;		//공개 여부(0:비공개, 1:공개)
+	private int open_type;			//공개 설정(전체공개:0, 이웃공개:1, 비공개:2)
 	private int hits;				//조회수
 	private int likes;				//좋아요수
 	
@@ -239,6 +239,12 @@ public class BlogDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public int getOpen_type() {
+		return open_type;
+	}
+	public void setOpen_type(int open_type) {
+		this.open_type = open_type;
+	}
 	public int getHits() {
 		return hits;
 	}
@@ -309,18 +315,41 @@ public class BlogDTO {
 	
 	@Override
 	public String toString() {
-		return "BlogDTO [blog_no=" + blog_no + ", member_no=" + member_no + ", blog_id=" + blog_id + ", blog_title="
-				+ blog_title + ", blog_nick=" + blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic
-				+ ", blog_img_no=" + blog_img_no + ", blog_category_no=" + blog_category_no + ", parent_category_no="
-				+ parent_category_no + ", category_index=" + category_index + ", category_name=" + category_name
-				+ ", is_public=" + is_public + ", topic=" + topic + ", type=" + type + ", show_list=" + show_list
-				+ ", list_line=" + list_line + ", objects_per_page=" + objects_per_page + ", is_basic=" + is_basic
+		return "BlogDTO [commentDTO=" + commentDTO + ", str_date=" + str_date + ", rank=" + rank + ", blog_no="
+				+ blog_no + ", member_no=" + member_no + ", blog_id=" + blog_id + ", blog_title=" + blog_title
+				+ ", blog_nick=" + blog_nick + ", blog_info=" + blog_info + ", blog_topic=" + blog_topic
+				+ ", blog_img_no=" + blog_img_no + ", objects_per_page=" + objects_per_page + ", blog_category_no="
+				+ blog_category_no + ", parent_category_no=" + parent_category_no + ", category_index=" + category_index
+				+ ", category_name=" + category_name + ", is_public=" + is_public + ", topic=" + topic + ", type="
+				+ type + ", show_list=" + show_list + ", list_line=" + list_line + ", is_basic=" + is_basic
 				+ ", is_upper=" + is_upper + ", all_category=" + all_category + ", blog_visit_no=" + blog_visit_no
 				+ ", visitor_no=" + visitor_no + ", query=" + query + ", date=" + date + ", blog_object_no="
-				+ blog_object_no + ", title=" + title + ", content=" + content + ", hits=" + hits + ", likes=" + likes
-				+ ", blog_object_like_no=" + blog_object_like_no + ", id=" + id + ", blog_neighbor_no="
-				+ blog_neighbor_no + ", neighbor_member_no=" + neighbor_member_no + ", path=" + path + ", saved_name="
-				+ saved_name + "]";
+				+ blog_object_no + ", title=" + title + ", content=" + content + ", open_type=" + open_type + ", hits="
+				+ hits + ", likes=" + likes + ", blog_object_like_no=" + blog_object_like_no + ", id=" + id
+				+ ", blog_neighbor_no=" + blog_neighbor_no + ", neighbor_member_no=" + neighbor_member_no + ", path="
+				+ path + ", saved_name=" + saved_name + ", getBlog_no()=" + getBlog_no() + ", getMember_no()="
+				+ getMember_no() + ", getBlog_id()=" + getBlog_id() + ", getBlog_title()=" + getBlog_title()
+				+ ", getBlog_nick()=" + getBlog_nick() + ", getBlog_info()=" + getBlog_info() + ", getBlog_topic()="
+				+ getBlog_topic() + ", getBlog_img_no()=" + getBlog_img_no() + ", getBlog_category_no()="
+				+ getBlog_category_no() + ", getParent_category_no()=" + getParent_category_no()
+				+ ", getCategory_index()=" + getCategory_index() + ", getCategory_name()=" + getCategory_name()
+				+ ", getIs_public()=" + getIs_public() + ", getTopic()=" + getTopic() + ", getType()=" + getType()
+				+ ", getShow_list()=" + getShow_list() + ", getList_line()=" + getList_line()
+				+ ", getObjects_per_page()=" + getObjects_per_page() + ", getIs_basic()=" + getIs_basic()
+				+ ", getIs_upper()=" + getIs_upper() + ", getAll_category()=" + getAll_category()
+				+ ", getBlog_visit_no()=" + getBlog_visit_no() + ", getVisitor_no()=" + getVisitor_no()
+				+ ", getQuery()=" + getQuery() + ", getDate()=" + getDate() + ", getBlog_object_no()="
+				+ getBlog_object_no() + ", getTitle()=" + getTitle() + ", getContent()=" + getContent()
+				+ ", getOpen_type()=" + getOpen_type() + ", getHits()=" + getHits() + ", getLikes()=" + getLikes()
+				+ ", getBlog_object_like_no()=" + getBlog_object_like_no() + ", getId()=" + getId()
+				+ ", getBlog_neighbor_no()=" + getBlog_neighbor_no() + ", getNeighbor_member_no()="
+				+ getNeighbor_member_no() + ", getPath()=" + getPath() + ", getSaved_name()=" + getSaved_name()
+				+ ", getCommentDTO()=" + getCommentDTO() + ", getStr_date()=" + getStr_date() + ", getRank()="
+				+ getRank() + ", blogToString()=" + blogToString() + ", blog_categoryToString()="
+				+ blog_categoryToString() + ", blog_visitToString()=" + blog_visitToString()
+				+ ", blog_objectToString()=" + blog_objectToString() + ", blog_object_likeToString()="
+				+ blog_object_likeToString() + ", blog_neighborToString()=" + blog_neighborToString() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}	
 	
 	public String blogToString() {
@@ -346,7 +375,7 @@ public class BlogDTO {
 	public String blog_objectToString() {
 		return "BlogDTO - blog_object [blog_object_no=" + blog_object_no+ ", blog_category_no=" + blog_category_no 
 				+ ",category_name= " + category_name + ", title=" + title + ", content=" + content + ", date=" + date
-				+ ", is_public=" + is_public + ", hits=" + hits + ", likes=" + likes + "]";
+				+ ", open_type=" + open_type + ", hits=" + hits + ", likes=" + likes + "]";
 	}
 	
 	public String blog_object_likeToString() {

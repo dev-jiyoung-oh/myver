@@ -30,11 +30,7 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	public int getIdCnt(String id) {
 		int result = session.selectOne("member.getIdCnt", id);
 		
-		if(result==1) {
-			System.out.println("MemberDAO.getIdCnt() - " + id+" 유저 존재함");
-		}else {
-			System.out.println("MemberDAO.getIdCnt() - " + id+" 유저 " + result + "명");
-		}
+		System.out.println("MemberDAO.getIdCnt() - " + id+" 유저 " + result + "명");
 		
 		return result;
 	}

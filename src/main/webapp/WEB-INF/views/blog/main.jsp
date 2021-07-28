@@ -49,7 +49,7 @@
 					<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">통계</a>
 				</div>
 				<div>
-					<a href="#">글쓰기</a>
+					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}/write">글쓰기</a>
 				</div>
 			</div>
 		</c:if>

@@ -10,7 +10,7 @@
 </head>
 	<body>
 		<tiles:insertAttribute name="header"/> <%--  value="/WEB-INF/common/layout/header.jsp" --%>
-		<div class="container">
+		<div class="container" id="body_container">
 			<tiles:insertAttribute name="body"/>
 		</div>
 		<tiles:insertAttribute name="footer"/> <%--  value="/WEB-INF/views/common/layout/footer.jsp" --%>

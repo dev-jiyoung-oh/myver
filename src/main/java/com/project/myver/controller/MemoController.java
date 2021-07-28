@@ -60,7 +60,7 @@ public class MemoController {
 		ArrayList<MemoDTO> my_received_memo_list = memoSVC.selectReceivedFromMemoAndMy_memo(user.getMember_no());
 		
 		mv.addObject("RECEIVED_LIST", my_received_memo_list);
-		mv.setViewName("member/memo/list");
+		mv.setViewName("memo/list");
 		
 		return mv;
 	}
@@ -73,7 +73,7 @@ public class MemoController {
 		
 		//mv.addObject("ID",id);
 		
-		mv.setViewName("member/memo/write");
+		mv.setViewName("memo/write");
 		
 		return mv;
 	}
@@ -226,7 +226,7 @@ public class MemoController {
 	// 21.05.11 쪽지 상세 (mn: memo_no)
 	@RequestMapping(value = "/read")
 	public ModelAndView memoRead(ModelAndView mv, int mn) {
-		mv.setViewName("member/memo/read");
+		mv.setViewName("memo/read");
 		return mv;
 	}
 	

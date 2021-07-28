@@ -138,7 +138,7 @@
 		ORDER BY category_index
 	</select>
 	
-	<!-- 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper -->
+	<!-- 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기 -->
 	<select id="selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper" parameterType="Integer" resultType="BlogDTO">
 		SELECT blog_category_no, category_name, is_public, parent_category_no, is_upper
 		FROM blog_category 

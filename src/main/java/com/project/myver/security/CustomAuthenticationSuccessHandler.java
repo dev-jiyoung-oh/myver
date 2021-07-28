@@ -84,19 +84,19 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		int intRedirectStrategy = decideRedirectStrategy(request, response);
 		switch(intRedirectStrategy) {
 		case 1:
-			System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - targetUrl = "+targetUrlParameter);
 			useTargetUrl(request, response);
 			break;
 		case 2:
-			System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - sessionUrl = "+ requestCache.getRequest(request, response));
 			useSessionUrl(request, response);
 			break;
 		case 3:
-			System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - refererUrl = "+ request.getHeader("REFERER"));
+			System.out.println("여기야~");
+			useSessionUrl2(request, response);
+			break;
+		case 4:
 			useRefererUrl(request, response);
 			break;
 		default:
-			System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - defaultUrl");
 			useDefaultUrl(request, response);
 		}
 	}
@@ -113,6 +113,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	
 	private void useTargetUrl(HttpServletRequest request, HttpServletResponse response) 
 			throws IOException {
+		System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - targetUrl = "+targetUrlParameter);
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
 		
 		if(savedRequest != null) {
@@ -127,14 +128,25 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
 		String targetUrl = savedRequest.getRedirectUrl();
 		redirectStrategy.sendRedirect(request, response, targetUrl);
+		System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - sessionUrl = "+ targetUrl);
+	}
+	
+	private void useSessionUrl2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		String prevPage = (String)session.getAttribute("prevPage");
+		session.removeAttribute("prevPage");
+		System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - prevPage = "+ prevPage);
+		redirectStrategy.sendRedirect(request, response, prevPage);
 	}
 	
 	private void useRefererUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String targetUrl = request.getHeader("REFERER");
+		System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - refererUrl = "+ targetUrl);
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
 	
 	private void useDefaultUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("CustomAuthenticationSuccessHandler.onAuthenticationSuccess - defaultUrl");
 		redirectStrategy.sendRedirect(request, response, defaultUrl);
 	}
 	
@@ -142,15 +154,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	 * 판단 기준은 
 	 * 1순위 : targetUrlParameter값을 읽은 URL이 존재할 경우
 	 * 2순위 : 1순위 URL이 없을 경우, Spring Security가 세션에 저장한 URL
-	 * 3순위 : 2순위 URL이 없을 경우, Request의 REFERER을 사용하고 그 REFERER URL이 존재할 경우
-	 * 4순위 : 3순위 URL이 없을 경우, Default URL
+	 * 3순위 : 2순위 URL이 없을 경우, 로그인 페이지에서 referer을 저장한 URL이 존재할 경우
+	 * 4순위 : 3순위 URL이 없을 경우, Request의 REFERER을 사용하고 그 REFERER URL이 존재할 경우
+	 * 5순위 : 4순위 URL이 없을 경우, Default URL
 	 * 
 	 * @param request
 	 * @param response
-	 * @return 1 : targetUrlParameter값을 읽은 url
-	 *         2 : Session에 저장되어 있는 url
-	 *         3 : referer 헤더에 있는 url
-	 *         0 : default url 
+	 * @return 1 : targetUrlParameter값을 읽은 URL
+	 *         2 : Session에 저장되어 있는 URL(1)
+	 *         3 : Session에 저장되어 있는 URL(2) - login page에서 선언한 URL
+	 *         4 : referer 헤더에 있는 URL
+	 *         0 : default URL 
 	 */
 	private int decideRedirectStrategy(HttpServletRequest request, HttpServletResponse response) {
 	
@@ -167,10 +181,21 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 				if(savedRequest != null) {
 					result = 2;
 				}else {
+					HttpSession session = request.getSession();
+					
+					if(session != null) {
+						String prevPage = (String)session.getAttribute("prevPage");
+						
+						if(prevPage != null) {
+							result = 3;
+							return result;
+						}
+					}
+					
 					String refererUrl = request.getHeader("REFERER");
 					
 					if(useReferer && StringUtils.hasText(refererUrl)) {
-						result = 3;
+						result = 4;
 					}else {
 						result = 0;
 					}
