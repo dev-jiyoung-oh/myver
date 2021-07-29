@@ -23,7 +23,7 @@ public class PageUtil {
 	private int no;					// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
 	private String column_name;		// no의 컬럼명(블로그 카테고리 번호 혹은 블로그 번호)
 	private boolean is_owner;		// 주인 여부
-	
+	private boolean is_neighbor;	// 이웃 여부(주인이 아닌 경우, 로그인한 본인이 해당 블로그의 이웃인지)
 	// 검색 시 필요한 파라미터
 	private String searchWord; //
 	private String searchType; //
@@ -39,6 +39,7 @@ public class PageUtil {
 	private String ftype;
 	private String fid;
 	private int fno; //(자유게시판 댓글 출력용)
+	
 	/*
 	public PageUtil(int nowPage, int totalCount) {
 		this(nowPage, totalCount, 10, 5);
@@ -58,7 +59,7 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean is_owner) {
+	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean is_owner, boolean is_neighbor) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
@@ -66,6 +67,7 @@ public class PageUtil {
 		this.no = no;
 		this.column_name = column_name;
 		this.is_owner = is_owner;
+		this.is_neighbor = is_neighbor;
 		
 		calcTotalPage();
 		calcStartPage();
@@ -332,6 +334,12 @@ public class PageUtil {
 	}
 	public void setIs_owner(boolean is_owner) {
 		this.is_owner = is_owner;
+	}
+	public boolean getIs_neighbor() {
+		return is_neighbor;
+	}
+	public void setIs_neighbor(boolean is_neighbor) {
+		this.is_neighbor = is_neighbor;
 	}
 
 	@Override

@@ -90,7 +90,7 @@ public class MemoController {
 				HttpServletRequest request) {
 		System.out.println(memoDTO.memoToString());
 
-		// 작성자 id가 null인 경우
+		// 로그인하지 않았을 경우 및 작성자 id가 null인 경우
 		if(user.getUsername() == null || memoDTO.getWriter_id() == null) {
     		return "no_login";
 		}

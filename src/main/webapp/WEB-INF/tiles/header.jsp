@@ -16,12 +16,20 @@
 			$('#logout_btn').click(function(){
 				$('#logout_frm').submit();
 			})
+			
+			$('#header_cafe_li').click(function(){
+				alert('현재 준비중인 서비스입니다. 잠시후에 만나요!');
+			})
+			
+			$('#header_help_li').click(function(){
+				alert('현재 준비중인 서비스입니다. 잠시후에 만나요!');
+			})
 		})
 	</script>
 </head>
 
 
-<header class="navbar navbar-expand-md navbar-light bg-light border-bottom">
+<header class="navbar navbar-expand-md navbar-light bg-white border-bottom">
 	<div class="container">
 	    <a class="navbar-brand text-success" href="${pageContext.request.contextPath}/">
 	    	<img src="${pageContext.request.contextPath}/resources/img/myver_logo.png" height="34"/>
@@ -40,11 +48,11 @@
 	        	<li class="nav-item">
 	          		<a class="nav-link text-success nav-custom-a" href="${pageContext.request.contextPath}/blog/home">블로그</a>
 	        	</li>
-		        <li class="nav-item">
-		          	<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">카페</a>
+		        <li id="header_cafe_li" class="nav-item">
+		          	<a id="header_cafe_a" class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">카페</a>
 		        </li>
-		        <li class="nav-item">
-		          	<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">고객센터</a>
+		        <li id="header_help_li" class="nav-item">
+		          	<a id="header_help_a" class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">고객센터</a>
 		        </li>
 	        </ul>
 	    

@@ -11,32 +11,48 @@
 <script type="text/javascript">
 	$(function(){
 		$('#body_container').css('height', '93vh');
-		$('#body_container').attr('class', 'container-fluid');
-		$('#body_container').addClass('d-flex');
-		$('#body_container').addClass('flex-column');
+		$('#body_container').attr('class', 'container-fluid d-flex flex-column p-0');
 		
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
 
+		// 라디오버튼 클릭시 이벤트 발생
+	    $("input:radio[name=radio_time]").click(function(){
+	        if($('#radio_time_reservation').is(":checked")){
+	            $("#reservation_time_div").attr("class", "d-block");
+	        }else{
+	        	$("#reservation_time_div").attr("class", "d-none");
+	        }
+	    });
+		
 		// 게시글 발행 ====================================================================
-		$('#write_object_submit_btn').click(function(){
+		$('#submit_btn').click(function(){
 			// 받는사람 없는 경우 처리
 			if(!$('#title').val()){
 				alert('제목을 입력해주세요.');
+				$('#submit_cancel_btn').click();
 				return false;
 			}
 			
 			// 제목 없는 경우 처리
 	  		if(!$('#content').val()){
 	  			alert('본문 내용을 입력해주세요.');
+	  			$('#submit_cancel_btn').click();
 				return false;
 	  		}
 			
+	  		if($('#radio_time_reservation').is(":checked")){
+	            alert("발행시간 예약");
+	        }
+	  		
+			alert('제목: '+$('#title').val()+', 내용: '+$('#content').val()+', 카테고리: '+$('#category').val()+', 공개 설정: '+$('[name="open_type"]:checked').val()+", 발행 시간: "+$('[name="radio_time"]:checked').val());
 			// 예약한 경우, 발행시간 가져와서 담기)★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-			//$('#write_object').submit();
-		})
-
+			$('#open_type').val($('[name="open_type"]:checked').val());
+			
+			$('#write_object_frm').submit();
+		});
+	});
 </script>
 </head>
 
@@ -52,162 +68,13 @@
 							</svg>
 					</button>
 
-					<button type="button" class="btn btn-success">
+					<button type="button" class="btn btn-success" data-toggle="modal" data-target="#object_set_modal">
 						<span>발행</span>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
 							<path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1z" />
 						</svg>
 					</button>
 				</div>
-			</div>
-
-			<div>
-				<table>
-					<tr>
-						<td>카테고리</td>
-						<td>
-							<select>
-								<option>전체보기</option>
-								<option>g</option>
-							</select>
-						</td>
-					</tr>
-					<%--
-					<tr>
-						<td>주제</td>
-						<td></td>
-					</tr>
-					 --%>
-					<tr>
-						<td>공개 설정</td>
-						<td>
-							<ul>
-								<li>
-									<input id="open_public" type="radio" name="open_type"> 
-									<label for="open_public">전체공개</label>
-								</li>
-								<li>
-									<input id="open_neighbor" type="radio" name="open_type"> 
-									<label for="open_neighbor">이웃공개</label>
-								</li>
-								<li>
-									<input id="open_private" type="radio" name="open_type"> 
-									<label for="open_private">비공개</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td>발행 설정</td>
-						<td>
-							<ul>
-								<li>
-									<input id="publish-option-comment" type="checkbox"> 
-									<label for="publish-option-comment">댓글허용</label>
-								</li>
-								<li>
-									<input id="publish-option-like" type="checkbox"> 
-									<label for="publish-option-like">공감허용</label>
-								</li>
-								<li>
-									<input id="publish-option-search" type="checkbox"> 
-									<label for="publish-option-search">검색허용</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<%--
-					<tr>
-						<td colspan="2">
-							<input type="checkbox" i> 
-							<label>이 설정을 기본값으로 유지</label>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>태그 편집</td>
-						<td></td>
-					</tr>
-					 --%>
-					<tr>
-						<td>발행 시간</td>
-						<td>
-							<ul>
-								<li>
-									<input id="radio_time1" type="radio" name="radio_time" value="now"> 
-									<label for="radio_time1">현재</label>
-								</li>
-								<li>
-									<input id="radio_time2" type="radio" name="radio_time" value="reservation"> 
-									<label for="radio_time2">예약</label>
-								</li>
-							</ul>
-							<div>
-								<p>설정한 시간으로 예약 발행됩니다.</p>
-								<div>
-									<div>
-										<input type="text" readonly value="오늘 날짜">
-										<div>달력 그리기</div>
-									</div>
-									<div>
-										<select title="예약 발행 시간 선택" id="reservation_hour">
-											<option value="00">00</option>
-											<option value="01">01</option>
-											<option value="02">02</option>
-											<option value="03">03</option>
-											<option value="04">04</option>
-											<option value="05">05</option>
-											<option value="06">06</option>
-											<option value="07">07</option>
-											<option value="08">08</option>
-											<option value="09">09</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-										</select>
-									</div>
-									<div>
-										<select title="예약 발행 분 선택" id="reservation_minute">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									</div>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<button id="" type="button" class="btn btn-outline-danger">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-									<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-								</svg>
-								<span>취소</span>
-							</button>
-							<button id="write_object_submit_btn" type="button" class="btn btn-outline-success">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-									<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-								</svg>
-								<span>발행</span>
-							</button>
-						</td>
-					</tr>
-				</table>
 			</div>
 		</div>
 	</div>
@@ -217,14 +84,15 @@
 			<div class="row h-100">
 				<div class="col"></div>
 				<div class="col-md-10">
-					<form id="write_object_frm" class="h-100 d-flex flex-column">
-						<input type="hidden" name="date" value="" />
+					<form id="write_object_frm" action="${pageContext.request.contextPath}/blog/${BLOG_ID}/write" method="POST" class="h-100 d-flex flex-column">
+						<input type="hidden" id="open_type" name="open_type">
+						<input type="hidden" id="date" name="date" value="" />
 						<div class="input-group">
-							<input type="text" name="title" id="title" class="form-control p-5" placeholder="제목" style="border-top: none; border-color: #dee2e6; border-radius: 0; font-size: 32px;">
+							<input type="text" id="title" name="title" class="form-control p-5" placeholder="제목" style="border-top: none; border-color: #dee2e6; border-radius: 0; font-size: 32px;">
 						</div>
 
 						<div class="input-group h-100">
-							<textarea name="content" id="content" class="form-control p-5" placeholder="본문을 입력해주세요." style="border-top: none; border-color: #dee2e6; border-radius: 0; resize: none;"></textarea>
+							<textarea id="content" name="content" class="form-control p-5" placeholder="본문을 입력해주세요." style="border-top: none; border-color: #dee2e6; border-radius: 0; resize: none;"></textarea>
 						</div>
 						
 						<%-- <tr>
@@ -254,5 +122,179 @@
 		</div>
 	</div>
 
+	<!-- 모달창 -->
+	<div class="modal" id="object_set_modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modar-body px-4 py-3">
+					<table>
+						<tr>
+							<td>카테고리</td>
+							<td>
+								<select id="category">
+									<c:forEach items="${CATEGORY_LIST}" var="category">
+										<option value="${category.blog_category_no}" 
+											<c:if test="${category.is_basic eq 1}">selected</c:if>>
+											<c:if test="${category.parent_category_no ne 0}">
+												ㄴ
+											</c:if>
+											<c:if test="${category.is_public eq 1}">
+												(비공개) 
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+													<path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+												</svg>
+											</c:if>
+											${category.category_name}
+										</option>
+									</c:forEach>
+								</select>
+							</td>
+						</tr>
+						<%--
+						<tr>
+							<td>주제</td>
+							<td></td>
+						</tr>
+						 --%>
+						<tr>
+							<td>공개 설정</td>
+							<td>
+								<ul>
+									<li>
+										<input id="open_public" type="radio" name="open_type" value="0" checked> 
+										<label for="open_public">전체공개</label>
+									</li>
+									<li>
+										<input id="open_neighbor" type="radio" name="open_type" value="1"> 
+										<label for="open_neighbor">이웃공개</label>
+									</li>
+									<li>
+										<input id="open_private" type="radio" name="open_type" value="2"> 
+										<label for="open_private">비공개</label>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<%-- 
+						<tr>
+							<td>발행 설정</td>
+							<td>
+								<ul>
+									<li>
+										<input id="publish-option-comment" name="publish-option" type="checkbox"> 
+										<label for="publish-option-comment">댓글허용</label>
+									</li>
+									<li>
+										<input id="publish-option-like" name="publish-option" type="checkbox"> 
+										<label for="publish-option-like">공감허용</label>
+									</li>
+									<li>
+										<input id="publish-option-search" name="publish-option" type="checkbox"> 
+										<label for="publish-option-search">검색허용</label>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="checkbox" i> 
+								<label>이 설정을 기본값으로 유지</label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>태그 편집</td>
+							<td></td>
+						</tr>
+						 --%>
+						<tr>
+							<td>발행 시간</td>
+							<td>
+								<ul>
+									<li>
+										<input id="radio_time_now" type="radio" name="radio_time" value="now" checked> 
+										<label for="radio_time_now">현재</label>
+									</li>
+									<li>
+										<input id="radio_time_reservation" type="radio" name="radio_time" value="reservation"> 
+										<label for="radio_time_reservation">예약</label>
+									</li>
+								</ul>
+								<div id="reservation_time_div" class="d-none">
+									<p>
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
+											<path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
+											<path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
+										</svg>
+										<a id="time_setting_text">
+											설정한 시간으로 예약 발행됩니다.
+										</a>
+									</p>
+									<div>
+										<div>
+											<input type="text" readonly value="오늘 날짜">
+											<div>달력 그리기</div>
+										</div>
+										<div>
+											<select title="예약 발행 시간 선택" id="reservation_hour">
+												<option value="00">00</option>
+												<option value="01">01</option>
+												<option value="02">02</option>
+												<option value="03">03</option>
+												<option value="04">04</option>
+												<option value="05">05</option>
+												<option value="06">06</option>
+												<option value="07">07</option>
+												<option value="08">08</option>
+												<option value="09">09</option>
+												<option value="10">10</option>
+												<option value="11">11</option>
+												<option value="12">12</option>
+												<option value="13">13</option>
+												<option value="14">14</option>
+												<option value="15">15</option>
+												<option value="16">16</option>
+												<option value="17">17</option>
+												<option value="18">18</option>
+												<option value="19">19</option>
+												<option value="20">20</option>
+												<option value="21">21</option>
+												<option value="22">22</option>
+												<option value="23">23</option>
+											</select>
+										</div>
+										<div>
+											<select title="예약 발행 분 선택" id="reservation_minute">
+												<option value="00">00</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="40">40</option>
+												<option value="50">50</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer px-4 py-3">
+					<button id="submit_cancel_btn" type="button" class="btn btn-outline-danger" data-dismiss="modal">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+							<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+						</svg>
+						<span>취소</span>
+					</button>
+					<button id="submit_btn" type="button" class="btn btn-outline-success">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+							<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+						</svg>
+						<span>발행</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

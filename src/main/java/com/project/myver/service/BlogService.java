@@ -51,7 +51,7 @@ public class BlogService {
 	}
 	
 	// 21.06.12 블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
-	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, boolean is_owner, int blog_category_no, int currentPage) {
+	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, boolean is_owner, boolean is_neighbor, int blog_category_no, int currentPage) {
 		Map<String, Object> map = new HashMap<>();
 		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
 		int no = -1;			 // blog_category_no 혹은 blog_no가 들어갈 예정
@@ -156,9 +156,9 @@ public class BlogService {
 		// 21.05.27 블로그 글 테이블에서 'blog_no' 혹은 'blog_category_no'에 해당하는 개수 가져오기
 		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, is_owner);
 		
-		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,is_owner)
-		PageUtil listInfo = new PageUtil(currentPage,totalCount,blog_category.getList_line(),no,column_name,is_owner);
-		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blogDTO.getObjects_per_page(),no,column_name,is_owner);
+		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,is_owner,is_neighbor)
+		PageUtil listInfo = new PageUtil(currentPage,totalCount,blog_category.getList_line(),no,column_name,is_owner,is_neighbor);
+		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blogDTO.getObjects_per_page(),no,column_name,is_owner,is_neighbor);
 		
 		// 21.05.27 목록 내용 가져오기
 		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);

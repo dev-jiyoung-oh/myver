@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<footer class="bg-light">
+<footer class="bg-white border-top">
 	<div class="container">
 		<a target="_blank" href="undefined/icons/set/important-mail">Important Mail icon</a> icon by <a target="_blank" href="">Icons8</a>
 		<br/>

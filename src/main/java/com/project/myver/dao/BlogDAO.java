@@ -125,7 +125,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectTotalCountByNoFromBlog_object", map);
 	}
 
-	// 21.05.27 목록 내용 가져오기 (전체/공개)
+	// 21.05.27 목록 내용 가져오기 (전체(공개+이웃+비공개) / 공개+이웃 / 공개)
 	public List<BlogDTO> selectListDetailByNoFromBlog_object(PageUtil listInfo) {
 		return session.selectList("blog.selectListDetailByNoFromBlog_object", listInfo);
 	}

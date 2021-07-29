@@ -166,6 +166,66 @@
 	
 	
 	<!-- 'blog_object'table =================================================================== -->
+	<!-- 21.06.09 게시물 조회수 업데이트(증가) -->
+	<update id="updateBlogObjectHits" parameterType="Integer">
+		UPDATE blog_object
+		SET
+		hits = hits+1
+		where blog_object_no = #{blog_object_no}
+	</update>
+
+	<!-- 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기 -->
+	<select id="selectBlog_object" parameterType="Map" resultType="blogDTO">
+		SELECT * 
+		FROM blog_object 
+		WHERE blog_no = #{blog_no}
+			AND blog_object_no = #{blog_object_no}
+			<if test="!is_owner">
+				AND is_public = 0
+			</if>
+	</select>
+	
+	
+	
+	<!-- 'blog_comment' table =========================================== -->
+	<!-- 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기 -->
+	<select id="todayCommentCount" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM blog_comment 
+		WHERE DATE > CURDATE() 
+			AND blog_no = #{blog_no}
+	</select>
+	
+	
+	
+	<!-- 'blog_comment' & 'blog_object' table ================================================== -->
+	<!-- 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기 -->
+	<select id="selectCommentByBlog_noFromBlog_comment" parameterType="Integer" resultType="commentDTO">
+		SELECT C.blog_comment_no, C.blog_object_no, C.blog_no, C.id, C.nick, C.comment, C.date, O.title 
+		FROM blog_comment C, blog_object O 
+		WHERE C.blog_no = #{blog_no}
+			AND C.blog_object_no = O.blog_object_no
+	</select>
+	
+	
+	
+	<!-- 'blog_visit' & 'blog_object' table ==================================================== -->
+	<select id="hitRankDuringFromBlog_visitAndBlog_object" parameterType="Map" resultType="blogDTO">
+	<![CDATA[
+		SELECT BV.blog_object_no, BO.title, BO.date, COUNT(*) AS hits
+  		FROM blog_visit BV, blog_object BO 
+		  WHERE BV.blog_no = #{blog_no}
+		  	AND BV.blog_object_no != -1 
+			AND BV.DATE > #{startDate} AND BV.DATE < #{endDate}
+			AND BV.blog_object_no = BO.blog_object_no
+		  GROUP BY BV.blog_object_no
+		  ORDER BY hits DESC
+	]]>
+	</select>
+	
+	
+	
+	<!-- 'blog_object'table & 'blog_cateogy'table =========================================================== -->
 	<!-- 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기 -->
 	<select id="selectTotalCountByNoFromBlog_object" parameterType="Map" resultType="Integer">
 		SELECT COUNT(*) 
@@ -182,6 +242,8 @@
 		<if test="!is_owner">
 			AND O.is_public = 0
 			AND C.is_public = 0
+			<if test="is_ne"></if>
+			
 		</if>
 			AND O.blog_category_no = C.blog_category_no
 	</select>
@@ -192,7 +254,7 @@
   		FROM (SELECT blog_object_no, title, DATE, O.is_public, hits
           	  FROM blog_object AS O, blog_category AS C
           	  WHERE 
-          	  <choose>
+			  <choose>
 					<when test="column_name!=null and column_name.equalsIgnoreCase('blog_no')">
 						O.blog_no = #{no}
 					</when>
@@ -201,8 +263,16 @@
 					</otherwise>
 			  </choose>
 			  <if test="!is_owner">
-					AND C.is_public = 0
-					AND O.is_public = 0
+					<choose>
+						<when test="is_neighbor">
+							AND C.is_public != 2
+							AND O.is_public != 2
+						</when>
+						<otherwise>
+							AND C.is_public = 0
+							AND O.is_public = 0
+						</otherwise>
+				  </choose>
 			  </if>
 			  		AND O.blog_category_no = C.blog_category_no
               ORDER BY blog_object_no DESC) AS TB
@@ -234,59 +304,5 @@
  		LIMIT #{startNo}, #{endNo}
 	</select>
 	
-	<!-- 21.06.09 게시물 조회수 업데이트(증가) -->
-	<update id="updateBlogObjectHits" parameterType="Integer">
-		UPDATE blog_object
-		SET
-		hits = hits+1
-		where blog_object_no = #{blog_object_no}
-	</update>
-
-	<!-- 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기 -->
-	<select id="selectBlog_object" parameterType="Map" resultType="blogDTO">
-		SELECT * FROM blog_object 
-		WHERE blog_no = #{blog_no}
-			AND blog_object_no = #{blog_object_no}
-			<if test="!is_owner">
-				AND is_public = 0
-			</if>
-	</select>
-	
-	
-	
-	<!-- 'blog_comment' table =========================================== -->
-	<!-- 21.07.03 'blog_no'에 해당하는 오늘의 댓글수 가져오기 -->
-	<select id="todayCommentCount" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(*) 
-		FROM blog_comment 
-		WHERE DATE > CURDATE() 
-			AND blog_no = #{blog_no}
-	</select>
-	
-	
-	
-	<!-- 'blog_comment' & 'blog_object' table ================================================== -->
-	<!-- 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기 -->
-	<select id="selectCommentByBlog_noFromBlog_comment" parameterType="Integer" resultType="commentDTO">
-		SELECT C.blog_comment_no, C.blog_object_no, C.blog_no, C.id, C.nick, C.comment, C.date, O.title 
-		FROM blog_comment C, blog_object O 
-		WHERE C.blog_no = #{blog_no}
-			AND C.blog_object_no = O.blog_object_no
-	</select>
-	
-	
-	<!-- 'blog_visit' & 'blog_object' table ==================================================== -->
-	<select id="hitRankDuringFromBlog_visitAndBlog_object" parameterType="Map" resultType="blogDTO">
-	<![CDATA[
-		SELECT BV.blog_object_no, BO.title, BO.date, COUNT(*) AS hits
-  		FROM blog_visit BV, blog_object BO 
-		  WHERE BV.blog_no = #{blog_no}
-		  	AND BV.blog_object_no != -1 
-			AND BV.DATE > #{startDate} AND BV.DATE < #{endDate}
-			AND BV.blog_object_no = BO.blog_object_no
-		  GROUP BY BV.blog_object_no
-		  ORDER BY hits DESC
-	]]>
-	</select>
 </mapper>
 	

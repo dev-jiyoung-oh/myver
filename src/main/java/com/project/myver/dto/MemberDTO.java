@@ -29,7 +29,7 @@ public class MemberDTO implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority(auth));
+		authorities.add(new SimpleGrantedAuthority("ROLE_"+auth));
         return authorities;
 	}
 
