@@ -22,8 +22,9 @@ public class PageUtil {
 	// 블로그
 	private int no;					// 블로그 카테고리 번호 혹은 블로그 번호로 사용!
 	private String column_name;		// no의 컬럼명(블로그 카테고리 번호 혹은 블로그 번호)
-	private boolean is_owner;		// 주인 여부
-	private boolean is_neighbor;	// 이웃 여부(주인이 아닌 경우, 로그인한 본인이 해당 블로그의 이웃인지)
+	private String visitor_type;	// 방문자 종류(주인:"owner", 이웃:"neighbor", 비이웃:"other")
+	
+	/*
 	// 검색 시 필요한 파라미터
 	private String searchWord; //
 	private String searchType; //
@@ -39,7 +40,7 @@ public class PageUtil {
 	private String ftype;
 	private String fid;
 	private int fno; //(자유게시판 댓글 출력용)
-	
+	*/
 	/*
 	public PageUtil(int nowPage, int totalCount) {
 		this(nowPage, totalCount, 10, 5);
@@ -59,15 +60,14 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, boolean is_owner, boolean is_neighbor) {
+	public PageUtil(int nowPage, int totalCount, int lineCount, int no, String column_name, String visitor_type) {
 		this.nowPage 	= nowPage;
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
 		this.pageGroup 	= 10;
 		this.no = no;
 		this.column_name = column_name;
-		this.is_owner = is_owner;
-		this.is_neighbor = is_neighbor;
+		this.visitor_type = visitor_type;
 		
 		calcTotalPage();
 		calcStartPage();
@@ -76,13 +76,13 @@ public class PageUtil {
 		calcEndNo();
 	}
 	
-	public PageUtil(int totalCount, int lineCount, int no, String column_name, boolean is_owner, int nowNo) {
+	public PageUtil(int totalCount, int lineCount, int no, String column_name, String visitor_type, int nowNo) {
 		this.totalCount = totalCount;
 		this.lineCount 	= lineCount;
 		this.pageGroup 	= 10;
 		this.no = no;
 		this.column_name = column_name;
-		this.is_owner = is_owner;
+		this.visitor_type = visitor_type;
 		
 		calcNowPage(nowNo);
 		calcTotalPage();
@@ -105,7 +105,7 @@ public class PageUtil {
 		calcEndNo();
 	}
 	*/
-	
+	/*
 	//notice, question(user)검색 - totalCnt에 쓰이는 생성자
 	public PageUtil(String searchWord, String searchType) {
 		this.searchType=searchType;
@@ -116,7 +116,7 @@ public class PageUtil {
 	public PageUtil(String searchWord) {
 		this.searchWord=searchWord;
 	}
-
+*/
 
 	// 시작 글번호 계산 : {총 게시글 수 - (한 페이지 게시글 수*현재 페이지 번호)}+1 3-5+1 8-10+1
 	private void calcStartNo() {
@@ -186,7 +186,7 @@ public class PageUtil {
 	}
 	
 	
-	
+	/*
 	public String getConame() {
 		return coname;
 	}
@@ -258,7 +258,7 @@ public class PageUtil {
 	public void setSearchWord(String searchWord) {
 		this.searchWord = searchWord;
 	}
-
+*/
 	public int getStartNo() {
 		return startNo;
 	}
@@ -329,32 +329,21 @@ public class PageUtil {
 	public void setColumn_name(String column_name) {
 		this.column_name = column_name;
 	}
-	public boolean getIs_owner() {
-		return is_owner;
+	public String getVisitor_type() {
+		return visitor_type;
 	}
-	public void setIs_owner(boolean is_owner) {
-		this.is_owner = is_owner;
-	}
-	public boolean getIs_neighbor() {
-		return is_neighbor;
-	}
-	public void setIs_neighbor(boolean is_neighbor) {
-		this.is_neighbor = is_neighbor;
+	public void setVisitor_type(String visitor_type) {
+		this.visitor_type = visitor_type;
 	}
 
+	
+	
 	@Override
 	public String toString() {
 		return "PageUtil [nowPage=" + nowPage + ", totalCount=" + totalCount + ", lineCount=" + lineCount
 				+ ", pageGroup=" + pageGroup + ", totalPage=" + totalPage + ", startPage=" + startPage + ", endPage="
 				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", no=" + no + ", column_name=" + column_name
-				+ ", is_owner=" + is_owner + ", searchWord=" + searchWord + ", searchType=" + searchType
-				+ ", rid=" + rid + ", coname=" + coname + ", qid=" + qid + ", qno=" + qno + ", ftype=" + ftype
-				+ ", fid=" + fid + ", fno=" + fno + "]";
+				+ ", visitor_type=" + visitor_type + "]";
 	}
+	
 }
-
-
-
-
-
-

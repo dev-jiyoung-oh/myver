@@ -44,7 +44,7 @@ public class BlogController {
 	private ImageService imgSVC;
 	
 	// 21.05.17 블로그 홈_메인 페이지
-	@RequestMapping(value = "/blog/home")
+	@RequestMapping(value = {"/blog/home", "/blog/", "/blog"})
 	public ModelAndView blogHome(HttpSession session, ModelAndView mv) {
 		/* main.jsp에 보낼 정보
 		 * 1. 블로그 정보 'blog'table - blog_no, nick, blog_img_no
@@ -81,14 +81,8 @@ public class BlogController {
 		return mv;
 	}
 	
-	// 블로그 홈_메인 페이지
-	@RequestMapping(value = "/")
-	public ModelAndView blogHome2(HttpSession session, ModelAndView mv) {
-		return blogHome(session, mv);
-	}
-	
 	// 21.05.19 블로그 메인
-	// ★★★★★ 댓글, 좋아요 기능 추가해야함!
+	// ★★★★★ 댓글, 좋아요 기능 추가해야함! ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 	@RequestMapping(value = "/blog/{blog_id}")
 	public ModelAndView blogMain(
 					ModelAndView mv, 
@@ -104,7 +98,7 @@ public class BlogController {
 		
 		if(idCnt == 0) { // member id(blog_id)가 존재하지 않는 경우
 			System.out.println("blog id가 존재하지 않음");
-			mv.setViewName("blog/no_blog");
+			mv.setViewName("blog/error/no_blog_error");
 			return mv;
 		}
 		
@@ -116,26 +110,11 @@ public class BlogController {
 		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blogDTO.getMember_no());
 		
 		// 방문자 정보
-		int visitor_no = (user.getUsername() == null)? -1 : user.getMember_no();
-		boolean is_owner = blogDTO.getMember_no() == visitor_no; // 방문자가 주인인지 여부(주인:true, 외부인:false)
-		boolean is_neighbor = false;	// 방문자가 블로그 주인의 이웃인지 여부(이웃:true, 아님:false)
-		
-		// 21.06.09 외부인이 방문한 경우
-		if(!is_owner) {
-			// 1. 블로그 방문자 정보 추가
-			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), -1, visitor_no, query, session);
-			
-			// 2. 블로그 이웃인지 확인
-			for(BlogDTO following : followingList) {
-				if(following.getMember_no() == visitor_no) {
-					is_neighbor = true;
-					break;
-				}
-			}
-		}
+		int visitor_no = (user == null)? -1 : user.getMember_no();
+		String visitor_type = blogSVC.sortOutVisitor_type(blogDTO.getMember_no(), visitor_no, followingList);
 		
 		// 21.06.12  블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
-		Map<String,Object> map  = blogSVC.selectCategoryAndListAndObject(blogDTO, is_owner, is_neighbor, blog_category_no, currentPage);
+		Map<String,Object> map  = blogSVC.selectCategoryAndListAndObject(blogDTO, visitor_type, blog_category_no, currentPage);
 		
 		// 21.06.12 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
 		if(map == null) {
@@ -162,12 +141,14 @@ public class BlogController {
 	// ★★★★★ 댓글, 좋아요 기능 추가해야함! ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
     // 21.05.30 블로그 글 보기	
     @RequestMapping(value = "/blog/{blog_id}/{blog_object_no}")	
-    public ModelAndView blogObject(HttpSession session, 
-				   ModelAndView mv, 
-				   @PathVariable("blog_id") String blog_id, 
-				   @PathVariable("blog_object_no") int blog_object_no, 
-				   @RequestParam(value="query", defaultValue="") String query,
-				   @RequestParam(value="blog_category_no", defaultValue="-1") int blog_category_no) {	
+    public ModelAndView blogObject(
+    				HttpSession session, 
+    				ModelAndView mv, 
+    				@AuthenticationPrincipal MemberDTO user,
+    				@PathVariable("blog_id") String blog_id, 
+    				@PathVariable("blog_object_no") int blog_object_no, 
+    				@RequestParam(value="query", defaultValue="") String query,
+    				@RequestParam(value="blog_category_no", defaultValue="-1") int blog_category_no) {	
 		
     	if(blog_id.length() == 0) {
 			mv.setViewName("blog/home");
@@ -179,40 +160,37 @@ public class BlogController {
 		
 		if(idCnt == 0) { // member id(blogId)가 존재하지 않는 경우
 			System.out.println("blog id가 존재하지 않음");
-			mv.setViewName("blog/no_blog");
+			mv.setViewName("blog/error/no_blog_error");
 			return mv;
-		}
-		
-		// 블로그 주인 회원 번호
-		int blog_member_no = memSVC.selectMember_noById(blog_id);
-		
-		//방문자 id
-		String visitor_id = (String)session.getAttribute("MID");
-		
-		int visitor_no = -1;
-		
-		// 방문자 member_no
-		if(visitor_id != null) {
-			visitor_no = memSVC.selectMember_noById(visitor_id);
 		}
 		
 		// blog_id로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
+		int blog_member_no = blogDTO.getMember_no();
+		
+		// 방문자 정보
+		int visitor_no = (user == null)? -1 : user.getMember_no();
+		
+		// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
+		
+		// 방문자 종류(주인:"owner", 이웃:"neighbor", 비이웃:"other")
+		String visitor_type = blogSVC.sortOutVisitor_type(blog_member_no, visitor_no, followingList);
 		
 		// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
-		boolean is_owner = blog_member_no == visitor_no; // 블로그 주인이면 해당 글이 비공개여도 가져올 수 있다!
-		BlogDTO object = blogSVC.selectBlog_object(blogDTO.getBlog_no(), blog_object_no, is_owner);
+		BlogDTO object = blogSVC.selectBlog_object(blogDTO.getBlog_no(), blog_object_no, visitor_type);
 		
 		// 해당 블로그에 해당 게시글이 존재하지 않는 경우
 		if(object == null) {
 			System.out.println("해당 블로그에 존재하지 않는 게시글입니다.");
-			mv.setViewName("blog/no_blog_object");
+			mv.setViewName("blog/error/no_blog_object_error");
 			mv.addObject("BLOG", blogDTO);
 			return mv;
 		}
 		
 		// 21.06.14 블로그 카테고리, 목록, 글 가져오기
-		Map<String,Object> map  = blogSVC.selectCategoryAndList(blogDTO, object, is_owner, blog_category_no);
+		Map<String,Object> map  = blogSVC.selectCategoryAndList(blogDTO, object, visitor_type, blog_category_no);
 		
 		// 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
 		if(map == null) {
@@ -222,19 +200,7 @@ public class BlogController {
 			return mv;
 		}
 		
-		// 외부인이 방문한 경우
-		if(!is_owner) { 
-			// 21.06.09 게시글 조회수 업데이트(증가)
-			blogSVC.updateBlogObjectHits(blog_object_no, session);
-			
-			// 21.06.09 블로그 방문자 정보 추가
-			blogSVC.insertBlog_visit(blogDTO.getBlog_no(), blog_object_no, visitor_no, query, session);
-		}
-		
-		// 21.06.04 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
-		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blog_member_no);
-		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
-	
+
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWING", followingList);
 		mv.addObject("FOLLOWER", followerList);
@@ -260,7 +226,7 @@ public class BlogController {
     	
     	if(user == null || !user.getUsername().equals(blog_id)) {
     		System.out.println("로그인 아이디 없음. 혹은 블로그 아이디와 현재 로그인된 아이디가 일치하지 않음.");
-    		mv.setViewName("blog/no_blog");
+    		mv.setViewName("blog/error/no_blog_error");
 			return mv;
     	}
     	
@@ -276,14 +242,24 @@ public class BlogController {
     	return mv;
     }
     
-    // 21.07.28 블로그 글 작성
+    // 21.07.30 블로그 글 작성
     @RequestMapping(value = "/blog/{blog_id}/write", method = RequestMethod.POST)	
     public ModelAndView blogWriteObject(
     			ModelAndView mv,
+    			HttpServletRequest request,
     			@PathVariable("blog_id") String blog_id,
     			BlogDTO blog_object) {
-    	System.out.println("BlogController - blogWriteObject() - blog_object: " + blog_object.blog_objectToString());
-    	mv.setViewName("blog/write");
+    	System.out.println("BlogController - blogWriteObject() - " + blog_object.blog_objectToString());
+    	
+    	int blog_object_no = blogSVC.insertBlog_object(blog_object);
+    	
+    	if(blog_object_no == -1) {
+    		mv.setViewName("blog/error/write_object_error");
+    	}else {
+    		RedirectView rv = new RedirectView(request.getContextPath()+"/blog/"+blog_id+"/"+blog_object_no);
+    		mv.setView(rv);
+    	}
+    	
     	return mv;
     }
     
@@ -389,8 +365,8 @@ public class BlogController {
     		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
     		//  1 - 페이지에 따라 비동기로 가져오는거 처리해야함
     		//  2 - 아이디로 검색하는것도 비동기 처리해야함
-    		int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", true);
-    		PageUtil pageInfo = new PageUtil(1,totalCount,20,blog_no,"blog_no",true,true);
+    		int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", "owner");
+    		PageUtil pageInfo = new PageUtil(1, totalCount, 20, blog_no, "blog_no", "owner");
     		List<BlogDTO> objectList = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
     		
     		mv.addObject("CATEGORYS_FOR_OBJECT", categoryList);

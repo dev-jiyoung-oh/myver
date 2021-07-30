@@ -47,16 +47,33 @@ blog object
 		<a>(${BLOG.blog_id})</a><br/>
 		<a>${BLOG.blog_info}</a>
 	</div>
-	<div class="col-md-3">
-		<ul>
-			<c:forEach var="category" items="${CATEGORY_LIST}">
-				<li>
-					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}">
-						${category.category_name}
-					</a>
-				</li>
-			</c:forEach>
-		</ul>
+	<div class="col-md-2">
+		<div class="border-bottom alert-link">카테고리</div>
+		<div>
+			<ul class="nav flex-column">
+				<c:forEach var="category" items="${CATEGORY_LIST}">
+					<li class="nav-item <c:if test='${category.all_category eq 1}'>py-2</c:if>">
+						<div class="d-inline-flex">
+							<div class="d-inline-flex">
+								<c:if test="${category.parent_category_no != 0}">
+									<img src="${pageContext.request.contextPath}/resources/img/icons/depth.png" height="14" class="align-bottom m-1 me-0">
+								</c:if>
+								<img src="${pageContext.request.contextPath}/resources/img/icons/list.png" height="14" class="align-bottom m-1"> 
+							</div>
+							<div class="">
+								<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}" class="hover-text-decoration-undeline <c:if test='${category.all_category eq 1}'>alert-link</c:if>">
+									${category.category_name}</a>
+								<c:if test="${category.is_public eq 1}">
+									<svg xmlns="http://www.w3.org/2000/svg" height="12" fill="currentColor" class="bi bi-lock-fill text-secondary mb-1" viewBox="0 0 16 16">
+										<path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+									</svg>
+								</c:if>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
 	</div>
 	<div class="col-md-3">
 		내가 추가한

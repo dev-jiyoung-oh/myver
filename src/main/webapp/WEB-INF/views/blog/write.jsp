@@ -10,14 +10,13 @@
 
 <script type="text/javascript">
 	$(function(){
+		//id => $('#') //class => $('.') //name => $('[name=""]')
+		
 		$('#body_container').css('height', '93vh');
 		$('#body_container').attr('class', 'container-fluid d-flex flex-column p-0');
-		
-		//id => $('#아이디밸류')
-		//class => $('.클래스밸류')
-		//name => $('[name="네임밸류"]')
 
-		// 라디오버튼 클릭시 이벤트 발생
+
+		// "발행 시간" radio 변경 event
 	    $("input:radio[name=radio_time]").click(function(){
 	        if($('#radio_time_reservation').is(":checked")){
 	            $("#reservation_time_div").attr("class", "d-block");
@@ -26,12 +25,27 @@
 	        }
 	    });
 		
-		// 게시글 발행 ====================================================================
+		// "카테고리" select box 변경 event
+		$('#category_select').change(function(){
+			var is_public = $('#category_select > option:selected').attr("value2");
+			
+			if(is_public == 1){
+				$('#open_public').prop("disabled", true);
+				$('#open_neighbor').prop("disabled", true);
+				$('#open_private').prop("checked", true);
+			}else{
+				$('#open_public').prop("disabled", false);
+				$('#open_neighbor').prop("disabled", false);
+			}
+		})
+		
+		// 게시글 발행 버튼 클릭 event ====================================================================
 		$('#submit_btn').click(function(){
 			// 받는사람 없는 경우 처리
 			if(!$('#title').val()){
 				alert('제목을 입력해주세요.');
 				$('#submit_cancel_btn').click();
+				$('#title').focus();
 				return false;
 			}
 			
@@ -39,6 +53,7 @@
 	  		if(!$('#content').val()){
 	  			alert('본문 내용을 입력해주세요.');
 	  			$('#submit_cancel_btn').click();
+	  			$('#content').focus();
 				return false;
 	  		}
 			
@@ -49,6 +64,7 @@
 			alert('제목: '+$('#title').val()+', 내용: '+$('#content').val()+', 카테고리: '+$('#category').val()+', 공개 설정: '+$('[name="open_type"]:checked').val()+", 발행 시간: "+$('[name="radio_time"]:checked').val());
 			// 예약한 경우, 발행시간 가져와서 담기)★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 			$('#open_type').val($('[name="open_type"]:checked').val());
+			$('#blog_category_no').val($('#category_select > option:selected').val());
 			
 			$('#write_object_frm').submit();
 		});
@@ -86,7 +102,8 @@
 				<div class="col-md-10">
 					<form id="write_object_frm" action="${pageContext.request.contextPath}/blog/${BLOG_ID}/write" method="POST" class="h-100 d-flex flex-column">
 						<input type="hidden" id="open_type" name="open_type">
-						<input type="hidden" id="date" name="date" value="" />
+						<input type="hidden" id="blog_category_no" name="blog_category_no">
+						
 						<div class="input-group">
 							<input type="text" id="title" name="title" class="form-control p-5" placeholder="제목" style="border-top: none; border-color: #dee2e6; border-radius: 0; font-size: 32px;">
 						</div>
@@ -131,18 +148,20 @@
 						<tr>
 							<td>카테고리</td>
 							<td>
-								<select id="category">
+								<select id="category_select">
 									<c:forEach items="${CATEGORY_LIST}" var="category">
-										<option value="${category.blog_category_no}" 
-											<c:if test="${category.is_basic eq 1}">selected</c:if>>
+										<option value="${category.blog_category_no}" value2="${category.is_public}"
+										 <c:if test="${category.is_basic eq 1}">selected</c:if>>
 											<c:if test="${category.parent_category_no ne 0}">
 												ㄴ
 											</c:if>
 											<c:if test="${category.is_public eq 1}">
 												(비공개) 
+												<%--
 												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
 													<path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
 												</svg>
+												--%>
 											</c:if>
 											${category.category_name}
 										</option>

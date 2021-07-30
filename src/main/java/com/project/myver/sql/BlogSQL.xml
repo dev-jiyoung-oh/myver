@@ -118,7 +118,7 @@
 		SELECT * 
 		FROM blog_category 
 		WHERE blog_category_no = #${blog_category_no}
-		<if test="!is_owner">
+		<if test="!visitor_type.equals('owner')">
 			AND is_public = 0
 		</if>
 	</select>
@@ -166,6 +166,23 @@
 	
 	
 	<!-- 'blog_object'table =================================================================== -->
+	<!-- 21.07.30 블로그 글 작성 -->
+	<insert id="insertBlog_object" parameterType="blogDTO" useGeneratedKeys="true" keyProperty="blog_object_no">
+		INSERT INTO blog_object
+			(blog_category_no, blog_no, title, content, open_type, date)
+		VALUES(#{blog_category_no}, #{blog_no}, #{title}, #{content}, #{open_type},
+			<choose>
+				<when test="date == null">
+					SYSDATE()
+				</when>
+				<otherwise>
+					${date}
+				</otherwise>
+			</choose>
+		)
+		
+	</insert>
+	
 	<!-- 21.06.09 게시물 조회수 업데이트(증가) -->
 	<update id="updateBlogObjectHits" parameterType="Integer">
 		UPDATE blog_object
@@ -180,9 +197,14 @@
 		FROM blog_object 
 		WHERE blog_no = #{blog_no}
 			AND blog_object_no = #{blog_object_no}
-			<if test="!is_owner">
-				AND is_public = 0
-			</if>
+			<choose>
+				<when test="visitor_type.equals('neighbor')">
+					AND open_type != 2
+				</when>
+				<when test="visitor_type.equals('other')">
+					AND open_type = 0
+				</when>
+			</choose>
 	</select>
 	
 	
@@ -231,51 +253,82 @@
 		SELECT COUNT(*) 
 		FROM blog_object AS O, blog_category AS C
 		WHERE 
-		<choose>
-			<when test="column_name.equalsIgnoreCase('blog_no')">
-				O.blog_no = #{no}
-			</when>
-			<otherwise>
-				O.blog_category_no = #{no}
-			</otherwise>
-		</choose>
-		<if test="!is_owner">
-			AND O.is_public = 0
-			AND C.is_public = 0
-			<if test="is_ne"></if>
-			
-		</if>
+			<choose>
+				<when test="column_name.equalsIgnoreCase('blog_no')">
+					O.blog_no = #{no}
+				</when>
+				<otherwise>
+					O.blog_category_no = #{no}
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="visitor_type.equals('neighbor')">
+					AND C.is_public = 0
+					AND O.open_type != 2
+				</when>
+				<when test="visitor_type.equals('other')">
+					AND C.is_public = 0
+					AND O.open_type = 0
+				</when>
+			</choose>
 			AND O.blog_category_no = C.blog_category_no
+	</select>
+	
+	<!-- 21.07.30 'blog_category_no' 혹은 'blog_no'에 해당하는 것들 중에 특정 글의 순번 가져오기 -->
+	<select id="selectRowNumByNoFromBlog_object" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*)+1 
+		FROM blog_object AS O, blog_category AS C
+		WHERE 
+			<choose>
+				<when test="column_name.equalsIgnoreCase('blog_no')">
+					O.blog_no = #{no}
+				</when>
+				<otherwise>
+					O.blog_category_no = #{no}
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="visitor_type.equals('neighbor')">
+					AND C.is_public = 0
+					AND O.open_type != 2
+				</when>
+				<when test="visitor_type.equals('other')">
+					AND C.is_public = 0
+					AND O.open_type = 0
+				</when>
+			</choose>
+			AND O.blog_category_no = C.blog_category_no
+		<![CDATA[
+			AND O.blog_object_no <= #{blog_object_no}
+		]]>
 	</select>
 	
 	<!-- 21.05.27 목록 가져오기 -->
 	<select id="selectListDetailByNoFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
 		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, title, DATE, O.is_public, hits
-          	  FROM blog_object AS O, blog_category AS C
-          	  WHERE 
-			  <choose>
-					<when test="column_name!=null and column_name.equalsIgnoreCase('blog_no')">
+  		FROM (SELECT blog_object_no, title, DATE, O.open_type, hits
+			FROM blog_object AS O, blog_category AS C
+			WHERE 
+				<choose>
+					<when test="column_name != null and column_name.equalsIgnoreCase('blog_no')">
 						O.blog_no = #{no}
 					</when>
 					<otherwise>
 						O.blog_category_no = #{no}
 					</otherwise>
-			  </choose>
-			  <if test="!is_owner">
-					<choose>
-						<when test="is_neighbor">
-							AND C.is_public != 2
-							AND O.is_public != 2
-						</when>
-						<otherwise>
-							AND C.is_public = 0
-							AND O.is_public = 0
-						</otherwise>
-				  </choose>
-			  </if>
-			  		AND O.blog_category_no = C.blog_category_no
-              ORDER BY blog_object_no DESC) AS TB
+				</choose>
+			  	<choose>
+					<when test="visitor_type.equals('neighbor')">
+						AND C.is_public = 0
+						AND O.open_type != 2
+					</when>
+					<when test="visitor_type.equals('other')">
+						AND C.is_public = 0
+						AND O.open_type = 0
+					</when>
+				</choose>
+				AND O.blog_category_no = C.blog_category_no
+			ORDER BY blog_object_no DESC) AS TB
       		, (SELECT @ROWNUM := 0) AS RN
  		LIMIT #{startNo}, #{endNo}
 	</select>
@@ -283,23 +336,29 @@
 	<!-- 21.05.27 게시글 내용 가져오기 -->
 	<select id="selectObjectDetailByNoFromBlog_object" parameterType="pageUtil" resultType="blogDTO">
 		SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
-  		FROM (SELECT blog_object_no, O.blog_category_no, category_name, title, content, date, O.is_public, hits, likes
-          	  FROM blog_object AS O, blog_category AS C
-          	  WHERE
-          	  <choose>
+  		FROM (SELECT blog_object_no, O.blog_category_no, category_name, title, content, date, O.open_type, hits, likes
+			FROM blog_object AS O, blog_category AS C
+			WHERE
+				<choose>
 					<when test="column_name!=null and column_name.equalsIgnoreCase('blog_no')">
 						O.blog_no = #{no}
 					</when>
 					<otherwise>
 						O.blog_category_no = #{no}
 					</otherwise>
-			  </choose>
-			  <if test="!is_owner">
-					AND C.is_public = 0
-					AND O.is_public = 0
-			  </if>
-			  		AND O.blog_category_no = C.blog_category_no
-              ORDER BY blog_object_no DESC) AS TB
+			  	</choose>
+				<choose>
+					<when test="visitor_type.equals('neighbor')">
+						AND C.is_public = 0
+						AND O.open_type != 2
+					</when>
+					<when test="visitor_type.equals('other')">
+						AND C.is_public = 0
+						AND O.open_type = 0
+					</when>
+				</choose>
+			  	AND O.blog_category_no = C.blog_category_no
+            ORDER BY blog_object_no DESC) AS TB
       		, (SELECT @ROWNUM := 0) AS RN
  		LIMIT #{startNo}, #{endNo}
 	</select>

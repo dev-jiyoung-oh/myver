@@ -51,14 +51,14 @@ public class BlogService {
 	}
 	
 	// 21.06.12 블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
-	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, boolean is_owner, boolean is_neighbor, int blog_category_no, int currentPage) {
+	public Map<String, Object> selectCategoryAndListAndObject(BlogDTO blogDTO, String visitor_type, int blog_category_no, int currentPage) {
 		Map<String, Object> map = new HashMap<>();
 		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
 		int no = -1;			 // blog_category_no 혹은 blog_no가 들어갈 예정
 		BlogDTO blog_category = null;
 		
 		// 21.06.03 방문자가 블로그 주인일 경우
-		if(is_owner){
+		if(visitor_type.equals("owner")){
 			System.out.println("주인이 방문했습니다.");
 			
 			// 21.05.23 카테고리 리스트 가져오기
@@ -102,6 +102,7 @@ public class BlogService {
 				}				
 			}
 			map.put("categoryList", categoryList);
+			
 		}else { // 21.06.30 방문자가 외부인일 경우
 			System.out.println("외부인이 방문했습니다.");
 			
@@ -154,11 +155,11 @@ public class BlogService {
 		}
 		
 		// 21.05.27 블로그 글 테이블에서 'blog_no' 혹은 'blog_category_no'에 해당하는 개수 가져오기
-		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, is_owner);
+		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, visitor_type);
 		
-		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage,totalCount,lineCount,no,column_name,is_owner,is_neighbor)
-		PageUtil listInfo = new PageUtil(currentPage,totalCount,blog_category.getList_line(),no,column_name,is_owner,is_neighbor);
-		PageUtil pageInfo = new PageUtil(currentPage,totalCount,blogDTO.getObjects_per_page(),no,column_name,is_owner,is_neighbor);
+		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(nowPage, totalCount, lineCount, no, column_name, visitor_type)
+		PageUtil listInfo = new PageUtil(currentPage, totalCount, blog_category.getList_line(), no, column_name, visitor_type);
+		PageUtil pageInfo = new PageUtil(currentPage, totalCount, blogDTO.getObjects_per_page(), no, column_name, visitor_type);
 		
 		// 21.05.27 목록 내용 가져오기
 		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);
@@ -176,14 +177,14 @@ public class BlogService {
 
 
 	// 21.06.14 블로그 글 보기 - 카테고리, 목록 가져오기
-	public Map<String, Object> selectCategoryAndList(BlogDTO blogDTO, BlogDTO object, boolean is_owner, int blog_category_no) {
+	public Map<String, Object> selectCategoryAndList(BlogDTO blogDTO, BlogDTO object, String visitor_type, int blog_category_no) {
 		Map<String, Object> map = new HashMap<>();
 		String column_name = ""; // "blog_category_no" 혹은 "blog_no"가 들어갈 예정
 		int no = -1;			 // blog_category_no 혹은 blog_no가 들어갈 예정
 		BlogDTO blog_category = null;
 		
 		// 방문자가 블로그 주인일 경우
-		if(is_owner){
+		if(visitor_type.equals("owner")){
 			System.out.println("주인이 방문했습니다.");
 			
 			// 21.05.23 모든 카테고리 리스트 가져오기
@@ -283,10 +284,12 @@ public class BlogService {
 		}
 		
 		// 21.05.27 블로그 글 테이블에서 'blog_no' 혹은 'blog_category_no'에 해당하는 개수 가져오기
-		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, is_owner);
+		int totalCount = selectTotalCountByNoFromBlog_object(no, column_name, visitor_type);
+		int rowNum = selectRowNumByNoFromBlog_object(no, column_name, visitor_type, blogDTO.getBlog_object_no());
+		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(totalCount, lineCount, no, column_name, visitor_type, nowNo)
+		PageUtil listInfo = new PageUtil(totalCount, blog_category.getList_line(), no, column_name, visitor_type, rowNum);
 		
-		// 21.05.27 리스트, 게시글 페이지 정보 생성  PageUtil(totalCount,lineCount,no,column_name,is_owner,nowNo)
-		PageUtil listInfo = new PageUtil(totalCount,blog_category.getList_line(),no,column_name,is_owner,object.getBlog_object_no());
+		System.out.println(listInfo.toString());
 		
 		// 21.05.27 목록 내용 가져오기
 		List<BlogDTO> lists = selectListDetailByNoFromBlog_object(listInfo);
@@ -297,7 +300,22 @@ public class BlogService {
 		
 		return map;
 	}
+	
+	// 21.07.30 방문자 종류 가려내기
+	public String sortOutVisitor_type(int blog_member_no, int visitor_member_no, List<BlogDTO> followingList) {
 		
+		if(blog_member_no == visitor_member_no) {
+			return "owner";
+		}else {
+			for(BlogDTO following : followingList) {
+				if(following.getNeighbor_member_no() == visitor_member_no) {
+					return "neighbor";
+				}
+			}
+		}
+		return "other";
+	}
+	
 		
 	
 	// 'blog'table ============================================================
@@ -335,12 +353,46 @@ public class BlogService {
 	
 	
 	// 'blog_visit'table ===================================================
+	// 21.06.09 블로그 방문자 정보 추가
+	public boolean insertBlog_visit(int blog_no, int blog_object_no, int visitor_no, String query, HttpSession session) {
+		ArrayList<Integer> list = (ArrayList) session.getAttribute("BLOGVISITCHECK");
+		boolean is_first;
+		
+		System.out.println("session id: "+session.getId()+", list: " + list);
+		
+		// 기록이 없을 경우(블로그 자체를 처음 방문하는 경우)
+		if (list == null) {
+			list = new ArrayList<>();
+			list.add(blog_no);
+			session.setAttribute("BLOGVISITCHECK", list);
+			is_first = true;
+		}else if (list.contains(blog_no)) { // 기록이 있을 경우 -> 해당 블로그를 방문한 경우
+			is_first = false;
+		}else {// 기록이 있는 경우 -> 해당 블로그를 처음 방문하는 경우
+			list.add(blog_no);
+			session.setAttribute("BLOGVISITCHECK", list);
+			is_first = true;
+		}
+		
+		if(is_first) {
+			BlogDTO blogDTO = new BlogDTO();
+			blogDTO.setBlog_no(blog_no);
+			blogDTO.setBlog_object_no(blog_object_no);
+			blogDTO.setVisitor_no(visitor_no);
+			blogDTO.setQuery(query);
+			
+			blogDAO.insertBlog_visit(blogDTO);
+		}
+		
+		return is_first;
+	}
+	
 	// 21.05.19 'blog_no'에 해당하는 블로그 오늘 방문자수 
 	public int todayBlogVisitCount(int blog_no) {
 		return blogDAO.todayBlogVisitCount(blog_no);
 	}	
 	
-	// 21.07.03 'blog_no'에 해당하는 블로그글 오늘 조회수
+	// 21.07.03 'blog_no'에 해당하는 블로그 글 오늘 조회수
 	public int todayObjectHitFromBlog_visit(int blog_no) {
 		return blogDAO.todayObjectHitFromBlog_visit(blog_no);
 	}
@@ -463,24 +515,9 @@ public class BlogService {
 	
 	
 	// 'blog_object'table =================================================
-	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
-	public int selectTotalCountByNoFromBlog_object(int no, String column_name, boolean only_public) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("no", no);
-		map.put("column_name", column_name);
-		map.put("only_public", only_public);
-		
-		return blogDAO.selectTotalCountByNoFromBlog_object(map);
-	}
-
-	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 목록 내용 가져오기 (전체/공개)
-	public List<BlogDTO> selectListDetailByNoFromBlog_object(PageUtil listInfo) {
-		return blogDAO.selectListDetailByNoFromBlog_object(listInfo);
-	}
-	
-	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 게시글 내용 가져오기 (전체/공개)
-	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
-		return blogDAO.selectObjectDetailByNoFromBlog_object(pageInfo);
+	// 21.07.30 블로그 글 작성
+	public int insertBlog_object(BlogDTO blog_object) {
+		return blogDAO.insertBlog_object(blog_object);
 	}
 	
 	// 21.06.09 게시물 조회수 업데이트(증가)
@@ -510,47 +547,44 @@ public class BlogService {
 		
 		return is_first;
 	}
-
-	// 21.06.09 블로그 방문자 정보 추가
-	public boolean insertBlog_visit(int blog_no, int blog_object_no, int visitor_no, String query, HttpSession session) {
-		ArrayList<Integer> list = (ArrayList) session.getAttribute("BLOGVISITCHECK");
-		boolean is_first;
+	
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
+	public int selectTotalCountByNoFromBlog_object(int no, String column_name, String visitor_type) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("column_name", column_name);
+		map.put("visitor_type", visitor_type);
 		
-		System.out.println("session id: "+session.getId()+", list: " + list);
+		return blogDAO.selectTotalCountByNoFromBlog_object(map);
+	}
+	
+	// 21.07.30 'blog_category_no' 혹은 'blog_no'에 해당하는 것들 중에 특정 글의 순번 가져오기
+	public int selectRowNumByNoFromBlog_object(int no, String column_name, String visitor_type, int blog_object_no) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("column_name", column_name);
+		map.put("visitor_type", visitor_type);
+		map.put("blog_object_no", blog_object_no);
 		
-		// 기록이 없을 경우(블로그 자체를 처음 방문하는 경우)
-		if (list == null) {
-			list = new ArrayList<>();
-			list.add(blog_no);
-			session.setAttribute("BLOGVISITCHECK", list);
-			is_first = true;
-		}else if (list.contains(blog_no)) { // 기록이 있을 경우 -> 해당 블로그를 방문한 경우
-			is_first = false;
-		}else {// 기록이 있는 경우 -> 해당 블로그를 처음 방문하는 경우
-			list.add(blog_no);
-			session.setAttribute("BLOGVISITCHECK", list);
-			is_first = true;
-		}
-		
-		if(is_first) {
-			BlogDTO blogDTO = new BlogDTO();
-			blogDTO.setBlog_no(blog_no);
-			blogDTO.setBlog_object_no(blog_object_no);
-			blogDTO.setVisitor_no(visitor_no);
-			blogDTO.setQuery(query);
-			
-			blogDAO.insertBlog_visit(blogDTO);
-		}
-		
-		return is_first;
+		return blogDAO.selectRowNumByNoFromBlog_object(map);
+	}
+	
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 목록 내용 가져오기 (전체/공개)
+	public List<BlogDTO> selectListDetailByNoFromBlog_object(PageUtil listInfo) {
+		return blogDAO.selectListDetailByNoFromBlog_object(listInfo);
+	}
+	
+	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 게시글 내용 가져오기 (전체/공개)
+	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
+		return blogDAO.selectObjectDetailByNoFromBlog_object(pageInfo);
 	}
 
 	// 21.06.10 'blog_no'와 'blog_object_no'에 일치하는 'blog_object' 가져오기
-	public BlogDTO selectBlog_object(int blog_no, int blog_object_no, boolean is_owner) {
+	public BlogDTO selectBlog_object(int blog_no, int blog_object_no, String visitor_type) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("blog_no", blog_no);
 		map.put("blog_object_no", blog_object_no);
-		map.put("is_owner",is_owner);
+		map.put("visitor_type", visitor_type);
 		
 		BlogDTO blogDTO = blogDAO.selectBlog_object(map);
 		
@@ -570,6 +604,7 @@ public class BlogService {
 	
 	
 	
+	// 테이블 join ====================================================================================
 	// 'blog_comment' & 'blog_object' table ==============================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {

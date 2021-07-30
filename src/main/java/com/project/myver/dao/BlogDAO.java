@@ -120,11 +120,31 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	
 	
 	// 'blog_object'table ===============================================================================================================
+	// 21.07.30 블로그 글 작성
+	public int insertBlog_object(BlogDTO blog_object) {
+		session.insert("blog.insertBlog_object", blog_object);
+		
+		if(blog_object.getBlog_object_no() == 0) {
+			return -1;
+		}else {
+			return blog_object.getBlog_object_no();
+		}
+	}
+	
+	// 21.06.09 게시물 조회수 업데이트(증가)
+	public void updateBlogObjectHits(int blog_object_no) {
+		session.update("blog.updateBlogObjectHits", blog_object_no);
+	}
 	// 21.05.27 'blog_category_no' 혹은 'blog_no'에 해당하는 개수 가져오기
 	public int selectTotalCountByNoFromBlog_object(Map map) {
 		return session.selectOne("blog.selectTotalCountByNoFromBlog_object", map);
 	}
-
+	
+	// 21.07.30 'blog_category_no' 혹은 'blog_no'에 해당하는 것들 중에 특정 글의 순번 가져오기
+	public int selectRowNumByNoFromBlog_object(Map<String, Object> map) {
+		return session.selectOne("blog.selectRowNumByNoFromBlog_object", map);
+	}
+	
 	// 21.05.27 목록 내용 가져오기 (전체(공개+이웃+비공개) / 공개+이웃 / 공개)
 	public List<BlogDTO> selectListDetailByNoFromBlog_object(PageUtil listInfo) {
 		return session.selectList("blog.selectListDetailByNoFromBlog_object", listInfo);
@@ -133,11 +153,6 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	// 21.05.27 게시글 내용 가져오기 (전체/공개)
 	public List<BlogDTO> selectObjectDetailByNoFromBlog_object(PageUtil pageInfo) {
 		return session.selectList("blog.selectObjectDetailByNoFromBlog_object", pageInfo);
-	}
-
-	// 21.06.09 게시물 조회수 업데이트(증가)
-	public void updateBlogObjectHits(int blog_object_no) {
-		session.update("blog.updateBlogObjectHits", blog_object_no);
 	}
 
 	// 21.06.10 'blog_no' 혹은 'blog_object_no'에 일치하는 'blog_object' 가져오기
@@ -155,6 +170,7 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	
 	
 	
+	// table join ==============================================================================================
 	// 'blog_comment' & 'blog_object' table ===================================================================================================
 	// 'blog_no'에 해당하는 블로그 댓글과 해당하는 댓글의 글 번호의 글제목 가져오기
 	public List<CommentDTO> selectCommentByBlog_noFromBlog_comment(int blog_no) {
@@ -169,11 +185,5 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectList("blog.hitRankDuringFromBlog_visitAndBlog_object", map);
 	}
 
-	
-
-	
-
-	
-	
 	
 }

@@ -373,9 +373,9 @@ public class BlogDTO {
 	}
 	
 	public String blog_objectToString() {
-		return "BlogDTO - blog_object [blog_object_no=" + blog_object_no+ ", blog_category_no=" + blog_category_no 
-				+ ",category_name= " + category_name + ", title=" + title + ", content=" + content + ", date=" + date
-				+ ", open_type=" + open_type + ", hits=" + hits + ", likes=" + likes + "]";
+		return "BlogDTO - blog_object [blog_object_no= " + blog_object_no+ ", blog_category_no= " + blog_category_no 
+				+ ", title= " + title + ", content= " + content + ", date= " + date
+				+ ", open_type= " + open_type + ", hits= " + hits + ", likes= " + likes + "]";
 	}
 	
 	public String blog_object_likeToString() {

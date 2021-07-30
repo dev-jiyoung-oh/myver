@@ -17,6 +17,11 @@
 	font-weight: 700;
 }
 
+.hover-text-decoration-undeline:hover {
+	text-decoration: underline;
+}
+
+
 /*
 .bg-green {
   background-color: #00c73c !important;
