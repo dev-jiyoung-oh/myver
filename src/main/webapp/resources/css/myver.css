@@ -10,7 +10,15 @@
 }
 
 .pl-2rem {
-  padding-left: 2rem !important;
+	padding-left: 2rem !important;
+}
+
+.p-6rem {
+	padding: 6rem !important;
+}
+
+.mt-04rem {
+	margin-top: 0.4rem;
 }
 
 .nav-custom-a:hover {
@@ -21,6 +29,9 @@
 	text-decoration: underline;
 }
 
+.text-black {
+  color: #000000 !important;
+}
 
 /*
 .bg-green {

@@ -12,6 +12,7 @@ public class BlogDTO {
 	private CommentDTO commentDTO;	//블로그 댓글
 	String str_date;				//"yyyy.MM.dd"형태의 날짜 문자열
 	int rank;						//순위
+	boolean isBothNeighbor = false;	//서로이웃 여부
 	
 	// 'blog' table
 	private int blog_no;			//블로그 번호
@@ -41,7 +42,7 @@ public class BlogDTO {
 	// 'blog_visit' table
 	private int blog_visit_no;		//블로그 방문 번호
 	private int visitor_no;			//방문자 번호
-	private String query;		//검색 단어(검색 유입 경로)
+	private String query;			//검색 단어(검색 유입 경로)
 	private Date date;				//방문일
 	//private int blog_object_no;	//유입된 블로그 글 번호
 	
@@ -311,6 +312,13 @@ public class BlogDTO {
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
+	public boolean getIsBothNeighbor() {
+		return isBothNeighbor;
+	}
+	public void setIsBothNeighbor(boolean isBothNeighbor) {
+		this.isBothNeighbor = isBothNeighbor;
+	}
+	
 	
 	
 	@Override

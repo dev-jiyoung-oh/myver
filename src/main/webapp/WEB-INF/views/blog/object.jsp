@@ -17,14 +17,11 @@
                     color : rgb(241, 196, 15);}
    </style>
 </head>
-<body>
 
-<a class="hanSansYello">MY</a>
-<a class="hanSansGreen">VER</a>&nbsp;
-<a class="hanSansGreen">블로그</a>
-blog object
+<body>
+<!-- blog object -->
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12 d-none">
 		<a>이웃 블로그</a>
 		<a>블로그 홈</a>
 		<a>내 메뉴</a>
@@ -32,8 +29,8 @@ blog object
 			<a>${sessionScope.MID}</a>
 		</sec:authorize>
 	</div>
-	<div class="col-md-12">
-		<a>${BLOG.blog_title}</a>
+	<div class="col-md-12 text-end p-6rem">
+		<h2 class="fw-bold">${BLOG.blog_title}</h2>
 	</div>
 	<div class="col-md-3">
 		<c:if test="${empty BLOG.path or empty BLOG.saved_name}">
@@ -48,8 +45,10 @@ blog object
 		<a>${BLOG.blog_info}</a>
 	</div>
 	<div class="col-md-2">
-		<div class="border-bottom alert-link">카테고리</div>
-		<div>
+		<div id="" class="border-bottom alert-link accordion-button p-1 bg-white text-black" data-bs-toggle="collapse" data-bs-target="#category_list_div" aria-controls="category_list_div" aria-expanded="true" role="button">
+			카테고리
+		</div>
+		<div id="category_list_div" class="collapse show">
 			<ul class="nav flex-column">
 				<c:forEach var="category" items="${CATEGORY_LIST}">
 					<li class="nav-item <c:if test='${category.all_category eq 1}'>py-2</c:if>">
@@ -64,9 +63,7 @@ blog object
 								<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}" class="hover-text-decoration-undeline <c:if test='${category.all_category eq 1}'>alert-link</c:if>">
 									${category.category_name}</a>
 								<c:if test="${category.is_public eq 1}">
-									<svg xmlns="http://www.w3.org/2000/svg" height="12" fill="currentColor" class="bi bi-lock-fill text-secondary mb-1" viewBox="0 0 16 16">
-										<path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-									</svg>
+									<i class="fas fa-lock text-secondary h-50 align-top mt-04rem"></i>
 								</c:if>
 							</div>
 						</div>

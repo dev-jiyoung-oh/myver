@@ -264,7 +264,7 @@ public class BlogController {
     }
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
-    @RequestMapping(value = "/blog.admin/{blog_id}/config")	
+    @RequestMapping(value = {"/blog.admin/{blog_id}/config", "/blog.admin/{blog_id}/", "/blog.admin/{blog_id}"})	
     public ModelAndView blogConfig(HttpSession session, 
     			HttpServletRequest request,
 				ModelAndView mv,
@@ -275,7 +275,7 @@ public class BlogController {
     		System.out.println("blogConfig - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
     		RedirectView rv = new RedirectView();
-			rv.setUrl("/login");
+			rv.setUrl(request.getContextPath()+"/login");
 			mv.setView(rv);
 			return mv;
     	}
@@ -298,6 +298,16 @@ public class BlogController {
 		// 3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
 		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blog_member_no);
 		
+		// 나를 추가한 이웃/내가 추가한 이웃 - 일치하는 이웃 확인
+		for(BlogDTO following : followingList) {
+			for(BlogDTO follower : followerList) {
+				if(following.getNeighbor_member_no() == follower.getMember_no()) {
+					System.out.println("서로 이웃 - "+following.getNeighbor_member_no());
+					following.setIsBothNeighbor(true);
+					follower.setIsBothNeighbor(true);
+				}
+			}
+		}
 
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWINGS", followingList);
@@ -320,7 +330,7 @@ public class BlogController {
     		System.out.println("blogConfig - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
     		RedirectView rv = new RedirectView();
-			rv.setUrl("/login");
+			rv.setUrl(request.getContextPath()+"/login");
 			mv.setView(rv);
 			return mv;
     	}
@@ -408,7 +418,7 @@ public class BlogController {
     	if(visitor_id==null || !blog_id.equals(visitor_id)) {
     		System.out.println("BlogController - blogStat() - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
-			rv.setUrl("/login");
+			rv.setUrl(request.getContextPath()+"/login");
 			mv.setView(rv);
 			return mv;
     	}

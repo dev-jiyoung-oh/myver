@@ -90,7 +90,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			useSessionUrl(request, response);
 			break;
 		case 3:
-			System.out.println("여기야~");
 			useSessionUrl2(request, response);
 			break;
 		case 4:

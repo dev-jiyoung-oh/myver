@@ -191,23 +191,28 @@ MYVER 블로그 | 관리
 	<div class="col-md-9">
 		<form id="blogFrm">
 			<h1>나를 추가한 이웃</h1>
-			<table>
-				<tr>
-					<td><input type="checkbox"/></td>
-					<td>
+			<table class="table text-center">
+				<tr class="table-light">
+					<td class="col"><input type="checkbox"/></td>
+					<td class="col text-start">
 						<select>
 							<option selected>나를 이웃으로 추가한 사람 전체</option>
 							<option>나도 이웃으로 추가한 사람</option>
 							<option>상대만 나를 추가한 사람</option>
 						</select>
 					</td>
-					<td>추가일</td>
+					<td class="col">이웃 추가</td>
+					<td class="col">추가일</td>
 				</tr>
 				<c:forEach items="${FOLLOWERS}" var="follower">
 					<tr>
 						<td><input type="checkbox"/></td>
-						<td>${follower.blog_nick} | 
+						<td class="col text-start">
+							${follower.blog_nick}&nbsp;|&nbsp;
 							<a href="${pageContext.request.contextPath}/blog/${follower.blog_nick}">${follower.blog_title}</a>
+						</td>
+						<td>
+							<button type="button" class="btn btn-light border-secondary btn-sm" <c:if test="${follower.isBothNeighbor}">disabled</c:if>>이웃 추가</button>
 						</td>
 						<td>${follower.date}</td>
 					</tr>
