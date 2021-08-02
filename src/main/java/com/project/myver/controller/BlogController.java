@@ -104,7 +104,7 @@ public class BlogController {
 		
 		// 21.05.19 blog_id로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
-		
+		System.out.println(blogDTO.blogToString());
 		// 21.05.24 블로그의 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
 		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blogDTO.getMember_no());
 		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blogDTO.getMember_no());

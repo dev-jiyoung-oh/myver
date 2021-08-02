@@ -33,6 +33,13 @@
   color: #000000 !important;
 }
 
+.fs-08rem {
+	font-size: 0.8rem !important;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
 /*
 .bg-green {
   background-color: #00c73c !important;

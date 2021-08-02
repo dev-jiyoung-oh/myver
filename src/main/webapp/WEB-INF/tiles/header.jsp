@@ -77,8 +77,8 @@
 				<%-- 로그인 시 --%>
 				
 				<sec:authorize access="isAuthenticated()">
+					<sec:authentication property="principal" var="user"/>
 					<li class="nav-item">
-						<sec:authentication property="principal" var="user"/>
 						<div class="dropdown">
 							<button class="btn dropdown-toggle mx-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 								${user.nick} 님
@@ -87,7 +87,7 @@
 								<li><a class="dropdown-item" href="#">내 정보</a></li>
 								<li><a class="dropdown-item" href="${pageContext.request.contextPath}/memo/list">쪽지</a></li>
 								<li><a class="dropdown-item pb-3" href="${pageContext.request.contextPath}/blog/${user.id}">내 블로그</a></li>
-								<li><a class="dropdown-item text-danger text-center" id="logout_btn">로그아웃</a></li>
+								<li><a class="dropdown-item text-danger text-center cursor-pointer" id="logout_btn">로그아웃</a></li>
 							</ul>
 						</div>
 					</li>
@@ -98,16 +98,16 @@
 	<form action="${pageContext.request.contextPath}/logout" method="POST" id="logout_frm"> 
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	</form>
-<!-- 
+<%-- 
 <a href="${pageContext.request.contextPath}/">MYVER</a>
 
-<%-- 로그인중이 아닐 때에만 로그인,회원가입 버튼이 보임  -> taglib ( security/tags ) 때문에 가능 --%>
+<!-- 로그인중이 아닐 때에만 로그인,회원가입 버튼이 보임  -> taglib ( security/tags ) 때문에 가능 -->
 <sec:authorize access="isAnonymous()">
 	<a href="${pageContext.request.contextPath}/login">로그인</a>
 	<a href="${pageContext.request.contextPath}/join">회원가입</a>
 </sec:authorize>
 
-<%-- 로그인 중일 경우에만 로그아웃 버튼이 보임 --%>
+<%-- 로그인 중일 경우에만 로그아웃 버튼이 보임 -->
 <sec:authorize access="isAuthenticated()">
 	<form action="${pageContext.request.contextPath}/logout" method="POST"> 
 		<input type="submit" id="logoutBtn" value="Logout" />
@@ -121,15 +121,15 @@
 	${user.auth}
 </sec:authorize>
 
-<%-- 관리자 로그인 시 --%>
+<%-- 관리자 로그인 시 -->
 <sec:authorize access="hasRole('ADMIN')">
 - 관리자 로그인함 -
 </sec:authorize>
 
-<%-- 일반 회원 로그인 시 --%>
+<%-- 일반 회원 로그인 시 -->
 <sec:authorize access="hasRole('MEMBER')">
 - 회원 로그인함 -
 </sec:authorize>
- -->
+--%>
 </header>
 </html>
