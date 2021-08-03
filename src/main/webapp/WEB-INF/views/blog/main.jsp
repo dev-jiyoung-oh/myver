@@ -130,7 +130,7 @@
 	</div>
 	<div class="col-md-12">
 		<c:choose>
-			<c:when test="${empty OBJECTS}">
+			<c:when test="${empty LIST && empty OBJECTS}">
 				<div class="w-100 text-center p-5">
 					<strong>아직 작성된 글이 없습니다.</strong>
 					<c:if test="${BLOG.blog_id eq user.id}">
@@ -144,29 +144,40 @@
 			</c:when>
 			<c:otherwise>
 				<div class="w-100">
-					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a> <a>${CATEGORY_TOTAL}개의 글</a>
-					<table border="1">
-						<tr>
-							<td>글제목</td>
-							<td>조회수</td>
-							<td>작성일</td>
-						</tr>
-						<c:forEach var="list" items="${LIST}">
-							<tr>
-								<td>
-									<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}" class="hover-text-decoration-undeline">
-										${list.title}
-									</a>
-								</td>
-								<td>${list.hits}</td>
-								<td>${list.date}</td>
+					<div>
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a>
+						<a>${CATEGORY_TOTAL}개의 글</a>
+					</div>
+					<a>
+						<span>목록닫기</span>
+						<span>목록열기</span>
+					</a>
+					<table class="table">
+						<thead>
+							<tr class="text-secondary">
+								<td>글제목</td>
+								<td>조회수</td>
+								<td>작성일</td>
 							</tr>
-						</c:forEach>
+						</thead>
+						<tbody>
+							<c:forEach var="list" items="${LIST}">
+								<tr>
+									<td>
+										<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}" class="hover-text-decoration-undeline">
+											${list.title}
+										</a>
+									</td>
+									<td>${list.hits}</td>
+									<td>${list.date}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
 					</table>
 				</div>
 				<div class="w-100">
 					<c:forEach var="object" items="${OBJECTS}">
-						<table border="1">
+						<table class="table table-borderless">
 							<tr>
 								<td colspan="2">
 									<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${object.blog_category_no}" class="hover-text-decoration-undeline">

@@ -87,7 +87,7 @@
 								<li><a class="dropdown-item" href="#">내 정보</a></li>
 								<li><a class="dropdown-item" href="${pageContext.request.contextPath}/memo/list">쪽지</a></li>
 								<li><a class="dropdown-item pb-3" href="${pageContext.request.contextPath}/blog/${user.id}">내 블로그</a></li>
-								<li><a class="dropdown-item text-danger text-center cursor-pointer" id="logout_btn">로그아웃</a></li>
+								<li><a class="dropdown-item text-danger text-center cursor-pointer p-2 border-top" id="logout_btn">로그아웃</a></li>
 							</ul>
 						</div>
 					</li>
