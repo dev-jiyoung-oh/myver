@@ -105,6 +105,7 @@ public class BlogController {
 		// 21.05.19 blog_id로 블로그 정보 가져오기
 		BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
 		System.out.println(blogDTO.blogToString());
+		
 		// 21.05.24 블로그의 이웃 리스트 가져오기 (내가 추가한 이웃 following / 나를 추가한 이웃 follower)
 		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(blogDTO.getMember_no());
 		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(blogDTO.getMember_no());
@@ -112,6 +113,9 @@ public class BlogController {
 		// 방문자 정보
 		int visitor_no = (user == null)? -1 : user.getMember_no();
 		String visitor_type = blogSVC.sortOutVisitor_type(blogDTO.getMember_no(), visitor_no, followingList);
+		
+		// 21.08.05 블로그 followerList(나를 추가한 이웃)중에 방문자가 포함되는지 확인
+		boolean is_neighbor = blogSVC.checkMemberIsPartOfFollowerList(visitor_no, followerList);
 		
 		// 21.06.12  블로그 메인 - 카테고리 리스트, 목록 리스트, 글 리스트 가져오기
 		Map<String,Object> map  = blogSVC.selectCategoryAndListAndObject(blogDTO, visitor_type, blog_category_no, currentPage);
@@ -125,6 +129,7 @@ public class BlogController {
 		}
 		
 		mv.addObject("BLOG", blogDTO);
+		mv.addObject("IS_NEIGHBOR", is_neighbor);
 		mv.addObject("FOLLOWING", followingList);
 		mv.addObject("FOLLOWER", followerList);
 		mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
@@ -200,16 +205,18 @@ public class BlogController {
 			return mv;
 		}
 		
+		// 21.08.05 블로그 followerList(나를 추가한 이웃)중에 방문자가 포함되는지 확인
+		boolean is_neighbor = blogSVC.checkMemberIsPartOfFollowerList(visitor_no, followerList);
 
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWING", followingList);
 		mv.addObject("FOLLOWER", followerList);
-		mv.addObject("OBJECT", object);
-		
+		mv.addObject("IS_NEIGHBOR", is_neighbor);
 		mv.addObject("CATEGORY_LIST", (List)map.get("categoryList"));
 		mv.addObject("CATEGORY", map.get("blog_category"));
 		mv.addObject("CATEGORY_TOTAL", map.get("totalCount"));
 		mv.addObject("LIST", (List)map.get("lists"));
+		mv.addObject("OBJECT", object);
 		
 		mv.setViewName("blog/object");
 		
@@ -263,22 +270,78 @@ public class BlogController {
     	return mv;
     }
     
+    // 21.08.05 이웃 설정(추가/삭제) 폼
+    @RequestMapping(value = "/blog/NeighborChange", method = RequestMethod.GET)	
+    public ModelAndView blogNeighborChangeFrm(
+				ModelAndView mv,
+				HttpServletRequest request,
+				@AuthenticationPrincipal MemberDTO user,
+				String blog_id) {
+    	if(user == null) {
+    		System.out.println("blogNeighborChangeFrm - 로그인 정보 없음");
+    		// 방법A
+    		RedirectView rv = new RedirectView(request.getContextPath()+"/?");
+    		mv.setView(rv);
+    		return mv;
+    	}
+    	
+    	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
+    	BlogDTO blogDTO = blogSVC.selectMember_noAndBlog_nickFromBlogByBlog_id(blog_id);
+    	
+    	if(blogDTO == null) {
+    		System.out.println("blogNeighborChangeFrm - 존재하지 않는 blog_id");
+    		// 방법B
+    		mv.setViewName("");
+    		return mv;
+    	}
+    	
+    	// 21.08.06 user가 해당 회원을 이웃으로 추가했는지 여부 가져오기
+    	boolean is_neighbor = 
+    			(blogSVC.selectCntByMember_noAndNeighborMember_noFromBlog_neighbor(user.getMember_no(), blogDTO.getMember_no()) == 0)?
+    					false : true;
+
+    	mv.addObject("BLOG", blogDTO);
+    	mv.addObject("IS_NEIGHBOR", is_neighbor);
+    	mv.setViewName("blog/blog_neighbor_change");
+    	return mv;
+    }
+    
+    // 21.08.06 이웃 설정(추가/삭제)
+    @RequestMapping(value = "/blog/NeighborChange", method = RequestMethod.POST)
+    @ResponseBody
+    public String blogNeighborChange(boolean add, int member_no, int neighbor_member_no) {
+    	System.out.println("blogNeighborChange");
+    	int cnt = 0;
+    	if(add) {
+    		// 이웃 추가
+    		cnt = blogSVC.insertBlog_neighbor(member_no, neighbor_member_no);
+    	}else {
+    		// 이웃 삭제
+    		cnt = blogSVC.deleteBlog_neighbor(member_no, neighbor_member_no);
+    	}
+    	
+    	System.out.println("cnt : "+cnt);
+    	return null;
+    }
+    
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
     @RequestMapping(value = {"/blog.admin/{blog_id}/config", "/blog.admin/{blog_id}/", "/blog.admin/{blog_id}"})	
-    public ModelAndView blogConfig(HttpSession session, 
+    public ModelAndView blogConfig(
     			HttpServletRequest request,
 				ModelAndView mv,
+				@AuthenticationPrincipal MemberDTO user,
 				@PathVariable("blog_id") String blog_id) {
-    	String visitor_id = (String)session.getAttribute("MID");
     	
-    	if(visitor_id==null || !blog_id.equals(visitor_id)) {
+    	if(user == null || !user.getUsername().equals(blog_id)) {
     		System.out.println("blogConfig - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
-    		RedirectView rv = new RedirectView();
-			rv.setUrl(request.getContextPath()+"/login");
-			mv.setView(rv);
-			return mv;
+    		RedirectView rv = new RedirectView(request.getContextPath()+"/login");
+    		mv.setView(rv);
+    		return mv;
     	}
+    	
+    	// 방문자 id
+    	String visitor_id = user.getUsername();
     	
     	/* config(기본 설정)
     	   1) 블로그 정보 : blog_id로 'blog' 정보 가져오기

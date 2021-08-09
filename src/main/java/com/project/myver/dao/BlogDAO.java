@@ -24,6 +24,11 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		session.insert("blog.insertBlog", blogDTO);
 		return blogDTO.getBlog_no();
 	}
+	
+	// 21.06.22 블로그 정보 수정
+	public int blogUpdate(BlogDTO blogDTO) {
+		return session.update("blog.blogUpdate", blogDTO);
+	}
 
 	// 21.05.19 블로그 홈에서 보일 'member_id'에 해당하는 블로그 정보
 	public BlogDTO selectBlogHomeDataFromBlog(int member_no) {
@@ -39,11 +44,12 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	public BlogDTO selectBlog_titleAndidAndNickAndImg_noFromBlog(int member_no) {
 		return session.selectOne("blog.selectBlog_titleAndidAndNickAndImg_noFromBlog", member_no);
 	}
-	
-	// 21.06.22 블로그 정보 수정
-	public int blogUpdate(BlogDTO blogDTO) {
-		return session.update("blog.blogUpdate", blogDTO);
+
+	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
+	public BlogDTO selectMember_noAndBlog_nickFromBlogByBlog_id(String blog_id) {
+		return session.selectOne("blog.selectMember_noAndBlog_nickFromBlogByBlog_id", blog_id);
 	}
+	
 	
 	
 	// 'blog_visit'table ============================================================================================================
@@ -107,6 +113,16 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	
 	
 	// 'blog_neighbor'table ==========================================================================================================
+	// 21.08.06 이웃 추가
+	public int insertBlog_neighbor(Map<String, Integer> map) {
+		return session.insert("blog.insertBlog_neighbor", map);
+	}
+	
+	// 21.08.06 이웃 추가
+	public int deleteBlog_neighbor(Map<String, Integer> map) {
+		return session.insert("blog.deleteBlog_neighbor", map);
+	}
+	
 	// 21.05.24 내가 추가한 이웃 리스트 가져오기(member_no 리스트)
 	public List<BlogDTO> selectFollowingListFromBlog_neighbor(int member_no) {
 		return session.selectList("blog.selectFollowingListFromBlog_neighbor", member_no);
@@ -115,6 +131,11 @@ public class BlogDAO extends SqlSessionDaoSupport {
 	// 21.05.24 나를 추가한 이웃 리스트 가져오기(member_no 리스트)
 	public List<BlogDTO> selectFollowerListFromBlog_neighbor(int member_no) {
 		return session.selectList("blog.selectFollowerListFromBlog_neighbor", member_no);
+	}
+
+	// 21.08.06 member_no와 neighbor_member_no에 해당하는 레코드 개수 세기
+	public int selectCntByMember_noAndNeighborMember_noFromBlog_neighbor(Map<String, Integer> map) {
+		return session.selectOne("blog.selectCntByMember_noAndNeighborMember_noFromBlog_neighbor", map);
 	}
 
 	

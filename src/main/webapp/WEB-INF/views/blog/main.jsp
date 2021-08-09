@@ -16,6 +16,11 @@
       .hanSansYello {font-family : "Black Han Sans";
                     color : rgb(241, 196, 15);}
    </style>
+   <script type="text/javascript">
+   	$(function(){
+   		
+   	})
+   </script>
 </head>
 <body>
 <!-- blog main -->
@@ -63,6 +68,14 @@
 				</div>
 			</div>
 		</c:if>
+		<c:choose>
+			<c:when test="${IS_NEIGHBOR}">
+				<button type="button" class="btn btn-outline-success w-100 removeNeighborPop" onclick="">이웃</button>
+			</c:when>
+			<c:otherwise>
+				<button type="button" class="btn btn-outline-success w-100 addNeighborPop" onclick="">이웃 추가</button>
+			</c:otherwise>
+		</c:choose>
 	</div>
 	<div class="col-md-2 mx-3">
 		<div id="" class="border-bottom alert-link accordion-button p-1 bg-white text-black" data-bs-toggle="collapse" data-bs-target="#category_list_div" aria-controls="category_list_div" aria-expanded="true" role="button">

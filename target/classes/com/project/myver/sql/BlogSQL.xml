@@ -10,6 +10,16 @@
 		VALUES (#{member_no}, #{blog_id}, #{blog_title}, #{blog_nick})
 	</insert>
 	
+	<!-- 21.06.22 블로그 정보 수정 -->
+	<update id="blogUpdate">
+		update blog 
+		SET blog_title = #{blog_title},
+			blog_nick = #{blog_nick},
+			blog_info = #{blog_info},
+			blog_topic = #{blog_topic}
+		where blog_id = #{blog_id}
+	</update>
+	
 	<!-- 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보 -->
 	<select id="selectBlogHomeDataFromBlog" parameterType="Integer" resultType="blogDTO">
 		SELECT blog_no, blog_nick, blog_img_no
@@ -31,15 +41,12 @@
 		WHERE member_no = #{member_no}
 	</select>
 	
-	<!-- 21.06.22 블로그 정보 수정 -->
-	<update id="blogUpdate">
-		update blog 
-		SET blog_title = #{blog_title},
-			blog_nick = #{blog_nick},
-			blog_info = #{blog_info},
-			blog_topic = #{blog_topic}
-		where blog_id = #{blog_id}
-	</update>
+	<!-- 21.08.06 blog_id로 회원번호, 닉네임 가져오기 -->
+	<select id="selectMember_noAndBlog_nickFromBlogByBlog_id" parameterType="String" resultType="blogDTO">
+		SELECT member_no, blog_nick 
+		FROM blog 
+		WHERE blog_id = ${blog_id}
+	</select>
 	
 	
 	
@@ -149,6 +156,19 @@
 	
 	
 	<!-- 'blog_neighbor'table ================================================================== -->
+	<!-- 21.08.06 이웃 추가 -->
+	<insert id="insertBlog_neighbor" parameterType="Map">
+		INSERT INTO blog_neighbor (member_no, neighbor_member_no, date)
+		VALUES (#{member_no}, #{neighbor_member_no}, SYSDATE())
+	</insert>
+	
+	<!-- 21.08.06 이웃 삭제 -->
+	<delete id="deleteBlog_neighbor" parameterType="Map">
+		DELETE FROM blog_neighbor
+		WHERE member_no = #{member_no} 
+			AND neighbor_member_no = #{neighbor_member_no}
+	</delete>
+	
 	<!-- 21.05.24 내가 추가한 이웃 리스트 가져오기 -->
 	<select id="selectFollowingListFromBlog_neighbor" parameterType="Integer" resultType="blogDTO">
 		SELECT neighbor_member_no, date
@@ -161,6 +181,14 @@
 		SELECT member_no, date
 		FROM blog_neighbor
 		WHERE neighbor_member_no = #{member_no}
+	</select>
+	
+	<!-- 21.08.06 member_no와 neighbor_member_no에 해당하는 레코드 개수 세기 -->
+	<select id="selectCntByMember_noAndNeighborMember_noFromBlog_neighbor" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM blog_neighbor 
+		WHERE member_no = ${member_no} 
+			AND neighbor_member_no = ${neighbor_member_no}
 	</select>
 	
 	

@@ -316,7 +316,23 @@ public class BlogService {
 		return "other";
 	}
 	
+	// 21.08.05 followerList(나를 추가한 이웃)중에 방문자가 포함되는지 확인
+	public boolean checkMemberIsPartOfFollowerList(int visitor_no, List<BlogDTO> followerList) {
+		if(visitor_no == -1) return false;
 		
+		boolean is_neighbor = false;
+		
+		for(BlogDTO follower : followerList) {
+			if(follower.getMember_no() == visitor_no) {
+				is_neighbor = true;
+				break;
+			}
+		}
+		
+		return is_neighbor;
+	}
+	
+	
 	
 	// 'blog'table ============================================================
 	// 21.05.19 블로그 생성하고 'blog_no' 리턴
@@ -328,6 +344,11 @@ public class BlogService {
 		blogDTO.setBlog_nick(blog_nick);
 		
 		return blogDAO.insertBlog(blogDTO);
+	}
+	
+	// 21.06.22 블로그 정보 수정
+	public int blogUpdate(BlogDTO blogDTO) {
+		return blogDAO.blogUpdate(blogDTO);
 	}
 
 	// 21.05.19 블로그 홈에서 보일 'member_no'에 해당하는 블로그 정보
@@ -345,9 +366,9 @@ public class BlogService {
 		return blogDAO.selectAllFromBlog(member_id);
 	}
 
-	// 21.06.22 블로그 정보 수정
-	public int blogUpdate(BlogDTO blogDTO) {
-		return blogDAO.blogUpdate(blogDTO);
+	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
+	public BlogDTO selectMember_noAndBlog_nickFromBlogByBlog_id(String blog_id) {
+		return blogDAO.selectMember_noAndBlog_nickFromBlogByBlog_id(blog_id);
 	}
 		
 	
@@ -477,7 +498,25 @@ public class BlogService {
 	
 	
 	// 'blog_neighbor'table ==================================================
-	// 21.05.24 내가 추가한 이웃 리스트 가져오기
+	// 21.08.06 이웃 추가
+	public int insertBlog_neighbor(int member_no, int neighbor_member_no) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("neighbor_member_no", neighbor_member_no);
+		
+		return blogDAO.insertBlog_neighbor(map);
+	}
+	
+	// 21.08.06 이웃 삭제
+	public int deleteBlog_neighbor(int member_no, int neighbor_member_no) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("neighbor_member_no", neighbor_member_no);
+		
+		return blogDAO.deleteBlog_neighbor(map);
+	}
+	
+	// 21.05.24 블로그의 following(내가 추가한 이웃) 목록 가져오기
 	public List<BlogDTO> selectFollowingListFromBlog_neighbor(int member_no) {
 		List<BlogDTO> blogList = blogDAO.selectFollowingListFromBlog_neighbor(member_no);
 		
@@ -494,7 +533,7 @@ public class BlogService {
 		return blogList;
 	}
 	
-	// 21.05.24 나를 추가한 이웃 리스트 가져오기
+	// 21.05.24 블로그의 follower(나를 추가한 이웃 ) 목록 가져오기
 	public List<BlogDTO> selectFollowerListFromBlog_neighbor(int member_no) {
 		List<BlogDTO> blogList = blogDAO.selectFollowerListFromBlog_neighbor(member_no);
 		
@@ -510,6 +549,15 @@ public class BlogService {
 		}
 		
 		return blogList;
+	}
+
+	// 21.08.06 member_no와 neighbor_member_no에 해당하는 레코드 개수 세기
+	public int selectCntByMember_noAndNeighborMember_noFromBlog_neighbor(int member_no, int neighbor_member_no) {
+		Map<String,Integer> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("neighbor_member_no", neighbor_member_no);
+		
+		return blogDAO.selectCntByMember_noAndNeighborMember_noFromBlog_neighbor(map);
 	}
 
 	
