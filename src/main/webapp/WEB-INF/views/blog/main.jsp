@@ -68,14 +68,18 @@
 				</div>
 			</div>
 		</c:if>
-		<c:choose>
-			<c:when test="${IS_NEIGHBOR}">
-				<button type="button" class="btn btn-outline-success w-100 removeNeighborPop" onclick="">이웃</button>
-			</c:when>
-			<c:otherwise>
-				<button type="button" class="btn btn-outline-success w-100 addNeighborPop" onclick="">이웃 추가</button>
-			</c:otherwise>
-		</c:choose>
+		<c:if test="${!empty user.id and BLOG.blog_id ne user.id}">
+			<a class="btn btn-outline-success w-100" onclick="window.open('${pageContext.request.contextPath}/blog/neighborChange?blog_id=${BLOG.blog_id}', '이웃 설정', 'menubar=no');">
+				<c:choose>
+					<c:when test="${IS_NEIGHBOR}">
+						이웃
+					</c:when>
+					<c:otherwise>
+						이웃 추가
+					</c:otherwise>
+				</c:choose>
+			</a>
+		</c:if>
 	</div>
 	<div class="col-md-2 mx-3">
 		<div id="" class="border-bottom alert-link accordion-button p-1 bg-white text-black" data-bs-toggle="collapse" data-bs-target="#category_list_div" aria-controls="category_list_div" aria-expanded="true" role="button">

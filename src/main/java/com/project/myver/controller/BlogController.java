@@ -1,6 +1,7 @@
 package com.project.myver.controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -271,29 +272,29 @@ public class BlogController {
     }
     
     // 21.08.05 이웃 설정(추가/삭제) 폼
-    @RequestMapping(value = "/blog/NeighborChange", method = RequestMethod.GET)	
+    @RequestMapping(value = "/blog/neighborChange", method = RequestMethod.GET)	
     public ModelAndView blogNeighborChangeFrm(
 				ModelAndView mv,
 				HttpServletRequest request,
 				@AuthenticationPrincipal MemberDTO user,
-				String blog_id) {
+				@RequestParam(value="blog_id", required = true) String blog_id) {
+    	System.out.println("blogNeighborChangeFrm - blog_id: "+blog_id);
     	if(user == null) {
     		System.out.println("blogNeighborChangeFrm - 로그인 정보 없음");
-    		// 방법A
-    		RedirectView rv = new RedirectView(request.getContextPath()+"/?");
-    		mv.setView(rv);
-    		return mv;
+    		mv.setViewName("blog/error/?????????");
+			return mv;
     	}
     	
-    	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
-    	BlogDTO blogDTO = blogSVC.selectMember_noAndBlog_nickFromBlogByBlog_id(blog_id);
+    	// 21.08.06 blog_id로 닉네임 가져오기
+    	BlogDTO blogDTO = blogSVC.selectBlog_nickByBlog_idFromBlog(blog_id);
     	
     	if(blogDTO == null) {
     		System.out.println("blogNeighborChangeFrm - 존재하지 않는 blog_id");
-    		// 방법B
-    		mv.setViewName("");
-    		return mv;
+    		mv.setViewName("blog/error/no_blog_error");
+			return mv;
     	}
+    	
+    	blogDTO.setBlog_id(blog_id);
     	
     	// 21.08.06 user가 해당 회원을 이웃으로 추가했는지 여부 가져오기
     	boolean is_neighbor = 
@@ -307,21 +308,42 @@ public class BlogController {
     }
     
     // 21.08.06 이웃 설정(추가/삭제)
-    @RequestMapping(value = "/blog/NeighborChange", method = RequestMethod.POST)
+    @RequestMapping(value = "/blog/neighborChange", method = RequestMethod.POST)
     @ResponseBody
-    public String blogNeighborChange(boolean add, int member_no, int neighbor_member_no) {
-    	System.out.println("blogNeighborChange");
-    	int cnt = 0;
+    public ModelAndView blogNeighborChange(
+    		ModelAndView mv,
+    		@AuthenticationPrincipal MemberDTO user,
+    		@RequestParam(value="add", required = true) boolean add,
+    		@RequestParam(value="blog_id", required = true) String blog_id) {
+    	System.out.println("blogNeighborChange - add: "+add+", blog_id: "+blog_id);
+    	
+    	// 블로그 주인 id count 가져오기
+		int idCnt = memSVC.getIdCnt(blog_id);
+		
+		if(idCnt == 0) { // member id(blogId)가 존재하지 않는 경우
+			System.out.println("blogNeighborChange - blog id가 존재하지 않음");
+			mv.setViewName("blog/error/no_blog_error");
+			return mv;
+		}
+    	
+    	BlogDTO blogDTO = blogSVC.selectBlog_nickByBlog_idFromBlog(blog_id);
+		int neighbor_member_no = memSVC.selectMember_noById(blog_id);
+		int cnt = 0;
+    	
+		// 이웃 추가
     	if(add) {
-    		// 이웃 추가
-    		cnt = blogSVC.insertBlog_neighbor(member_no, neighbor_member_no);
+    		cnt = blogSVC.insertBlog_neighbor(user.getMember_no(), neighbor_member_no);
+		// 이웃 삭제
     	}else {
-    		// 이웃 삭제
-    		cnt = blogSVC.deleteBlog_neighbor(member_no, neighbor_member_no);
+    		cnt = blogSVC.deleteBlog_neighbor(user.getMember_no(), neighbor_member_no);
     	}
     	
     	System.out.println("cnt : "+cnt);
-    	return null;
+
+    	mv.addObject("BLOG", blogDTO);
+    	mv.addObject("ADD", add);
+    	mv.setViewName("blog/blog_neighbor_change_success");
+    	return mv;
     }
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)

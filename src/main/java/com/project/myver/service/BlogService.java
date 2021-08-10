@@ -366,9 +366,9 @@ public class BlogService {
 		return blogDAO.selectAllFromBlog(member_id);
 	}
 
-	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
-	public BlogDTO selectMember_noAndBlog_nickFromBlogByBlog_id(String blog_id) {
-		return blogDAO.selectMember_noAndBlog_nickFromBlogByBlog_id(blog_id);
+	// 21.08.06 blog_id로 닉네임 가져오기
+	public BlogDTO selectBlog_nickByBlog_idFromBlog(String blog_id) {
+		return blogDAO.selectBlog_nickByBlog_idFromBlog(blog_id);
 	}
 		
 	

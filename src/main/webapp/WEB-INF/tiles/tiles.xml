@@ -5,6 +5,39 @@
  	 - 참고사이트 : https://wjheo.tistory.com/entry/Spring-Spring-Tiles-Framework-%EC%A0%81%EC%9A%A9 -->
  
 <tiles-definitions>
+    <!-- 21.08.10 추가 
+    	 - 바디(body)만 존재하는 레이아웃
+    -->
+    <definition name="only_body" template="/WEB-INF/tiles/onlyBodyLayout.jsp">
+    	<put-attribute name="body" value="" />
+    </definition>
+    
+	<!-- 21.04.14 추가 
+		 - base tiles layout
+		 - 1. 기본적인 템플릿
+		 - header, body, footer를 가진 template.jsp라는 기본 레이아웃을 정의.
+		 - 이 정의된 레이아웃의 name속성인 base를 상속하여 추가적으로 여러 tiles를 만들 수 있음. -->
+	<!-- base : 로그인 헤더/푸터 -->
+	<definition name="base" template="/WEB-INF/tiles/baseLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
+	</definition>
+	
+	<definition name="/blog/neighborChange" extends="only_body">
+		<put-attribute name="body" value="/WEB-INF/views/blog/blog_neighbor_change.jsp" /> 
+	</definition>
+	
+	<definition name="*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
+	</definition>
+	<definition name="*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" /> 
+	</definition>
+	<definition name="*/*/*" extends="base"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
+	</definition>
+	
 	
 	<!-- 메뉴 미표시
 		 : 페이지 중 로그인페이지 같은건 보통 header, footer모두를 레이아웃으로 가지지 않을 것이다. 
@@ -23,18 +56,6 @@
     </definition>
      --> 
      
-	<!-- 21.04.14 추가 
-		 - base tiles layout
-		 - 1. 기본적인 템플릿
-		 - header, body, footer를 가진 template.jsp라는 기본 레이아웃을 정의.
-		 - 이 정의된 레이아웃의 name속성인 base를 상속하여 추가적으로 여러 tiles를 만들 수 있음. -->
-	<!-- base : 로그인 헤더/푸터 -->
-	<definition name="base" template="/WEB-INF/tiles/baseLayout.jsp">
-		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
-		<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
-	</definition>
-	
 	<!-- 2. base를 상속받은것. 
 		 - 즉, body부분만 설정한 경로대로 갈아 끼우고, 나머지 header, footer는 base의 형식대로 상속받아 오는 것 --> 
 	<!-- <definition name="*" extends="base"> 
@@ -49,14 +70,4 @@
 	<definition name="/*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" /> 
 	</definition>-->
-	
-	<definition name="*" extends="base"> 
-		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
-	</definition>
-	<definition name="*/*" extends="base"> 
-		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" /> 
-	</definition>
-	<definition name="*/*/*" extends="base"> 
-		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
-	</definition>
 </tiles-definitions>
