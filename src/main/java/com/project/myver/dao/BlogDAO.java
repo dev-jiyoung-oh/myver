@@ -45,9 +45,9 @@ public class BlogDAO extends SqlSessionDaoSupport {
 		return session.selectOne("blog.selectBlog_titleAndidAndNickAndImg_noFromBlog", member_no);
 	}
 
-	// 21.08.06 blog_id로 닉네임 가져오기
-	public BlogDTO selectBlog_nickByBlog_idFromBlog(String blog_id) {
-		return session.selectOne("blog.selectBlog_nickByBlog_idFromBlog", blog_id);
+	// 21.08.06 blog_id로 회원 번호, 닉네임 가져오기
+	public BlogDTO selectMember_noAndBlog_nickByBlog_idFromBlog(String blog_id) {
+		return session.selectOne("blog.selectMember_noAndBlog_nickByBlog_idFromBlog", blog_id);
 	}
 	
 	

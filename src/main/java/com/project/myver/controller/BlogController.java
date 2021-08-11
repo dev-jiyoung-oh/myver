@@ -285,8 +285,8 @@ public class BlogController {
 			return mv;
     	}
     	
-    	// 21.08.06 blog_id로 닉네임 가져오기
-    	BlogDTO blogDTO = blogSVC.selectBlog_nickByBlog_idFromBlog(blog_id);
+    	// 21.08.06 blog_id로 회원번호, 닉네임 가져오기
+    	BlogDTO blogDTO = blogSVC.selectMember_noAndBlog_nickByBlog_idFromBlog(blog_id);
     	
     	if(blogDTO == null) {
     		System.out.println("blogNeighborChangeFrm - 존재하지 않는 blog_id");
@@ -300,7 +300,7 @@ public class BlogController {
     	boolean is_neighbor = 
     			(blogSVC.selectCntByMember_noAndNeighborMember_noFromBlog_neighbor(user.getMember_no(), blogDTO.getMember_no()) == 0)?
     					false : true;
-
+    	System.out.println("이웃 여부: "+is_neighbor);
     	mv.addObject("BLOG", blogDTO);
     	mv.addObject("IS_NEIGHBOR", is_neighbor);
     	mv.setViewName("blog/blog_neighbor_change");
@@ -326,7 +326,7 @@ public class BlogController {
 			return mv;
 		}
     	
-    	BlogDTO blogDTO = blogSVC.selectBlog_nickByBlog_idFromBlog(blog_id);
+    	BlogDTO blogDTO = blogSVC.selectMember_noAndBlog_nickByBlog_idFromBlog(blog_id);
 		int neighbor_member_no = memSVC.selectMember_noById(blog_id);
 		int cnt = 0;
     	

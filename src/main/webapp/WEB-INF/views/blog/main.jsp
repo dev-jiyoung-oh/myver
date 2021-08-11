@@ -53,7 +53,7 @@
 			<div>
 				<div>
 					<button type="button" class="btn btn-success w-100">
-						<i class="bi bi-pencil"></i>글쓰기
+						<i class="bi bi-pencil"></i> 글쓰기
 					</button>
 					<!-- 
 					<i class="bi bi-pencil"></i>

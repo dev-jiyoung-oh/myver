@@ -10,10 +10,11 @@
 
 <script type="text/javascript">
 	$(function(){
-		//id => $('#') //class => $('.') //name => $('[name=""]')
+	    opener.parent.location.reload();
+
+	    //id => $('#') //class => $('.') //name => $('[name=""]')
 		
-	    /*opener.parent.location.reload();
-   		window.close();*/
+   		//window.close();
 	});
 </script>
 </head>

@@ -41,9 +41,9 @@
 		WHERE member_no = #{member_no}
 	</select>
 	
-	<!-- 21.08.06 blog_id로 닉네임 가져오기 -->
-	<select id="selectBlog_nickByBlog_idFromBlog" parameterType="String" resultType="blogDTO">
-		SELECT blog_nick 
+	<!-- 21.08.06 blog_id로 회원번호, 닉네임 가져오기 -->
+	<select id="selectMember_noAndBlog_nickByBlog_idFromBlog" parameterType="String" resultType="blogDTO">
+		SELECT member_no, blog_nick 
 		FROM blog 
 		WHERE blog_id = #{value} <!-- value : blog_id -->
 	</select>

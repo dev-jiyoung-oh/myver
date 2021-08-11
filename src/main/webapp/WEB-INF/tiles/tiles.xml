@@ -24,10 +24,6 @@
 		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
 	
-	<definition name="/blog/neighborChange" extends="only_body">
-		<put-attribute name="body" value="/WEB-INF/views/blog/blog_neighbor_change.jsp" /> 
-	</definition>
-	
 	<definition name="*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
@@ -36,6 +32,10 @@
 	</definition>
 	<definition name="*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
+	</definition>
+	
+	<definition name="*/blog/neighborChange*" extends="only_body">
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
 	
 	
