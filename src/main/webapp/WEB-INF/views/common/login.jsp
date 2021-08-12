@@ -31,7 +31,7 @@
 				</div>
 			</div>
 			<div class="form-group my-1">
-				<button type="submit" class="btn btn-primary w-100">로그인</button>
+				<button type="submit" class="btn btn-success w-100">로그인</button>
 			</div>
 			
 			<ul class="nav justify-content-center">

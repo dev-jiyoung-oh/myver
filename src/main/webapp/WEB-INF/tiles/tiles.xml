@@ -24,6 +24,19 @@
 		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
 	
+	
+	<!-- only_body(바디) -->
+	<definition name="*.onlyBody" extends="only_body">
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
+	</definition>
+	<definition name="*/*.onlyBody" extends="only_body"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" /> 
+	</definition>
+	<definition name="*/*/*.onlyBody" extends="only_body"> 
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
+	</definition>
+	
+	<!-- base(헤더/바디/푸터) -->
 	<definition name="*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
@@ -32,10 +45,6 @@
 	</definition>
 	<definition name="*/*/*" extends="base"> 
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" /> 
-	</definition>
-	
-	<definition name="*/blog/neighborChange*" extends="only_body">
-		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> 
 	</definition>
 	
 	

@@ -290,7 +290,7 @@ public class BlogController {
     	
     	if(blogDTO == null) {
     		System.out.println("blogNeighborChangeFrm - 존재하지 않는 blog_id");
-    		mv.setViewName("blog/error/no_blog_error");
+    		mv.setViewName("blog/error/no_blog_error.onlyBody");
 			return mv;
     	}
     	
@@ -303,7 +303,7 @@ public class BlogController {
     	System.out.println("이웃 여부: "+is_neighbor);
     	mv.addObject("BLOG", blogDTO);
     	mv.addObject("IS_NEIGHBOR", is_neighbor);
-    	mv.setViewName("blog/blog_neighbor_change");
+    	mv.setViewName("blog/blog_neighbor_change.onlyBody");
     	return mv;
     }
     
@@ -322,7 +322,7 @@ public class BlogController {
 		
 		if(idCnt == 0) { // member id(blogId)가 존재하지 않는 경우
 			System.out.println("blogNeighborChange - blog id가 존재하지 않음");
-			mv.setViewName("blog/error/no_blog_error");
+			mv.setViewName("blog/error/no_blog_error.onlyBody");
 			return mv;
 		}
     	
@@ -342,7 +342,7 @@ public class BlogController {
 
     	mv.addObject("BLOG", blogDTO);
     	mv.addObject("ADD", add);
-    	mv.setViewName("blog/blog_neighbor_change_success");
+    	mv.setViewName("blog/blog_neighbor_change_success.onlyBody");
     	return mv;
     }
     

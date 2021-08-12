@@ -69,7 +69,7 @@
 			</div>
 		</c:if>
 		<c:if test="${!empty user.id and BLOG.blog_id ne user.id}">
-			<a class="btn btn-outline-success w-100" onclick="window.open('${pageContext.request.contextPath}/blog/neighborChange?blog_id=${BLOG.blog_id}', '이웃 설정', 'menubar=no');">
+			<a class="btn btn-outline-success w-100" onclick="window.open('${pageContext.request.contextPath}/blog/neighborChange?blog_id=${BLOG.blog_id}', '이웃 설정', 'width=530, height=350, menubar=no');">
 				<c:choose>
 					<c:when test="${IS_NEIGHBOR}">
 						이웃

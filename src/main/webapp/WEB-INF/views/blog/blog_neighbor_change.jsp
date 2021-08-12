@@ -19,19 +19,19 @@
 </head>
 
 <body>
-	<div class="">
+	<div class="p-4">
 		<form method="POST" action="${pageContext.request.contextPath}/blog/neighborChange">
 			<input type="hidden" name="blog_id" value="${BLOG.blog_id}">
 			<div>
 				<c:choose>
 					<c:when test="${IS_NEIGHBOR}">
 						<input type="hidden" name="add" value="false">
-						<div class="popup_heading">
-							<h1 class="title">이웃 끊기</h1>
+						<div class="popup_heading mb-4">
+							<h1 class="title fs-4 fw-bold">이웃 끊기</h1>
 						</div>
-						<div class="popup_text">
+						<div class="popup_text p-4 bg-light border">
 							<div class="buddy_state">
-								<p>
+								<p class="m-0">
 									<strong class="text-success buddy_state_text">${BLOG.blog_nick}</strong>님과의 이웃을 끊습니다.
 								</p>
 							</div>
@@ -39,33 +39,35 @@
 					</c:when>
 					<c:otherwise>
 						<input type="hidden" name="add" value="true">
-						<div class="popup_heading">
-							<h1 class="title">이웃 추가</h1>
+						<div class="popup_heading mb-4">
+							<h1 class="title fs-4 fw-bold">이웃 추가</h1>
 						</div>
-						<div class="popup_text">
+						<div class="popup_text p-4 bg-light border">
 							<div class="buddy_state">
-								<p>
-									<strong class="text-success">${BLOG.blog_nick}</strong>님을 이웃으로 추가합니다.
+								<p class="m-0">
+									<strong class="text-success buddy_state_text">${BLOG.blog_nick}</strong>님을 이웃으로 추가합니다.
 								</p>
 							</div>
 						</div>
 					</c:otherwise>
 				</c:choose>
-				<div class="tip_box">
-					<ul class="list">
-						<li class="item">
-							<a target="_blank" href="#" class="">이웃은 무엇인가요?</a>
+				<div class="tip_box my-2">
+					<ul class="nav flex-column lh-1">
+						<li class="nav-item">
+							<a target="_blank" href="#" class="nav-link text-black hover-text-decoration-undeline">이웃은 무엇인가요?</a>
 						</li>
-						<li class="item">
-							<a target="_blank" href="#" class="">이웃공개 글은 누가 볼 수 있게 되나요?</a>
+						<li class="nav-item">
+							<a target="_blank" href="#" class="nav-link text-black hover-text-decoration-undeline">이웃공개 글은 누가 볼 수 있게 되나요?</a>
+						</li>
+						<li class="nav-item">
+							<a target="_blank" href="#" class="nav-link text-black hover-text-decoration-undeline">블로그 이용 TIP 더보기</a>
 						</li>
 					</ul>
-					<a target="_blank" href="#" class="">블로그 이용 TIP 더보기</a>
 				</div>
 			</div>
-			<div class="area_button">
+			<div class="area_button text-end mt-4">
 				<a href="#" onclick="window.close()" class="btn btn-outline-secondary">취소</a>
-				<input type="submit" class="btn btn-success" value="다음">
+				<input type="submit" class="btn btn-success " value="다음">
 			</div>
 		</form>
 	</div>
