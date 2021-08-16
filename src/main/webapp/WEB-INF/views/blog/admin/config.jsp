@@ -12,23 +12,46 @@
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
-		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
-	
-		$("#blogUpdateBtn").click(function(){
-			alert("버튼 누름!");
-			var queryString = $("#blogFrm").serialize();
-			 
-	        $.ajax({
-	            type : 'post',
-	            url : '${pageContext.request.contextPath}/blog.admin.update/blog',
-	            data : queryString,
-	            error: function(request,status,error){
-	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-	            },
-	            success : function(json){
-	                alert("성공적으로 반영되었습니다.");
-	            }
-	        });
+		//$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
+		
+		$(".following-delete").click(function(){
+			if($(".following-check:checked").length == 0){
+				alert("먼저 이웃을 선택해주세요.");
+				return false;
+			}
+			
+			if(confirm("선택한 이웃을 삭제하시겠습니까?")){
+				var followings = [];
+				
+				$(".following-check:checked").each(function(){
+					followings.push($(this).val());
+				})
+				/*
+				for(var i=0; i<followings.length; i++){
+					alert(followings[i]);
+				}*/
+				//followings.forEach(val => alert(val));
+				
+				$.ajax({
+		            type : 'post',
+		            url : '${pageContext.request.contextPath}/blog/neighborDelete',
+		            data : {followings : followings},
+		            dataType : 'json',
+		            //traditional : true, // 배열 전송시에 이렇게  해야함...!??? 뭐야 안하니까 되는데?
+		            error: function(xhr, status, error){
+		                alert(status+" "+error);
+		            },
+		            success : function(data){
+		            	if(data == "no_login"){
+		            		alert("로그인 필요");
+		            	}else{
+			                alert(data+"명 삭제 완료");
+			                
+			                // 해당하는 tr 삭제
+		            	}
+		            }
+		        });
+			}
 		})
 	})
 	</script>
@@ -166,7 +189,7 @@ MYVER 블로그 | 관리
 			<div class="following-action">
 				<div class="following-action1 float-start my-3 mx-1">
 					<span class="">
-						<button type="button" class="btn btn-sm btn-light border-secondary">삭제</button>
+						<button type="button" class="btn btn-sm btn-light border-secondary following-delete">삭제</button>
 					</span>
 				</div>
 				<div class="following-action2 float-end my-3">
@@ -186,7 +209,7 @@ MYVER 블로그 | 관리
 			</div>
 			<table class="table text-center">
 				<tr class="table-light">
-					<td class="col"><input type="checkbox" value="-1"/></td>
+					<td class="col"><input type="checkbox" class="following-all-check"/></td>
 					<td class="col text-start">
 						<select>
 							<%-- 
@@ -203,17 +226,15 @@ MYVER 블로그 | 관리
 					<td class="col">추가일</td>
 				</tr>
 				<c:forEach items="${FOLLOWINGS}" var="following">
-					<tr class="
-								<c:choose>
+					<tr class="<c:choose>
 									<c:when test="${following.isBothNeighbor}">
 										following-both-neighbor
 									</c:when>
 									<c:otherwise>
 										following-neighbor
 									</c:otherwise>
-								</c:choose>
-					">
-						<td><input type="checkbox" value="${following.neighbor_member_no}"/></td>
+								</c:choose>">
+						<td><input type="checkbox" value="${following.neighbor_member_no}" class="following-check"/></td>
 						<td class="col text-start">
 							<c:choose>
 								<c:when test="${following.isBothNeighbor}">

@@ -3,6 +3,7 @@ package com.project.myver.controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -344,6 +345,32 @@ public class BlogController {
     	mv.addObject("ADD", add);
     	mv.setViewName("blog/blog_neighbor_change_success.onlyBody");
     	return mv;
+    }
+    
+    // 21.08.16 이웃 삭제
+    @RequestMapping(value = "/blog/neighborDelete", method = RequestMethod.POST)
+    @ResponseBody
+    public String blogNeighborDelete(
+    		@AuthenticationPrincipal MemberDTO user,
+    		@RequestParam(value="followings[]") int[] followings) {
+    	System.out.println("blogNeighborDelete - followings: " + Arrays.toString(followings));
+    	
+    	if(user == null) {
+    		return "no_login";
+    	}
+    	
+    	int cnt = 0;
+    	/*
+    	for(int neighbor_member_no : followings) {
+    		int temp_cnt = blogSVC.deleteBlog_neighbor(user.getMember_no(), neighbor_member_no);
+    		
+    		System.out.println("temp_cnt: "+ temp_cnt);
+    		cnt += temp_cnt;
+    	}*/
+    	
+    	System.out.println("cnt : "+cnt);
+
+    	return Integer.toString(cnt);
     }
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
