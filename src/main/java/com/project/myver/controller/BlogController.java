@@ -350,27 +350,29 @@ public class BlogController {
     // 21.08.16 이웃 삭제
     @RequestMapping(value = "/blog/neighborDelete", method = RequestMethod.POST)
     @ResponseBody
-    public String blogNeighborDelete(
+    public List<Integer> blogNeighborDelete(
     		@AuthenticationPrincipal MemberDTO user,
     		@RequestParam(value="followings[]") int[] followings) {
     	System.out.println("blogNeighborDelete - followings: " + Arrays.toString(followings));
     	
+    	List<Integer> successed_member_no_list = new ArrayList<>();
+
     	if(user == null) {
-    		return "no_login";
+    		System.out.println("미로그인");
+    		
+    		successed_member_no_list.add(-1);
+    		return successed_member_no_list;
     	}
     	
-    	int cnt = 0;
-    	/*
     	for(int neighbor_member_no : followings) {
     		int temp_cnt = blogSVC.deleteBlog_neighbor(user.getMember_no(), neighbor_member_no);
     		
-    		System.out.println("temp_cnt: "+ temp_cnt);
-    		cnt += temp_cnt;
-    	}*/
+    		if(temp_cnt == 1) {
+    			successed_member_no_list.add(neighbor_member_no);
+    		}
+    	}
     	
-    	System.out.println("cnt : "+cnt);
-
-    	return Integer.toString(cnt);
+    	return successed_member_no_list;
     }
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)

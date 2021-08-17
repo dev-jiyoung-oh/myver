@@ -42,18 +42,22 @@
 		                alert(status+" "+error);
 		            },
 		            success : function(data){
-		            	if(data == "no_login"){
+		            	if(data[0] == -1){
 		            		alert("로그인 필요");
+		            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
 		            	}else{
-			                alert(data+"명 삭제 완료");
-			                
-			                // 해당하는 tr 삭제
+			            	//alert(data.length+"/"+followings.length+" 삭제 완료");
+			            	$.each(data, function(i, val){
+			            		if(val != -1){
+				            		$("input[name='following-check'][value='"+val+"']").closest('tr').remove();
+			            		}
+			            	});
 		            	}
 		            }
 		        });
 			}
-		})
-	})
+		});
+	});
 	</script>
 </head>
 <body>
@@ -226,7 +230,7 @@ MYVER 블로그 | 관리
 					<td class="col">추가일</td>
 				</tr>
 				<c:forEach items="${FOLLOWINGS}" var="following">
-					<tr class="<c:choose>
+					<tr class="${following.neighbor_member_no} <c:choose>
 									<c:when test="${following.isBothNeighbor}">
 										following-both-neighbor
 									</c:when>
@@ -234,7 +238,7 @@ MYVER 블로그 | 관리
 										following-neighbor
 									</c:otherwise>
 								</c:choose>">
-						<td><input type="checkbox" value="${following.neighbor_member_no}" class="following-check"/></td>
+						<td><input type="checkbox" name="following-check" value="${following.neighbor_member_no}" class="following-check"/></td>
 						<td class="col text-start">
 							<c:choose>
 								<c:when test="${following.isBothNeighbor}">
