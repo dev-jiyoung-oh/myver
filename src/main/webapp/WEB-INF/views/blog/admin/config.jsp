@@ -23,14 +23,30 @@
 			if(confirm("선택한 이웃을 삭제하시겠습니까?")){
 				var followings = [];
 				
-				$(".following-check:checked").each(function(){
+				/*$(".following-check:checked").each(function(){
+					followings.push($(this).val());
+				})*/
+				
+				$.each($(".following-check:checked"), function(){
 					followings.push($(this).val());
 				})
+				
+				//console.log(followings);
+				
 				/*
 				for(var i=0; i<followings.length; i++){
 					alert(followings[i]);
 				}*/
 				//followings.forEach(val => alert(val));
+				followings.forEach(function(val){
+					console.log(val);
+				});
+				console.log("----");
+				followings.forEach(function(){
+					console.log($(this).val());
+				});
+				
+				return false;
 				
 				$.ajax({
 		            type : 'post',
@@ -98,7 +114,7 @@ MYVER 블로그 | 관리
 		</div>
 	</div>
 	
-	<div class="col-md-9">
+	<div id="content" class="col-md-9">
 		<form id="blogFrm">
 			<h1>블로그 정보</h1>
 			<table>
@@ -213,8 +229,8 @@ MYVER 블로그 | 관리
 			</div>
 			<table class="table text-center">
 				<tr class="table-light">
-					<td class="col"><input type="checkbox" class="following-all-check"/></td>
-					<td class="col text-start">
+					<td class="col w-6"><input type="checkbox" class="following-all-check"/></td>
+					<td class="col w-20">
 						<select>
 							<%-- 
 							<option selected>내가 이웃으로 추가한 사람 전체</option>
@@ -226,8 +242,8 @@ MYVER 블로그 | 관리
 							<option>서로이웃</option>
 						</select>
 					</td>
-					<td class="col text-start">이웃</td>
-					<td class="col">추가일</td>
+					<td class="col text-start w-auto">이웃</td>
+					<td class="col w-20">추가일</td>
 				</tr>
 				<c:forEach items="${FOLLOWINGS}" var="following">
 					<tr class="${following.neighbor_member_no} <c:choose>
@@ -238,8 +254,8 @@ MYVER 블로그 | 관리
 										following-neighbor
 									</c:otherwise>
 								</c:choose>">
-						<td><input type="checkbox" name="following-check" value="${following.neighbor_member_no}" class="following-check"/></td>
-						<td class="col text-start">
+						<td class=""><input type="checkbox" name="following-check" value="${following.neighbor_member_no}" class="following-check"/></td>
+						<td class="col">
 							<c:choose>
 								<c:when test="${following.isBothNeighbor}">
 									서로이웃
@@ -252,7 +268,7 @@ MYVER 블로그 | 관리
 						<td class="col text-start">${following.blog_nick} | 
 							<a href="${pageContext.request.contextPath}/blog/${following.blog_nick}">${following.blog_title}</a>
 						</td>
-						<td>${following.date}</td>
+						<td class="">${following.date}</td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -264,16 +280,16 @@ MYVER 블로그 | 관리
 			<h1>나를 추가한 이웃</h1>
 			<table class="table text-center">
 				<tr class="table-light">
-					<td class="col"><input type="checkbox" value="-1"/></td>
-					<td class="col text-start">
+					<td class="col w-6"><input type="checkbox"/></td>
+					<td class="col text-start w-auto">
 						<select>
 							<option selected>나를 이웃으로 추가한 사람 전체</option>
 							<option>나도 이웃으로 추가한 사람</option>
 							<option>상대만 나를 추가한 사람</option>
 						</select>
 					</td>
-					<td class="col">이웃 추가</td>
-					<td class="col">추가일</td>
+					<td class="col w-20">이웃 추가</td>
+					<td class="col w-20">추가일</td>
 				</tr>
 				<c:forEach items="${FOLLOWERS}" var="follower">
 					<tr>

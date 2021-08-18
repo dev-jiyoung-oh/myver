@@ -125,7 +125,7 @@ public class BlogController {
 		// 21.06.12 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
 		if(map == null) {
 			System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
-			mv.setViewName("blog/error_to_main");
+			mv.setViewName("blog/error/error_to_main");
 			mv.addObject("BLOG", blogDTO);
 			return mv;
 		}
@@ -202,7 +202,7 @@ public class BlogController {
 		// 가져올 카테고리가 없는 경우, 해당하는 블로그 메인으로 이동
 		if(map == null) {
 			System.out.println("해당 카테고리를 방문하는데 오류가 발생했습니다.");
-			mv.setViewName("blog/error_to_main");
+			mv.setViewName("blog/error/error_to_main");
 			mv.addObject("BLOG", blogDTO);
 			return mv;
 		}
