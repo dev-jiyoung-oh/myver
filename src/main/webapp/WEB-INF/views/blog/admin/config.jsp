@@ -8,6 +8,36 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<script type="text/javascript">
+	const adminConfig = {
+		goToPage: function(href){
+			//alert(href);
+			//alert(href.substr(href.lastIndexOf('/')+1));
+			let page = href.substr(href.lastIndexOf('/')+1);
+			
+			function pageEmpty(){
+				$('#content').empty();
+			};
+			
+			if(page == 'blogInfo.myver'){
+				alert('블로그 정보');
+				pageEmpty();
+				// 페이지 생성해야함
+			}else if(page == 'myNeighborManage.myver'){
+				alert('내가 추가한 이웃');
+				pageEmpty();
+				// 페이지 생성해야함
+			}else if(page == 'neighborMeManage.myver'){
+				alert('나를 추가한 이웃');
+				pageEmpty();
+				// 페이지 생성해야함
+			}else if(page == 'blogReset.myver'){
+				alert('블로그 초기화');
+				pageEmpty();
+				// 페이지 생성해야함
+			}
+		}
+	}
+	
 	$(function(){
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
@@ -23,30 +53,11 @@
 			if(confirm("선택한 이웃을 삭제하시겠습니까?")){
 				var followings = [];
 				
-				/*$(".following-check:checked").each(function(){
+				$(".following-check:checked").each(function(){
 					followings.push($(this).val());
-				})*/
-				
-				$.each($(".following-check:checked"), function(){
-					followings.push($(this).val());
-				})
+				})*
 				
 				//console.log(followings);
-				
-				/*
-				for(var i=0; i<followings.length; i++){
-					alert(followings[i]);
-				}*/
-				//followings.forEach(val => alert(val));
-				followings.forEach(function(val){
-					console.log(val);
-				});
-				console.log("----");
-				followings.forEach(function(){
-					console.log($(this).val());
-				});
-				
-				return false;
 				
 				$.ajax({
 		            type : 'post',
@@ -96,20 +107,36 @@ MYVER 블로그 | 관리
 		<div>
 			<div>기본 정보 관리</div>
 			<ul>
-				<li>블로그 정보</li>
+				<li>
+					<a href="javascript:adminConfig.goToPage('${pageContext.request.contextPath}/blog.admin/blogInfo.myver');">
+						블로그 정보
+					</a>
+				</li>
 			</ul>   
 		</div>
 		<div>
 			<div>이웃 관리</div>
 			<ul>
-				<li>내가 추가한 이웃</li>
-				<li>나를 추가한 이웃</li>
+				<li>
+					<a href="javascript:adminConfig.goToPage('${pageContext.request.contextPath}/blog.admin/myNeighborManage.myver');">
+						내가 추가한 이웃
+					</a>
+				</li>
+				<li>
+					<a href="javascript:adminConfig.goToPage('${pageContext.request.contextPath}/blog.admin/neighborMeManage.myver');">
+						나를 추가한 이웃
+					</a>
+				</li>
 			</ul>   
 		</div>
 		<div>
 			<div>사생활 보호</div>
 			<ul>
-				<li>블로그 초기화</li>
+				<li>
+					<a href="javascript:adminConfig.goToPage('${pageContext.request.contextPath}/blog.admin/blogReset.myver');">
+						블로그 초기화
+					</a>
+				</li>
 			</ul>   
 		</div>
 	</div>
