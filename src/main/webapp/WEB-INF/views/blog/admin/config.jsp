@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -8,6 +8,55 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<script type="text/javascript">
+	function newPageBlogInfo(){
+		console.log('newPageBlogInfo()');
+		
+		$.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog.admin/blogInfo.myver',
+            data : {blog_id : '${BLOG.blog_id}'},
+            dataType : 'json',
+            error: function(xhr, status, error){
+                alert(status+" "+error);
+            },
+            success : function(data){
+            	alert('ajax 성공');
+            	if(data == 'no_login'){
+            		alert("로그인 필요");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else if(data == 'error'){
+	            	//
+            		alert("에러 발생");
+            	}else{
+            		console.log(data.blog_id);
+					
+            		let form = '<form id="blogFrm2">';
+            		let topic_list = [];
+            		topic_list.push('맛집');
+            		topic_list.push('라라라');
+            		
+					form += '<h1>블로그 정보</h1>';
+					form += '<table class="table">';
+					form += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
+					form += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
+					form += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
+					form += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
+					form += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
+					for(i=0; i<topic_list.length; i++){
+						form += '<option>'+ topic_list[i] + '</option>';
+					}
+					form += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
+					form += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
+					form += '</table>';
+					form += '<div><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
+					form += '</form>';
+					
+					$('#content').html(form);
+            	}
+            }
+        });
+	}
+	
 	const adminConfig = {
 		goToPage: function(href){
 			//alert(href);
@@ -20,8 +69,8 @@
 			
 			if(page == 'blogInfo.myver'){
 				alert('블로그 정보');
-				pageEmpty();
-				// 페이지 생성해야함
+				newPageBlogInfo();
+				// 페이지 생성해야함 A.html(B): A태그의 시작태그와 끝태그 사이의 내용을 B로 대체한다.
 			}else if(page == 'myNeighborManage.myver'){
 				alert('내가 추가한 이웃');
 				pageEmpty();
@@ -38,11 +87,31 @@
 		}
 	}
 	
+	function blogUpdate(){
+		var queryString = $("#blogFrm2").serialize();
+		console.log(queryString);
+		
+        $.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog.admin/blogInfoUpdate.myver',
+            data : queryString,
+            error: function(xhr, status, error){
+                alert(error);
+            },
+            success : function(data){
+                alert(data);
+            }
+        });
+	}
+	
 	$(function(){
 		//id => $('#아이디밸류')
 		//class => $('.클래스밸류')
 		//name => $('[name="네임밸류"]')
-		//$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
+		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
+		
+		newPageBlogInfo();
+		
 		
 		$(".following-delete").click(function(){
 			if($(".following-check:checked").length == 0){
@@ -55,16 +124,16 @@
 				
 				$(".following-check:checked").each(function(){
 					followings.push($(this).val());
-				})*
+				})
 				
 				//console.log(followings);
 				
 				$.ajax({
 		            type : 'post',
-		            url : '${pageContext.request.contextPath}/blog/neighborDelete',
+		            url : '${pageContext.request.contextPath}/blog.admin/neighborDelete',
 		            data : {followings : followings},
 		            dataType : 'json',
-		            //traditional : true, // 배열 전송시에 이렇게  해야함...!??? 뭐야 안하니까 되는데?
+		            traditional : true,
 		            error: function(xhr, status, error){
 		                alert(status+" "+error);
 		            },
@@ -75,9 +144,7 @@
 		            	}else{
 			            	//alert(data.length+"/"+followings.length+" 삭제 완료");
 			            	$.each(data, function(i, val){
-			            		if(val != -1){
-				            		$("input[name='following-check'][value='"+val+"']").closest('tr').remove();
-			            		}
+				            	$("input[name='following-check'][value='"+val+"']").closest('tr').remove();
 			            	});
 		            	}
 		            }
@@ -87,19 +154,20 @@
 	});
 	</script>
 </head>
+
 <body>
-MYVER 블로그 | 관리
 <div class="row">
-	<div class="col-md-12">
-		<ul>
-			<li>
-				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config">기본 설정</a>
-				</li>
-			<li>
-				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">메뉴·글·동영상 관리</a>
-				</li>
-			<li>
-				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">내 블로그 통계</a>
+	<a>블로그 관리</a>
+	<div class="col-md-12 collapse navbar-collapse">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config" class="nav-link">기본 설정</a>
+			</li>
+			<li class="nav-item">
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu" class="nav-link">메뉴·글·동영상 관리</a>
+			</li>
+			<li class="nav-item">
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today" class="nav-link">내 블로그 통계</a>
 			</li>
 		</ul>
 	</div>

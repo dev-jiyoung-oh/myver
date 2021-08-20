@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.myver.dto.BlogDTO;
 import com.project.myver.dto.CommentDTO;
 import com.project.myver.dto.FileDTO;
@@ -348,11 +350,11 @@ public class BlogController {
     }
     
     // 21.08.16 이웃 삭제
-    @RequestMapping(value = "/blog/neighborDelete", method = RequestMethod.POST)
+    @RequestMapping(value = "/blog.admin/neighborDelete", method = RequestMethod.POST)
     @ResponseBody
     public List<Integer> blogNeighborDelete(
     		@AuthenticationPrincipal MemberDTO user,
-    		@RequestParam(value="followings[]") int[] followings) {
+    		@RequestParam(value="followings") int[] followings) {
     	System.out.println("blogNeighborDelete - followings: " + Arrays.toString(followings));
     	
     	List<Integer> successed_member_no_list = new ArrayList<>();
@@ -374,6 +376,54 @@ public class BlogController {
     	
     	return successed_member_no_list;
     }
+    
+    // 21.08.20 내 블로그 관리 페이지 - 기본설정(config) > 블로그 정보
+    @RequestMapping(value = "/blog.admin/blogInfo.myver", method = RequestMethod.POST, produces = "application/json; charset=utf8")	
+    @ResponseBody
+    public String blogConfigBlogInfo(
+				@AuthenticationPrincipal MemberDTO user,
+				String blog_id) {
+    	if(blog_id == null) System.out.println("blog_id == null");
+    	if(user == null || blog_id == null || !user.getUsername().equals(blog_id)) {
+    		System.out.println("blogConfigBlogInfo - 로그인 정보가 없거나 일치하지 않음.");
+    		return "no_login";
+    	}
+    	
+    	// 1) 블로그 정보 : 'blog_id'로 블로그 정보 가져오기
+    	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
+		
+		try {
+			return new ObjectMapper().writeValueAsString(blogDTO);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "error";
+		}
+    	
+    }
+    
+
+    // 21.06.21 내 블로그 관리 페이지 - 기본설정(config) > 블로그 정보 수정
+    @RequestMapping(value = "/blog.admin/blogInfoUpdate.myver", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateBlog(BlogDTO blogDTO) {
+		System.out.println("updateBlog - blogDTO: "+blogDTO.blogToString());
+		String result = "";
+		
+		/* ★★★ 업로드한 이미지가 있는 경우 이미지 업로드...하고 번호 가져와서 blogDTO에 set ★★★ */
+		//boolean imgCange = false;
+		
+		int cnt = blogSVC.blogUpdate(blogDTO);
+		
+		if(cnt==1) {
+			System.out.println("updateBlog - 업데이트 성공");
+			result = "success";
+		}else {
+			System.out.println("updateBlog - cnt: "+cnt);
+			result = "fail";
+		}
+		
+		return result;
+	}
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
     @RequestMapping(value = {"/blog.admin/{blog_id}/config", "/blog.admin/{blog_id}/", "/blog.admin/{blog_id}"})	
@@ -422,7 +472,15 @@ public class BlogController {
 				}
 			}
 		}
-
+		
+		/* ★★★★★★★★★★★★★★★★★★★★★★★★★★★
+		try {
+			new ObjectMapper().writeValueAsString(blogDTO);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 		mv.addObject("BLOG", blogDTO);
 		mv.addObject("FOLLOWINGS", followingList);
 		mv.addObject("FOLLOWERS", followerList);
@@ -611,27 +669,4 @@ public class BlogController {
     	
     	return mv;
     }
-    
-    // 21.06.21 블로그 정보 수정
-    @RequestMapping(value = "/blog.admin.update/blog", method = RequestMethod.POST)
-	@ResponseBody
-	public String updateBlog(BlogDTO blogDTO) {
-		System.out.println("updateBlog - blogDTO: "+blogDTO.blogToString());
-		String result = "";
-		
-		/* ★★★ 업로드한 이미지가 있는 경우 이미지 업로드...하고 번호 가져와서 blogDTO에 set ★★★ */
-		//boolean imgCange = false;
-		
-		int cnt = blogSVC.blogUpdate(blogDTO);
-		
-		if(cnt==1) {
-			System.out.println("updateBlog - 업데이트 성공");
-			result = "success";
-		}else {
-			System.out.println("updateBlog - cnt: "+cnt);
-			result = "fail";
-		}
-		
-		return result;
-	}
 }
