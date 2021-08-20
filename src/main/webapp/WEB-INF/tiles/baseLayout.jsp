@@ -9,8 +9,7 @@
 <title>title</title>
 </head>
 <tiles:insertAttribute name="header"/> <%--  value="/WEB-INF/common/layout/header.jsp" --%>
-<div class="container" id="body_container">
-	<tiles:insertAttribute name="body"/>
-</div>
+<!-- <div class="container" id="body_container"> -->
+<tiles:insertAttribute name="body"/>
 <tiles:insertAttribute name="footer"/> <%--  value="/WEB-INF/views/common/layout/footer.jsp" --%>
 </html>
