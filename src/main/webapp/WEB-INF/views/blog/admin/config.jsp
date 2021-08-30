@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<script type="text/javascript">
+	
+	// 블로그 정보 div 생성
 	function newPageBlogInfo(){
 		console.log('newPageBlogInfo()');
 		
@@ -30,6 +32,190 @@
             	}else{ // 로그인 성공
             		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
             		let topic_list = [];
+            		// DB에서 가져오기~
+            		topic_list.push('맛집');
+            		topic_list.push('라라라');
+            		
+            		html += '<h3 class="py-3" style="border-bottom: 2px solid black;">블로그 정보</h3>';
+            		html += '<table class="table my-4">';
+            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
+            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
+            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
+            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
+            		html += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
+					for(i=0; i<topic_list.length; i++){
+						html += '<option>'+ topic_list[i] + '</option>';
+					}
+					html += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
+					html += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
+					html += '</table>';
+					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
+					html += '</form><div>';
+					
+					$('#content').html(html);
+            	}
+            }
+        });
+	}
+	
+	// 내가 추가한 이웃 div 생성
+	function newPageMyNeighborManage(){
+		console.log('newPageMyNeighborManage()');
+		
+		$.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog.admin/myNeighborManage.myver',
+            data : {blog_id : '${BLOG.blog_id}'},
+            dataType : 'json',
+            error: function(xhr, status, error){
+                alert(status+" "+error);
+            },
+            success : function(data){
+            	alert('ajax 성공');
+            	if(data == 'no_login'){
+            		alert("로그인 필요");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else if(data == 'error'){
+            		alert("에러 발생");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else{ // 로그인 성공
+            		/*
+            		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
+            		let topic_list = [];
+            		// DB에서 가져오기~
+            		topic_list.push('맛집');
+            		topic_list.push('라라라');
+            		
+            		html += '<h3 class="py-3" style="border-bottom: 2px solid black;">블로그 정보</h3>';
+            		html += '<table class="table my-4">';
+            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
+            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
+            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
+            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
+            		html += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
+					for(i=0; i<topic_list.length; i++){
+						html += '<option>'+ topic_list[i] + '</option>';
+					}
+					html += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
+					html += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
+					html += '</table>';
+					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
+					html += '</form><div>';
+					*/
+					
+					let html = '<form id="blogFrm">';
+					html += '<h1>내가 추가한 이웃</h1>';
+					html += '<div class="following-action">' +
+								'<div class="following-action1 float-start my-3 mx-1">' +
+									'<span class=""><button type="button" class="btn btn-sm btn-light border-secondary following-delete">삭제</button></span>' +
+								'</div>' +
+								'<div class="following-action2 float-end my-3">' +
+									'<span class="float-start me-1">정렬된 이웃<strong>n</strong>명</span>' +
+									'<div class="float-start">' +
+										'<select><option selected>이웃추가순</option><option>블로그명순</option><option>이웃별명순</option></select>' +
+							'</div></div></div>';
+					html += '<table class="table text-center">' +
+								'<tr class="table-light">' +
+									'<td class="col w-6"><input type="checkbox" class="following-all-check"/></td>' +
+									'<td class="col w-20"><select><option selected>이웃전체</option><option>이웃</option><option>서로이웃</option></select></td>' +
+									'<td class="col text-start w-auto">이웃</td>' +
+									'<td class="col w-20">추가일</td>' +
+								'</tr>';
+					for(i=0; i<data.followings.length; i++){
+						html += 'tr class="' + followings[i].neighbor_member_no;
+						if(followings[i].isBothNeighbor){
+							html += ' following-both-neighbor">' +
+										'<td class=""><input type="checkbox" name="following-check" value="' + followings[i].neighbor_member_no + '" class="following-check"/></td>' + 
+										'<td class="col">서로이웃</td>';
+						}else{
+							html += ' following-neighbor">' +
+										'<td class=""><input type="checkbox" name="following-check" value="' + followings[i].neighbor_member_no + '" class="following-check"/></td>' + 
+										'<td class="col">이웃</td>';
+						}
+						html += '<td class="col text-start">' + followings[i].blog_nick + ' | <a href="' + ${pageContext.request.contextPath} + '/blog/' + followings[i].blog_nick + '">' + followings[i].blog_title + '</a></td>' +
+								'<td class="">${following.date}</td></tr>'
+					}
+					html += '</table></form>';
+					
+					$('#content').html(html);
+            	}
+            }
+        });
+	}
+	
+	// 나를 추가한 이웃 div 생성
+	function newPageNeighborMeManage(){
+		console.log('newPageNeighborMeManage()');
+		
+		$.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog.admin/neighborMeManage.myver',
+            data : {blog_id : '${BLOG.blog_id}'},
+            dataType : 'json',
+            error: function(xhr, status, error){
+                alert(status+" "+error);
+            },
+            success : function(data){
+            	alert('ajax 성공');
+            	if(data == 'no_login'){
+            		alert("로그인 필요");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else if(data == 'error'){
+            		alert("에러 발생");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else{ // 로그인 성공
+            		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
+            		let topic_list = [];
+            		// DB에서 가져오기~
+            		topic_list.push('맛집');
+            		topic_list.push('라라라');
+            		
+            		html += '<h3 class="py-3" style="border-bottom: 2px solid black;">블로그 정보</h3>';
+            		html += '<table class="table my-4">';
+            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
+            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
+            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
+            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
+            		html += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
+					for(i=0; i<topic_list.length; i++){
+						html += '<option>'+ topic_list[i] + '</option>';
+					}
+					html += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
+					html += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
+					html += '</table>';
+					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
+					html += '</form><div>';
+					
+					$('#content').html(html);
+            	}
+            }
+        });
+	}
+	
+	// 블로그 초기화 div 생성
+	function newPageBlogReset(){
+		console.log('newPageBlogReset()');
+		
+		$.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog.admin/blogReset.myver',
+            data : {blog_id : '${BLOG.blog_id}'},
+            dataType : 'json',
+            error: function(xhr, status, error){
+                alert(status+" "+error);
+            },
+            success : function(data){
+            	alert('ajax 성공');
+            	if(data == 'no_login'){
+            		alert("로그인 필요");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else if(data == 'error'){
+            		alert("에러 발생");
+            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+            	}else{ // 로그인 성공
+            		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
+            		let topic_list = [];
+            		// DB에서 가져오기~
             		topic_list.push('맛집');
             		topic_list.push('라라라');
             		
