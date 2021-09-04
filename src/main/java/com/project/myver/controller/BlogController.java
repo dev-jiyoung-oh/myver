@@ -377,10 +377,11 @@ public class BlogController {
     	return successed_member_no_list;
     }
     
+    
     // 21.08.20 내 블로그 관리 페이지 - 기본설정(config) > 블로그 정보
-    @RequestMapping(value = "/blog.admin/blogInfo.myver", method = RequestMethod.POST, produces = "application/json; charset=utf8")	
+    @RequestMapping(value = "/blog.admin/myNeighborManage.myver", method = RequestMethod.GET, produces = "application/json; charset=utf8")	
     @ResponseBody
-    public String blogConfigBlogInfo(
+    public Object blogConfigMyNeighborManage(
 				@AuthenticationPrincipal MemberDTO user,
 				String blog_id) {
     	if(blog_id == null) System.out.println("blog_id == null");
@@ -389,12 +390,13 @@ public class BlogController {
     		return "no_login";
     	}
     	
-    	// 1) 블로그 정보 : 'blog_id'로 블로그 정보 가져오기
+    	// 블로그 정보 : 'blog_id'로 블로그 정보 가져오기
     	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
 		
 		try {
-			return new ObjectMapper().writeValueAsString(blogDTO);
-		} catch (JsonProcessingException e) {
+			//return new ObjectMapper().writeValueAsString(blogDTO);
+			return blogDTO;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "error";
 		}
@@ -424,6 +426,39 @@ public class BlogController {
 		
 		return result;
 	}
+    
+    
+    // 21.09.04 내 블로그 관리 페이지 - 기본설정(config) > 내가 추가한 이웃
+    @RequestMapping(value = "/blog.admin/blogInfo.myver", method = RequestMethod.GET, produces = "application/json; charset=utf8")	
+    @ResponseBody
+    public Object blogConfigBlogInfo(
+				@AuthenticationPrincipal MemberDTO user,
+				String blog_id) {
+    	if(blog_id == null) System.out.println("blog_id == null");
+    	if(user == null || blog_id == null || !user.getUsername().equals(blog_id)) {
+    		System.out.println("blogConfigBlogInfo - 로그인 정보가 없거나 일치하지 않음.");
+    		return "no_login";
+    	}
+    	
+    	// 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(user.getMember_no());
+		
+		// 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(user.getMember_no());
+		
+		// 나를 추가한 이웃/내가 추가한 이웃 - 일치하는 이웃 확인
+		for(BlogDTO following : followingList) {
+			for(BlogDTO follower : followerList) {
+				if(following.getNeighbor_member_no() == follower.getMember_no()) {
+					System.out.println("서로 이웃 - "+following.getNeighbor_member_no());
+					following.setIsBothNeighbor(true);
+				}
+			}
+		}
+		
+		return followingList;
+    }
+    
     
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
     @RequestMapping(value = {"/blog.admin/{blog_id}/config", "/blog.admin/{blog_id}/", "/blog.admin/{blog_id}"})	

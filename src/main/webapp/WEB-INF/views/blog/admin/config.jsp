@@ -14,7 +14,7 @@
 		console.log('newPageBlogInfo()');
 		
 		$.ajax({
-            type : 'post',
+            type : 'GET',
             url : '${pageContext.request.contextPath}/blog.admin/blogInfo.myver',
             data : {blog_id : '${BLOG.blog_id}'},
             dataType : 'json',
@@ -22,11 +22,12 @@
                 alert(status+" "+error);
             },
             success : function(data){
-            	alert('ajax 성공');
-            	if(data == 'no_login'){
+            	console.log(data);
+            	//alert('ajax 성공');
+            	if(data[0] == 'no_login'){
             		alert("로그인 필요");
             		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
-            	}else if(data == 'error'){
+            	}else if(data[0] == 'error'){
             		alert("에러 발생");
             		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
             	}else{ // 로그인 성공
@@ -38,10 +39,10 @@
             		
             		html += '<h3 class="py-3" style="border-bottom: 2px solid black;">블로그 정보</h3>';
             		html += '<table class="table my-4">';
-            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
-            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
-            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
-            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
+            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data[0].blog_id+'</td></tr>';
+            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data[0].blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
+            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data[0].blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
+            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data[0].blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
             		html += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
 					for(i=0; i<topic_list.length; i++){
 						html += '<option>'+ topic_list[i] + '</option>';
@@ -49,7 +50,7 @@
 					html += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
 					html += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
 					html += '</table>';
-					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
+					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data[0].blog_id+'"></div>';
 					html += '</form><div>';
 					
 					$('#content').html(html);
@@ -63,47 +64,24 @@
 		console.log('newPageMyNeighborManage()');
 		
 		$.ajax({
-            type : 'post',
+            type : 'GET',
             url : '${pageContext.request.contextPath}/blog.admin/myNeighborManage.myver',
             data : {blog_id : '${BLOG.blog_id}'},
             dataType : 'json',
             error: function(xhr, status, error){
+            	alert("에러 발생");
                 alert(status+" "+error);
             },
             success : function(data){
+            	console.log(data);
             	alert('ajax 성공');
             	if(data == 'no_login'){
             		alert("로그인 필요");
             		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
-            	}else if(data == 'error'){
-            		alert("에러 발생");
-            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
             	}else{ // 로그인 성공
-            		/*
-            		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
-            		let topic_list = [];
-            		// DB에서 가져오기~
-            		topic_list.push('맛집');
-            		topic_list.push('라라라');
-            		
-            		html += '<h3 class="py-3" style="border-bottom: 2px solid black;">블로그 정보</h3>';
-            		html += '<table class="table my-4">';
-            		html += '<tr><td>블로그 주소</td><td>'+'${pageContext.request.contextPath}/blog/'+data.blog_id+'</td></tr>';
-            		html += '<tr><td>블로그명</td><td><input type="text" name="blog_title" value="'+data.blog_title+'"/><p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p></td></tr>';
-            		html += '<tr><td>별명</td><td><input type="text" name="blog_nick" value="'+data.blog_nick+'"><p class="small">한글, 영문, 숫자 혼용가능 (한글 기준 10자 이내)</p></td></tr>';
-            		html += '<tr><td>소개글</td><td><textarea name="blog_info" class="float-start">'+data.blog_info+'</textarea><p class="small float-start">블로그 프로필 영역의<br/>프로필 이미지 아래에 반영됩니다.<br/>(한글 기준 200자 이내)</p></td></tr>';
-            		html += '<tr><td>내 블로그 주제</td><td><select id="blog_topic" name="blog_topic">';
-					for(i=0; i<topic_list.length; i++){
-						html += '<option>'+ topic_list[i] + '</option>';
-					}
-					html += '</select><p class="small">내 블로그에서 다루는 주제를 선택하세요.<br/>프로필 영역에 노출됩니다.</p></td></tr>';
-					html += '<tr><td>블로그 프로필 이미지</td><td></td></tr>';
-					html += '</table>';
-					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
-					html += '</form><div>';
-					*/
-					
-					let html = '<form id="blogFrm">';
+					alert(data[0].blog_id);
+            		let followings = data;
+            		let html = '<form id="blogFrm">';
 					html += '<h1>내가 추가한 이웃</h1>';
 					html += '<div class="following-action">' +
 								'<div class="following-action1 float-start my-3 mx-1">' +
@@ -121,7 +99,7 @@
 									'<td class="col text-start w-auto">이웃</td>' +
 									'<td class="col w-20">추가일</td>' +
 								'</tr>';
-					for(i=0; i<data.followings.length; i++){
+					for(i=0; i<followings.length; i++){
 						html += 'tr class="' + followings[i].neighbor_member_no;
 						if(followings[i].isBothNeighbor){
 							html += ' following-both-neighbor">' +
@@ -164,6 +142,7 @@
             		alert("에러 발생");
             		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
             	}else{ // 로그인 성공
+            		/*
             		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
             		let topic_list = [];
             		// DB에서 가져오기~
@@ -185,6 +164,7 @@
 					html += '</table>';
 					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
 					html += '</form><div>';
+					*/
 					
 					$('#content').html(html);
             	}
@@ -213,6 +193,7 @@
             		alert("에러 발생");
             		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
             	}else{ // 로그인 성공
+            		/*
             		let html = '<div class="p-4" style="width: 800px;"><form id="blogFrm2">';
             		let topic_list = [];
             		// DB에서 가져오기~
@@ -234,6 +215,7 @@
 					html += '</table>';
 					html += '<div class="text-center"><input type="button" value="확인" onclick="blogUpdate()"/><input type="hidden" name="blog_id" value="'+data.blog_id+'"></div>';
 					html += '</form><div>';
+					*/
 					
 					$('#content').html(html);
             	}
@@ -254,11 +236,9 @@
 			if(page == 'blogInfo.myver'){
 				alert('블로그 정보');
 				newPageBlogInfo();
-				// 페이지 생성해야함 A.html(B): A태그의 시작태그와 끝태그 사이의 내용을 B로 대체한다.
 			}else if(page == 'myNeighborManage.myver'){
 				alert('내가 추가한 이웃');
-				pageEmpty();
-				// 페이지 생성해야함
+				newPageMyNeighborManage();
 			}else if(page == 'neighborMeManage.myver'){
 				alert('나를 추가한 이웃');
 				pageEmpty();
@@ -397,6 +377,7 @@
 		</div>
 		
 		<div id="content" class="col-md-9">
+			<!-- 
 			<form id="blogFrm">
 				<h1>블로그 정보</h1>
 				<table>
@@ -482,9 +463,9 @@
 				
 				<input type="hidden" name="blog_id" value="${BLOG.blog_id}">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			</form>
+			</form> -->
 		</div>
-		
+		<!-- 
 		<div class="col-md-9">
 			<form id="blogFrm">
 				<h1>내가 추가한 이웃</h1>
@@ -588,7 +569,7 @@
 					</c:forEach>
 				</table>
 			</form>
-		</div>
+		</div> -->
 	</div>
 </div>
 </body>
