@@ -545,7 +545,6 @@ public class BlogService {
 			if(blogDTO.getBlog_img_no() != 0) {
 				imgSVC.setPathAndSaved_nameFromImage(blogDTO);
 			}
-			System.out.println(blogDTO.toString());
 		}
 		
 		return blogList;
