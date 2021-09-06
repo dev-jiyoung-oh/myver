@@ -381,7 +381,7 @@ public class BlogController {
     // 21.08.20 내 블로그 관리 페이지 - 기본설정(config) > 블로그 정보
     @RequestMapping(value = "/blog.admin/blogInfo.myver", method = RequestMethod.GET, produces = "application/json; charset=utf8")	
     @ResponseBody
-    public Object blogConfigMyNeighborManage(
+    public Object blogConfigBlogInfo(
 				@AuthenticationPrincipal MemberDTO user,
 				String blog_id) {
     	if(blog_id == null) System.out.println("blog_id == null");
@@ -429,14 +429,14 @@ public class BlogController {
     
     
     // 21.09.04 내 블로그 관리 페이지 - 기본설정(config) > 내가 추가한 이웃
-    @RequestMapping(value = "/blog.admin/myNeighborManage.myver", method = RequestMethod.GET, produces = "application/json; charset=utf8")	
+    @RequestMapping(value = "/blog.admin/myNeighborManage.myver", method = RequestMethod.GET)	
     @ResponseBody
-    public Object blogConfigBlogInfo(
+    public Object blogConfigMyNeighborManage(
 				@AuthenticationPrincipal MemberDTO user,
 				String blog_id) {
     	if(blog_id == null) System.out.println("blog_id == null");
     	if(user == null || blog_id == null || !user.getUsername().equals(blog_id)) {
-    		System.out.println("blogConfigBlogInfo - 로그인 정보가 없거나 일치하지 않음.");
+    		System.out.println("blogConfigMyNeighborManage - 로그인 정보가 없거나 일치하지 않음.");
     		return "no_login";
     	}
     	
@@ -453,6 +453,41 @@ public class BlogController {
 				if(following.getNeighbor_member_no() == follower.getMember_no()) {
 					//System.out.println("서로 이웃 - "+following.getNeighbor_member_no());
 					following.setIsBothNeighbor(true);
+				}
+			}
+		}
+		
+		return followingList;
+    }
+    
+    
+    // 21.09.06 내 블로그 관리 페이지 - 기본설정(config) > 나를 추가한 이웃
+    @RequestMapping(value = "/blog.admin/neighborMeManage.myver", method = RequestMethod.GET)	
+    @ResponseBody
+    public Object blogConfigNeighborMeManage(
+				@AuthenticationPrincipal MemberDTO user,
+				String blog_id) {
+    	if(blog_id == null) System.out.println("blog_id == null");
+    	if(user == null || blog_id == null || !user.getUsername().equals(blog_id)) {
+    		System.out.println("neighborMeManage - 로그인 정보가 없거나 일치하지 않음.");
+    		return "no_login";
+    	}
+    	
+    	// 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
+		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(user.getMember_no());
+		
+		// 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
+		List<BlogDTO> followerList = blogSVC.selectFollowerListFromBlog_neighbor(user.getMember_no());
+		
+		System.out.println("나를 추가한 이웃");
+		
+		// 내가 추가한 이웃/나를 추가한 이웃 - 일치하는 이웃 확인
+		for(BlogDTO following : followingList) {
+			System.out.println(following.getNeighbor_member_no()+" "+following.getDate());
+			for(BlogDTO follower : followerList) {
+				if(following.getNeighbor_member_no() == follower.getMember_no()) {
+					//System.out.println("서로 이웃 - "+following.getNeighbor_member_no());
+					follower.setIsBothNeighbor(true);
 				}
 			}
 		}
