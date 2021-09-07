@@ -263,15 +263,7 @@
 	</div>
 </div>
 
-<script id="companyTemplate" type="text/html">     
-	<li>${company}</li> 
-</script>
-
 <script type="text/javascript">
-	//var datas = [ {"compnay": "회사1"} , {"compnay": "회사2"} , {"compnay": "회사3"} ] 
-	// companyTemplate에 datas객체에 있는 데이터를 바인딩하여 companyList공간안 제일 뒷부분에 소스를 추가합니다
-	//$("#companyTemplate").tmpl(datas).appendTo("#companyList");
-	
 	// 블로그 정보 div 생성
 	function newPageBlogInfo(){
 		console.log('newPageBlogInfo()');
@@ -385,12 +377,12 @@
 
 	// 나를 추가한 이웃 div 생성
 	function newPageNeighborMeManage(){
-		console.log('newPageNeighborMeManage()');
+		console.log('newPageNeighborMeManage()!!!');
 		
 		$.ajax({
-           type : 'POST',
+           type : 'GET',
            url : '${pageContext.request.contextPath}/blog.admin/neighborMeManage.myver',
-           data : {blog_id : '${BLOG.blog_id}'},
+           data : {id : '${BLOG.blog_id}'},
            error: function(xhr, status, error){
                alert(status+" "+error);
            },
@@ -404,27 +396,28 @@
            		alert("에러 발생");
            		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
            	}else{ // 로그인 성공
-           		let html = 	'<div class="p-4" style="width: 800px;"><form id="blogFrm">';
-           		html += 	'<h3 class="py-3" style="border-bottom: 2px solid black;">나를 추가한 이웃</h3>';
-          		html += 	'<table class="table text-center my-4">';
-           		html += 		'<tr class="table-light">';
-          		html += 			'<td class="col w-6"><input type="checkbox"/></td>';
-           		html += 			'<td class="col text-start w-auto">';
-           		html += 				'<select>';
-           		html += 					'<option selected>나를 이웃으로 추가한 사람 전체</option>';
-           		html += 					'<option>나도 이웃으로 추가한 사람</option>';
-           		html += 					'<option>상대만 나를 추가한 사람</option>';
-           		html += 				'</select>';
-           		html += 			'</td>';
-           		html += 			'<td class="col w-20">이웃 추가</td>';
-           		html += 			'<td class="col w-20">추가일</td>';
-           		html += 		'</tr>';
+           		let html = 	'<div class="p-4" style="width: 800px;"><form id="blogFrm">'
+           					+	'<h3 class="py-3" style="border-bottom: 2px solid black;">나를 추가한 이웃</h3>'
+          					+	'<table class="table text-center my-4">'
+          					+		'<tr class="table-light">'
+          					+			'<td class="col w-6"><input type="checkbox"/></td>'
+          					+			'<td class="col text-start w-auto">'
+          					+				'<select>'
+          					+					'<option selected>나를 이웃으로 추가한 사람 전체</option>'
+          					+					'<option>나도 이웃으로 추가한 사람</option>'
+          					+					'<option>상대만 나를 추가한 사람</option>'
+          					+				'</select>'
+          					+			'</td>'
+          					+			'<td class="col w-20">이웃 추가</td>'
+          					+			'<td class="col w-20">추가일</td>'
+          					+		'</tr>'
+          					+		'<tbody id="neighborMeManageTbody">'
            		
            		$('#content').html(html);
            		
-           		$("#neighborMeManageTemplate").tmpl(data).appendTo("#content");
+           		$("#neighborMeManageTemplate").tmpl(data).appendTo("#neighborMeManageTbody");
 				
-           		$('#content').append('</table></form></div>');
+           		$('#content').append('</tbody></table></form></div>');
            	}
            }
        });
@@ -492,17 +485,16 @@
 			};
 			
 			if(page == 'blogInfo.myver'){
-				alert('블로그 정보');
+				console.log('블로그 정보');
 				newPageBlogInfo();
 			}else if(page == 'myNeighborManage.myver'){
-				alert('내가 추가한 이웃');
+				console.log('내가 추가한 이웃');
 				newPageMyNeighborManage();
 			}else if(page == 'neighborMeManage.myver'){
-				alert('나를 추가한 이웃');
-				// 페이지 생성해야함
+				console.log('나를 추가한 이웃');
 				newPageNeighborMeManage();
 			}else if(page == 'blogReset.myver'){
-				alert('블로그 초기화');
+				console.log('블로그 초기화');
 				// 페이지 생성해야함
 			}
 		}
@@ -576,10 +568,10 @@
 </script>
 <script id="neighborMeManageTemplate" type="text/html">
 	<tr>
-		<td><input type="checkbox" value="${member_no}"/></td>
+		<td><input type="checkbox" value="${neighbor_member_no}"/></td>
 		<td class="col text-start">
 			${blog_nick}&nbsp;|&nbsp;
-			<a href="${pageContext.request.contextPath}/blog/${blog_nick}">${blog_title}</a>
+			<a href="${pageContext.request.contextPath}/blog/${blog_id}">${blog_title}</a>
 		</td>
 		<td>
 			<button type="button" class="btn btn-light border-secondary btn-sm" {{if isBothNeighbor}}disabled{{/if}}>이웃 추가</button>

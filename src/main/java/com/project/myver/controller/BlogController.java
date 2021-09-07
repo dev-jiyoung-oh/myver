@@ -466,9 +466,10 @@ public class BlogController {
     @ResponseBody
     public Object blogConfigNeighborMeManage(
 				@AuthenticationPrincipal MemberDTO user,
-				String blog_id) {
-    	if(blog_id == null) System.out.println("blog_id == null");
-    	if(user == null || blog_id == null || !user.getUsername().equals(blog_id)) {
+				String id) { // id <= blog_id
+    	System.out.println("blogConfigNeighborMeManage()");
+    	if(id == null) System.out.println("blog_id == null");
+    	if(user == null || id == null || !user.getUsername().equals(id)) {
     		System.out.println("neighborMeManage - 로그인 정보가 없거나 일치하지 않음.");
     		return "no_login";
     	}

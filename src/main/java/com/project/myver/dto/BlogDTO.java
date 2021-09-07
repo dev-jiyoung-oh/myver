@@ -45,7 +45,7 @@ public class BlogDTO {
 	private int blog_visit_no;		//블로그 방문 번호
 	private int visitor_no;			//방문자 번호
 	private String query;			//검색 단어(검색 유입 경로)
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") // https://jiwontip.tistory.com/37
 	private Date date;				//방문일
 	//private int blog_object_no;	//유입된 블로그 글 번호
 	
