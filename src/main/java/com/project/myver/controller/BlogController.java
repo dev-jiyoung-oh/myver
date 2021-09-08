@@ -464,15 +464,15 @@ public class BlogController {
     // 21.09.06 내 블로그 관리 페이지 - 기본설정(config) > 나를 추가한 이웃
     @RequestMapping(value = "/blog.admin/neighborMeManage.myver", method = RequestMethod.GET)	
     @ResponseBody
-    public Object blogConfigNeighborMeManage(
+    public List<BlogDTO> blogConfigNeighborMeManage(
 				@AuthenticationPrincipal MemberDTO user,
 				String id) { // id <= blog_id
     	System.out.println("blogConfigNeighborMeManage()");
     	if(id == null) System.out.println("blog_id == null");
-    	if(user == null || id == null || !user.getUsername().equals(id)) {
+    	/*if(user == null || id == null || !user.getUsername().equals(id)) {
     		System.out.println("neighborMeManage - 로그인 정보가 없거나 일치하지 않음.");
     		return "no_login";
-    	}
+    	}*/
     	
     	// 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
 		List<BlogDTO> followingList = blogSVC.selectFollowingListFromBlog_neighbor(user.getMember_no());
@@ -493,7 +493,7 @@ public class BlogController {
 			}
 		}
 		
-		return followingList;
+		return followerList;
     }
     
     
