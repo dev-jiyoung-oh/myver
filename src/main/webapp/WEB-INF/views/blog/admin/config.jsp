@@ -189,7 +189,7 @@
 	        					+		'{{= blog_nick}}&nbsp;|&nbsp;'
 	        					+		'<a href="${pageContext.request.contextPath}/blog/{{= blog_id}}">{{= blog_title}}</a>'
 					        	+	'</td>'
-					        	+	'<td><button type="button" class="btn btn-light border-secondary btn-sm" {{if isBothNeighbor}}disabled{{/if}}>이웃 추가</button></td>'
+					        	+	'<td><button type="button" class="btn btn-light border-secondary btn-sm" {{if isBothNeighbor}}disabled{{else}} onclick="javascript:addNeighbor({{= blog_id}})"{{/if}}>이웃 추가</button></td>'
 					        	+	'<td>{{= date}}</td>'
 					        	+'</tr>';
 					
@@ -320,7 +320,7 @@
 			//console.log(followings);
 			
 			$.ajax({
-	            type : 'post',
+	            type : 'POST',
 	            url : '${pageContext.request.contextPath}/blog.admin/neighborDelete',
 	            data : {followings : followings},
 	            dataType : 'json',
@@ -342,6 +342,25 @@
 	        });
 		}
 	});
+	
+	function addNeighbor(blog_id){
+		if(confirm(blog_id+"님을 이웃으로 추가하시겠습니까?")){
+			$.ajax({
+	            type : 'POST',
+	            url : '${pageContext.request.contextPath}/blog/neighborChange',
+	            data : {blog_id : blog_id,
+	            		add : true},
+           		async: false,
+	            error: function(xhr, status, error){
+	                alert(status+" "+error);
+	            },
+	            success : function(data){
+	            	console.log('이웃 추가 성공');
+	            }
+	        });
+        	newPageNeighborMeManage();
+		}
+	}
 </script>
 </head>
 
