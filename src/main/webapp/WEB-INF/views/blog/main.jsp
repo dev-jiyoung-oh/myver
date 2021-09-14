@@ -97,7 +97,7 @@
 								<img src="${pageContext.request.contextPath}/resources/img/icons/list.png" height="14" class="align-bottom m-1"> 
 							</div>
 							<div class="">
-								<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${category.blog_category_no}" class="hover-text-decoration-undeline <c:if test='${category.all_category eq 1}'>alert-link</c:if>">
+								<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}?blog_category_no=${category.blog_category_no}" class="hover-text-decoration-undeline <c:if test='${category.all_category eq 1}'>alert-link</c:if>">
 									${category.category_name}</a>
 								<c:if test="${category.is_public eq 1}">
 									<i class="fas fa-lock text-secondary h-50 align-top mt-04rem"></i>
@@ -162,7 +162,7 @@
 			<c:otherwise>
 				<div class="w-100">
 					<div>
-						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a>
+						<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}?blog_category_no=${CATEGORY.blog_category_no}">${CATEGORY.category_name}</a>
 						<a>${CATEGORY_TOTAL}개의 글</a>
 					</div>
 					<a>
@@ -181,7 +181,7 @@
 							<c:forEach var="list" items="${LIST}">
 								<tr>
 									<td>
-										<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}" class="hover-text-decoration-undeline">
+										<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}/${list.blog_object_no}?blog_category_no=${CATEGORY.blog_category_no}" class="hover-text-decoration-undeline">
 											${list.title}
 										</a>
 									</td>
@@ -197,7 +197,7 @@
 						<table class="table table-borderless">
 							<tr>
 								<td colspan="2">
-									<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}?blog_category_no=${object.blog_category_no}" class="hover-text-decoration-undeline">
+									<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}?blog_category_no=${object.blog_category_no}" class="hover-text-decoration-undeline">
 										${object.category_name}
 									</a>
 								</td>
