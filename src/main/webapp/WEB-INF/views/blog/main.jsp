@@ -52,13 +52,10 @@
 		<c:if test="${BLOG.blog_id eq user.id}">
 			<div>
 				<div>
-					<button type="button" class="btn btn-success w-100">
+					<!-- 이동하는거 나중에 ajax로 처리하자 -->
+					<button type="button" class="btn btn-success w-100" onclick="location.href'${pageContext.request.contextPath}/blog/${BLOG.blog_id}/write'">
 						<i class="bi bi-pencil"></i> 글쓰기
 					</button>
-					<!-- 
-					<i class="bi bi-pencil"></i>
-					<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_id}/write" class="hover-text-decoration-undeline">글쓰기</a>
-					 -->
 				</div>
 				<div class="text-end fs-08rem p-2">
 					<i class="bi bi-gear-fill text-secondary"></i>
