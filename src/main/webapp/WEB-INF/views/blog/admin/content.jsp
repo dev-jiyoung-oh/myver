@@ -7,41 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-	<script type="text/javascript">
-	$(function(){
-		//id => $('#아이디밸류')
-		//class => $('.클래스밸류')
-		//name => $('[name="네임밸류"]')
-		$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
-	
-		$("#categoryUpdateBtn").click(function(){
-			var objects_per_page = document.getElementsByName("objects_per_page");
-			  
-	        for (var i=0; i<objects_per_page.length; i++) {
-	            if (objects_per_page[i].checked == true) {
-	                alert(objects_per_page[i].value);
-	            }
-	        }
-			/*
-			var queryString = $("#blogFrm").serialize();
-			 
-	        $.ajax({
-	            type : 'post',
-	            url : '${pageContext.request.contextPath}/blog/blogUpdate',
-	            data : queryString,
-	            dataType : 'json',
-	            error: function(xhr, status, error){
-	                //alert(error);
-	            },
-	            success : function(json){
-	                //alert(json)
-	            }
-	        });*/
-		})
-		
-		$(":radio[name='objects_per_page'][value='${BLOG.objects_per_page}']").prop('checked', true);
-	})
-	</script>
 </head>
 <body>
 MYVER 블로그 | 관리
@@ -159,7 +124,9 @@ MYVER 블로그 | 관리
 								<c:forEach var="category" items="${CATEGORYS}">
 									<li>
 										<c:if test="${category.parent_category_no != 0}">--</c:if>
-										${category.category_name}
+										<a class="">
+											${category.category_name}
+										</a>
 										<c:if test="${is_public == 1}">
 											<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">
 										</c:if>
@@ -300,4 +267,55 @@ MYVER 블로그 | 관리
 	</c:if>
 </div>
 </body>
+
+<script type="text/javascript">
+$(function(){
+	//id => $('#아이디밸류')
+	//class => $('.클래스밸류')
+	//name => $('[name="네임밸류"]')
+	$("#blog_topic").val("${BLOG.blog_topic}").prop("selected", true);
+
+	$("#categoryUpdateBtn").click(function(){
+		var objects_per_page = document.getElementsByName("objects_per_page");
+		  
+        for (var i=0; i<objects_per_page.length; i++) {
+            if (objects_per_page[i].checked == true) {
+                alert(objects_per_page[i].value);
+            }
+        }
+		/*
+		var queryString = $("#blogFrm").serialize();
+		 
+        $.ajax({
+            type : 'post',
+            url : '${pageContext.request.contextPath}/blog/blogUpdate',
+            data : queryString,
+            dataType : 'json',
+            error: function(xhr, status, error){
+                //alert(error);
+            },
+            success : function(json){
+                //alert(json)
+            }
+        });*/
+	})
+	
+	$(":radio[name='objects_per_page'][value='${BLOG.objects_per_page}']").prop('checked', true);
+	
+	//const hello = ${CATEGORYS};
+	//console.log(hello);
+	$.ajax({
+        type : 'get',
+        url : '${pageContext.request.contextPath}/blog.admin/category',
+        error: function(xhr, status, error){
+            //alert(error);
+        },
+        success : function(data){
+            console.log(data);
+        }
+    });
+	
+	// dto 수정하자....
+})
+</script>
 </html>
