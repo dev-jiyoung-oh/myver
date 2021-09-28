@@ -50,8 +50,8 @@
 		 - 참고사이트 : https://all-record.tistory.com/176?category=733072 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="classpath:/com/project/myver/myBatis/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:com/project/myver/sql/*.xml"/>
+        <property name="configLocation" value="classpath:/mybatis/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:/mapper/*.xml"/>
     </bean>
 
 	<!-- 2021.01.10
