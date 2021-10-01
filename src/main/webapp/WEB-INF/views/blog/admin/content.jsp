@@ -269,6 +269,9 @@ MYVER 블로그 | 관리
 </body>
 
 <script type="text/javascript">
+let categoryList;
+let categoryMap = new Map();
+
 $(function(){
 	//id => $('#아이디밸류')
 	//class => $('.클래스밸류')
@@ -312,10 +315,22 @@ $(function(){
         },
         success : function(data){
             console.log(data);
+        	categoryList = data;
+            makeCategoryMap(categoryList);
         }
     });
 	
-	// dto 수정하자....
+	// TODO. dto 수정 필요. DTO와 domain으로 분리하자.
 })
+
+function makeCategoryMap(categoryList){
+	$.each(categoryList, function(index, value){
+		categoryMap.set(value.category_no, index);
+	})
+}
+
+function drawCategoryDetail(category_no){
+	// TODO. 카테고리를 누르면 해당 카테고리 정보 그리는 함수
+}
 </script>
 </html>
