@@ -17,7 +17,7 @@ MYVER 블로그 | 관리
 				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/config">기본 설정</a>
 				</li>
 			<li>
-				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">메뉴·글·동영상 관리</a>
+				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/content/topmenu">메뉴·글 관리</a><!-- 메뉴·글·동영상 관리 -->
 				</li>
 			<li>
 				<a href="${pageContext.request.contextPath}/blog.admin/${BLOG.blog_id}/stat/today">내 블로그 통계</a>
@@ -321,6 +321,13 @@ $(function(){
     });
 	
 	// TODO. dto 수정 필요. DTO와 domain으로 분리하자.
+/* TODO. 각 버튼 누를시에 목록 그리기(jquery template)
+1. 상단 메뉴 관리. - 1) 목록 2) 상단메뉴로 이동 3) 상단메뉴에서 없애기 4) 적용
+2. 카테고리 관리. - 1) 목록 2) 카테고리 선택시 해당 카테고리 정보 보이기
+3. 게시글 관리. - 1) 목록(페이징, 검색)
+4. 댓글 관리 - 1) 목록(페이징, 검색)
+
+*/
 })
 
 function makeCategoryMap(categoryList){
