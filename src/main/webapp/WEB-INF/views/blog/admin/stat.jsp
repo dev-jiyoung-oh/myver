@@ -71,6 +71,15 @@
 		
 		$(":radio[name='objects_per_page'][value='${BLOG.objects_per_page}']").prop('checked', true);
 	})
+	
+	/* 일간 현황, 조회수, 방문 횟수, 조회수 순위, 좋아요수 순위, 댓글수 순위
+	- 각 버튼 클릭시 해당하는 내용 가져와서 template 그리기
+	 1) 버튼 클릭시 해당하는 함수 실행하는 function
+	 2) 각각의 내용 실행하는 함수
+	- 데이터 가져올 떄 필요한 파라미터
+	 1) 요일(없으면 오늘)
+	 2) 일/주/월[기간](없으면 일)
+	*/
 	</script>
 </head>
 <body>
@@ -106,7 +115,7 @@ MYVER 블로그 | 관리
 			</ul>   
 		</div>
 		<div>
-			<div>사용자 분석</div>
+			<div>사용자 분석(보류)</div>
 			<ul>
 				<li>검색 유입 분석</li>
 				<li>시간대 분석</li>
