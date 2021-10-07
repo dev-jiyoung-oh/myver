@@ -497,7 +497,7 @@ public class BlogController {
 		return followerList;
     }
     
-    /*
+    
     // 21.06.15 내 블로그 관리 페이지 - 기본설정(config)
     @RequestMapping(value = {"/blog.admin/{blog_id}/config", "/blog.admin/{blog_id}/", "/blog.admin/{blog_id}"})	
     public ModelAndView blogConfig(
@@ -517,12 +517,12 @@ public class BlogController {
     	// 방문자 id
     	String visitor_id = user.getUsername();
     	
-    	// config(기본 설정)
+    	/* config(기본 설정)
     	   1) 블로그 정보 : blog_id로 'blog' 정보 가져오기
     	   2) 내가 추가한 이웃 : 내가 추가한 이웃 리스트 가져오기
     	   3) 나를 추가한 이웃 : 나를 추가한 이웃 리스트 가져오기
     	   4) 블로그 초기화
-    	 //
+    	 */
     	
     	// 1) 블로그 정보 : 'blog_id'로 블로그 정보 가져오기
     	BlogDTO blogDTO = blogSVC.selectAllFromBlog(blog_id);
@@ -560,7 +560,7 @@ public class BlogController {
 		mv.setViewName("blog/admin/config");
     	
     	return mv;
-    }*/
+    }
     
     // 21.06.19 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content)
     @RequestMapping(value = "/blog.admin/category")
@@ -591,7 +591,7 @@ public class BlogController {
     	String visitor_id = (String)session.getAttribute("MID");
     	
     	if(visitor_id==null || !blog_id.equals(visitor_id)) {
-    		System.out.println("blogConfig - loginRedirect: "+request.getRequestURI());
+    		System.out.println("blogContent - loginRedirect: "+request.getRequestURI());
     		mv.addObject("loginRedirect", request.getRequestURI());
     		RedirectView rv = new RedirectView();
 			rv.setUrl(request.getContextPath()+"/login");

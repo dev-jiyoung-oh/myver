@@ -322,9 +322,9 @@ $(function(){
 	
 	// TODO. dto 수정 필요. DTO와 domain으로 분리하자.
 /* TODO. 각 버튼 누를시에 목록 그리기(jquery template)
-1. 상단 메뉴 관리. - 1) 목록 2) 상단메뉴로 이동 3) 상단메뉴에서 없애기 4) 적용
-2. 카테고리 관리. - 1) 목록 2) 카테고리 선택시 해당 카테고리 정보 보이기
-3. 게시글 관리. - 1) 목록(페이징, 검색)
+1. 상단 메뉴 관리 - 1) 목록 2) 상단메뉴로 이동 3) 상단메뉴에서 없애기 4) 적용
+2. 카테고리 관리 - 1) 목록 2) 카테고리 선택시 해당 카테고리 정보 보이기
+3. 게시글 관리 - 1) 목록(페이징, 검색)
 4. 댓글 관리 - 1) 목록(페이징, 검색)
 
 */
@@ -338,6 +338,32 @@ function makeCategoryMap(categoryList){
 
 function drawCategoryDetail(category_no){
 	// TODO. 카테고리를 누르면 해당 카테고리 정보 그리는 함수
+}
+
+const adminConfig = {
+	goToPage: function(href){
+		//alert(href);
+		//alert(href.substr(href.lastIndexOf('/')+1));
+		let page = href.substr(href.lastIndexOf('/')+1);
+		
+		function pageEmpty(){
+			$('#content').empty();
+		};
+		
+		if(page == 'topMenuManage.myver'){
+			console.log('상단 메뉴 관리');
+			// newPageTopMenuManage();
+		}else if(page == 'categoryManage.myver'){
+			console.log('카테고리 관리');
+			// newPageCategoryManage();
+		}else if(page == 'objectManage.myver'){
+			console.log('게시글 관리');
+			// newPageObjectManage();
+		}else if(page == 'commentManage.myver'){
+			console.log('댓글 관리');
+			// newPageCommentManage();
+		}
+	}
 }
 </script>
 </html>
