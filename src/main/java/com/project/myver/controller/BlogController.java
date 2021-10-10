@@ -47,7 +47,13 @@ public class BlogController {
 	private MemberService memSVC;
 	@Autowired
 	private ImageService imgSVC;
-	
+	/* 1. 뷰 컨트롤러를 따로 만들까?
+	 * 2. 내 블로그 관리(content) ajax
+	 * newPageTopMenuManage();
+	 * newPageCategoryManage();
+	 * newPageObjectManage();
+	 * newPageCommentManage();
+	 */
 	// 21.05.17 블로그 홈_메인 페이지
 	@RequestMapping(value = {"/blog/home", "/blog/", "/blog"})
 	public ModelAndView blogHome(HttpSession session, ModelAndView mv) {

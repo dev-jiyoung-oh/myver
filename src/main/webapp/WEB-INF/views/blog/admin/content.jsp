@@ -365,5 +365,68 @@ const adminConfig = {
 		}
 	}
 }
+
+// 상단 메뉴 관리 div 생성
+function newPageTopMenuManage(){
+	console.log('newPageTopMenuManage()');
+
+	$.ajax({
+    	type : 'GET',
+    	url : '${pageContext.request.contextPath}/blog.admin/topMenuManage.myver',
+    	data : {blog_id : '${BLOG.blog_id}'},
+    	dataType : 'json',
+    	error: function(xhr, status, error){
+       		alert("에러 발생");
+       		alert(status+" "+error);
+     	},
+    	success : function(data){
+       	console.log(data);
+       	if(data == 'no_login'){
+       		alert("로그인 필요");
+       		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+       	}else{ // 로그인 성공
+       		// TODO
+       		const html = '<div class="p-4" style="width: 800px;">'
+						+	'<form id="blogFrm">'
+						+		'<h3 class="py-3" style="border-bottom: 2px solid black;">내가 추가한 이웃</h3>'
+						+		'<div class="following-action w-100">'
+						+			'<div class="following-action1 float-start my-3 mx-1">'
+						+				'<span class=""><button type="button" class="btn btn-sm btn-light border-secondary following-delete">삭제</button></span>'
+						+			'</div>'
+						+			'<div class="following-action2 float-end my-3">'
+						+				'<span class="float-start me-1">정렬된 이웃<strong>n</strong>명</span>'
+						+				'<div class="float-start">'
+						+					'<select><option selected>이웃추가순</option><option>블로그명순</option><option>이웃별명순</option></select>'
+						+		'</div></div></div>'
+						+		'<table class="table text-center">'
+						+			'<thead><tr class="table-light">'
+						+				'<td class="col w-6"><input type="checkbox" class="following-all-check"/></td>'
+						+				'<td class="col w-20"><select><option selected>이웃전체</option><option>이웃</option><option>서로이웃</option></select></td>'
+						+				'<td class="col text-start w-auto">이웃</td>'
+						+				'<td class="col w-20">추가일</td>'
+						+			'</tr></thead>'
+						+			'<tbody id="myNeighborManageTbody"></tbody>'
+	   					+		'</table>'
+	   					+	'</form>'
+	   					+'<div>';
+	   		$('#content').html(html);
+	   		
+	  		const tmpl = '<tr class="{{if isBothNeighbor}}following-both-neighbor{{else}}following-neighbor{{/if}}">'
+						+	'<td class=""><input type="checkbox" name="following-check" value="{{= neighbor_member_no}}" class="following-check"/></td>'
+						+	'<td class="col">{{if isBothNeighbor}}서로{{/if}}이웃</td>'
+						+	'<td class="col text-start">{{= blog_nick}} | <a href="${pageContext.request.contextPath}/blog/{{= blog_id}}">{{= blog_title}}</a></td>'
+						+	'<td class="">{{= date}}</td>'
+						+'</tr>';
+			$("#myNeighborManageTbody").empty();
+	   		$.tmpl(tmpl, data).appendTo("#myNeighborManageTbody");
+       	}
+       }
+   });
+}
+
+/* newPageCategoryManage()
+ * newPageObjectManage()
+ * newPageCommentManage()
+ */
 </script>
 </html>
