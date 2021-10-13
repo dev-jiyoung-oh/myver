@@ -49,7 +49,7 @@ public class BlogController {
 	private ImageService imgSVC;
 	/* 1. 뷰 컨트롤러를 따로 만들까?
 	 * 2. 내 블로그 관리(content) ajax
-	 * newPageTopMenuManage();
+	 * /blog.admin/topMenuManage.myver
 	 * newPageCategoryManage();
 	 * newPageObjectManage();
 	 * newPageCommentManage();
@@ -587,6 +587,7 @@ public class BlogController {
 		
 		return categoryList;
     }
+    
     // 21.06.19 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content)
     @RequestMapping(value = "/blog.admin/{blog_id}/content/{menu}")
     public ModelAndView blogContent(HttpSession session,  
@@ -675,7 +676,72 @@ public class BlogController {
     	return mv;
     }
     
- // 21.06.15 내 블로그 통계 페이지
+    // 21.10.13 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content) - 상단 메뉴 설정
+    @ResponseBody
+    @RequestMapping(value = "/blog.admin/topMenuManage.myver")
+    public List<BlogDTO> topMenuManage(@AuthenticationPrincipal MemberDTO user, int blog_no) {
+    	// 21.06.29 'blog_no'에 해당하는 카테고리의 'blog_category_no','category_name','is_public','parent_category_no','is_upper' 가져오기
+		List<BlogDTO> categoryList = blogSVC.selectBlog_category_noAndCategory_nameAndIs_publicAndParent_category_noAndIs_upper(blog_no);
+		System.out.println(categoryList);
+		
+    	return categoryList;
+    }
+    
+    // 21.10.13 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content) - 카테고리 설정
+    @ResponseBody
+    @RequestMapping(value = "/blog.admin/categoryManage.myver")
+    public List<BlogDTO> categoryManage(@AuthenticationPrincipal MemberDTO user, int blog_no) {
+    	// (모든)카테고리 리스트 가져오기
+		List<BlogDTO> categoryList = blogSVC.selectAllFromBlog_category(blog_no);
+
+        for(BlogDTO category : categoryList) {
+        	System.out.println(category.blog_categoryToString());
+        }
+		
+    	return categoryList;
+    }
+    
+    // 21.10.13 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content) - 게시글 관리
+    @ResponseBody
+    @RequestMapping(value = "/blog.admin/objectManage.myver")
+    public Object objectManage(@AuthenticationPrincipal MemberDTO user, int blog_no) {
+    	// 모든 카테고리 이름과 카테고리 번호 가져오기
+		List<BlogDTO> categoryList = blogSVC.selectBlog_category_noAndCategory_name(blog_no);
+		
+		// (모든)글 목록 가져오기
+		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
+		//  1 - 페이지에 따라 비동기로 가져오는거 처리해야함
+		//  2 - 아이디로 검색하는것도 비동기 처리해야함
+		int totalCount = blogSVC.selectTotalCountByNoFromBlog_object(blog_no, "blog_no", "owner");
+		PageUtil pageInfo = new PageUtil(1, totalCount, 20, blog_no, "blog_no", "owner");
+		List<BlogDTO> objectList = blogSVC.selectObjectDetailByNoFromBlog_object(pageInfo);
+		
+		/* TODO
+		mv.addObject("CATEGORYS_FOR_OBJECT", categoryList);
+		mv.addObject("OBJECTS", objectList);
+		
+		for(BlogDTO object : objectList) {
+			System.out.println(object.blog_objectToString());
+		}
+    	*/
+		return null;
+    }
+    
+    // 21.10.13 내 블로그 관리 페이지 - 메뉴,글,동영상 관리(content) - 댓글 관리
+    @ResponseBody
+    @RequestMapping(value = "/blog.admin/commentManage.myver")
+    public List<CommentDTO> commentManage(@AuthenticationPrincipal MemberDTO user, int blog_no) {
+    	// 모든 	댓글 가져오기
+		List<CommentDTO> commentList = blogSVC.selectCommentByBlog_noFromBlog_comment(blog_no);
+		
+		for(CommentDTO category : commentList) {
+			System.out.println(category.toString());
+		}
+		
+    	return commentList;
+    }
+    
+    // 21.06.15 내 블로그 통계 페이지
     @RequestMapping(value = "/blog.admin/{blog_id}/stat/{menu}")	
     public ModelAndView blogStat(HttpSession session, 
 			       HttpServletRequest request, 
