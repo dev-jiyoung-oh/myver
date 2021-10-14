@@ -352,28 +352,28 @@ const adminConfig = {
 		
 		if(page == 'topMenuManage.myver'){
 			console.log('상단 메뉴 관리');
-			// newPageTopMenuManage();
+			newPageTopMenuManage();
 		}else if(page == 'categoryManage.myver'){
 			console.log('카테고리 관리');
-			// newPageCategoryManage();
+			newPageCategoryManage();
 		}else if(page == 'objectManage.myver'){
 			console.log('게시글 관리');
-			// newPageObjectManage();
+			newPageObjectManage();
 		}else if(page == 'commentManage.myver'){
 			console.log('댓글 관리');
-			// newPageCommentManage();
+			newPageCommentManage();
 		}
 	}
 }
 
 // 상단 메뉴 관리 div 생성
 function newPageTopMenuManage(){
-	console.log('newPageTopMenuManage()');
+	alert('newPageTopMenuManage()');
 
 	$.ajax({
     	type : 'GET',
     	url : '${pageContext.request.contextPath}/blog.admin/topMenuManage.myver',
-    	data : {blog_id : '${BLOG.blog_id}'},
+    	data : {blog_id : '${BLOG.blog_id}'}, // TODO
     	dataType : 'json',
     	error: function(xhr, status, error){
        		alert("에러 발생");
@@ -385,7 +385,7 @@ function newPageTopMenuManage(){
        		alert("로그인 필요");
        		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
        	}else{ // 로그인 성공
-       		// TODO
+       		/* TODO
        		const html = '<div class="p-4" style="width: 800px;">'
 						+	'<form id="blogFrm">'
 						+		'<h3 class="py-3" style="border-bottom: 2px solid black;">내가 추가한 이웃</h3>'
@@ -419,14 +419,23 @@ function newPageTopMenuManage(){
 						+'</tr>';
 			$("#myNeighborManageTbody").empty();
 	   		$.tmpl(tmpl, data).appendTo("#myNeighborManageTbody");
+			*/
        	}
        }
    });
 }
 
-/* newPageCategoryManage()
- * newPageObjectManage()
- * newPageCommentManage()
- */
+function newPageCategoryManage(){
+	alert('newPageCategoryManage()');
+	// TODO
+}
+function newPageObjectManage(){
+	alert('newPageObjectManage()');
+	// TODO
+}
+function newPageCommentManage(){
+	alert('newPageCommentManage()');
+	// TODO
+}
 </script>
 </html>
