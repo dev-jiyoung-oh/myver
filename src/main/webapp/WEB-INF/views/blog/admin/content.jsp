@@ -366,14 +366,14 @@ const adminConfig = {
 	}
 }
 
-// 상단 메뉴 관리 div 생성
+//상단 메뉴 관리 div 생성
 function newPageTopMenuManage(){
-	alert('newPageTopMenuManage()');
+	console.log('newPageTopMenuManage()');
 
 	$.ajax({
     	type : 'GET',
     	url : '${pageContext.request.contextPath}/blog.admin/topMenuManage.myver',
-    	data : {blog_id : '${BLOG.blog_id}'}, // TODO
+    	data : {blog_id : '${BLOG.blog_id}'},
     	dataType : 'json',
     	error: function(xhr, status, error){
        		alert("에러 발생");
@@ -385,32 +385,47 @@ function newPageTopMenuManage(){
        		alert("로그인 필요");
        		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
        	}else{ // 로그인 성공
-       		/* TODO
-       		const html = '<div class="p-4" style="width: 800px;">'
-						+	'<form id="blogFrm">'
-						+		'<h3 class="py-3" style="border-bottom: 2px solid black;">내가 추가한 이웃</h3>'
-						+		'<div class="following-action w-100">'
-						+			'<div class="following-action1 float-start my-3 mx-1">'
-						+				'<span class=""><button type="button" class="btn btn-sm btn-light border-secondary following-delete">삭제</button></span>'
-						+			'</div>'
-						+			'<div class="following-action2 float-end my-3">'
-						+				'<span class="float-start me-1">정렬된 이웃<strong>n</strong>명</span>'
-						+				'<div class="float-start">'
-						+					'<select><option selected>이웃추가순</option><option>블로그명순</option><option>이웃별명순</option></select>'
-						+		'</div></div></div>'
-						+		'<table class="table text-center">'
-						+			'<thead><tr class="table-light">'
-						+				'<td class="col w-6"><input type="checkbox" class="following-all-check"/></td>'
-						+				'<td class="col w-20"><select><option selected>이웃전체</option><option>이웃</option><option>서로이웃</option></select></td>'
-						+				'<td class="col text-start w-auto">이웃</td>'
-						+				'<td class="col w-20">추가일</td>'
-						+			'</tr></thead>'
-						+			'<tbody id="myNeighborManageTbody"></tbody>'
-	   					+		'</table>'
-	   					+	'</form>'
-	   					+'<div>';
+       		// TODO
+       		const html = '<div class="col-md-9">'
+	   					+ '<form id="upperCategoryFrm">'
+	   					+ 	'<h1>상단메뉴 설정</h1>'
+	   					+ 	'<table>'
+	   					+ 		'<tr>'
+	   					+ 			'<td><div>블로그 카테고리</div>'
+	   					+ 				'<div><ul></ul></div>'
+	   					+ 			'</td>'
+	   					+ 			'<td><input type="button" value="선택"></td>'
+	   					+ 			'<td><div>선택한 메뉴</div>'
+	   					+ 				'<div><ul></ul></div>'
+	   					+ 			'</td>'
+	   					+ 		'</tr>'
+	   					+ 	'</table>'
+	   					+ '<div><input type="button" id="upperCategoryUpdateBtn" value="확인"/></div>'
+	   					+ '</form>'
+	   					+ '</div>';
 	   		$('#content').html(html);
-	   		
+	   		/* TODO 어떻게 나타내야 할까~ tmpl을 두 번 돌려야하나
+	   		<c:forEach var="category" items="${CATEGORYS_FOR_UPPER}">
+				<li>
+					<c:if test="${category.parent_category_no != 0}">--</c:if>
+					${category.category_name}
+					<c:if test="${category.is_public == 1}">
+						<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">
+					</c:if>
+				</li>
+			</c:forEach>
+			
+			<c:forEach var="category" items="${CATEGORYS_FOR_UPPER}">
+				<c:if test="${category.is_upper == 1}">
+					<li>
+					${category.category_name}
+					<c:if test="${category.is_public == 1}">
+						<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">
+					</c:if>
+					</li>
+				</c:if>
+			</c:forEach>
+			*/
 	  		const tmpl = '<tr class="{{if isBothNeighbor}}following-both-neighbor{{else}}following-neighbor{{/if}}">'
 						+	'<td class=""><input type="checkbox" name="following-check" value="{{= neighbor_member_no}}" class="following-check"/></td>'
 						+	'<td class="col">{{if isBothNeighbor}}서로{{/if}}이웃</td>'
@@ -419,7 +434,6 @@ function newPageTopMenuManage(){
 						+'</tr>';
 			$("#myNeighborManageTbody").empty();
 	   		$.tmpl(tmpl, data).appendTo("#myNeighborManageTbody");
-			*/
        	}
        }
    });
@@ -428,6 +442,64 @@ function newPageTopMenuManage(){
 function newPageCategoryManage(){
 	alert('newPageCategoryManage()');
 	// TODO
+	$.ajax({
+    	type : 'GET',
+    	url : '${pageContext.request.contextPath}/blog.admin/topMenuManage.myver',
+    	data : {blog_id : '${BLOG.blog_id}'},
+    	dataType : 'json',
+    	error: function(xhr, status, error){
+       		alert("에러 발생");
+       		alert(status+" "+error);
+     	},
+    	success : function(data){
+       	console.log(data);
+       	if(data == 'no_login'){
+       		alert("로그인 필요");
+       		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+       	}else{ // 로그인 성공
+       		const html = '<div class="col-md-9"><form id="categoryFrm">'
+						+ '<h1>카테고리 설정</h1>'
+						+	'<table><tr>'
+						+		'<td>페이지당 글</td>'
+						+		'<td><input type="radio" name="objects_per_page" value="1">1개<input type="radio" name="objects_per_page" value="3">3개<input type="radio" name="objects_per_page" value="5">5개 <input type="radio" name="objects_per_page" value="10">10개</td>'
+						+	'</tr></table>'
+						+	'<table>'
+						+		'<tr>'
+						+			'<td>'
+						+				'<div>카테고리 관리·설정</div>'
+						+				'<div><ul id="여기"></ul></div>'
+						+			'</td>'
+						+			'<td>'
+						+				'<table>'
+						+					'<tr><td>카테고리명</td><td><input type="text"></td></tr>'
+						+					'<tr><td>공개설정</td><td><input type="radio" name="is_public">공개<input type="radio" name="is_public">비공개</td></tr>'
+						+					'<tr><td>주제분류</td><td></td></tr>'
+						+					'<tr><td>목록보기</td><td><input type="radio" name="show_list">목록닫기<input type="radio" name="show_list">목록열기<select><option>5줄 보기</option><option>10줄 보기</option><option>15줄 보기</option><option>20줄 보기</option><option>30줄 보기</option></select></td></tr>'
+						+				'</table>'
+						+				'<div><input type="checkbox"> 블로그에서 이 카테고리를 기본으로 보여줍니다.</div>'
+						+			'</td>'
+						+		'</tr>'
+						+	'</table>'
+						+	'<div><input type="checkbox"> 블로그에서 이 카테고리를 기본으로 보여줍니다.</div>'
+						+'</td>'
+						+'</tr>'
+						+'</table>'
+						+'<div><input type="button" id="categoryUpdateBtn" value="확인"/></div>'
+						+'</form></div>';
+	   		$('#content').html(html);
+	   		
+	   		// TODO 이게 가능한가? if문 내부에 if문
+	  		const tmpl = '<li>'
+					+ '{{if parent_category_no != 0}}--'
+					+ '{{else}}<a class="">${category.category_name}</a>'
+					+ 	'{{if is_public == 1}}<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">{{/if}}'
+					+ '{{/if}}'
+					+ '</li>';
+			$("#여기").empty();
+	   		$.tmpl(tmpl, data).appendTo("#여기");
+       	}
+       }
+   });
 }
 function newPageObjectManage(){
 	alert('newPageObjectManage()');
