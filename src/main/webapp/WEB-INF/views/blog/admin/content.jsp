@@ -441,7 +441,6 @@ function newPageTopMenuManage(){
 
 function newPageCategoryManage(){
 	alert('newPageCategoryManage()');
-	// TODO
 	$.ajax({
     	type : 'GET',
     	url : '${pageContext.request.contextPath}/blog.admin/topMenuManage.myver',
@@ -503,11 +502,140 @@ function newPageCategoryManage(){
 }
 function newPageObjectManage(){
 	alert('newPageObjectManage()');
-	// TODO
+	$.ajax({
+    	type : 'GET',
+    	url : '${pageContext.request.contextPath}/blog.admin/objectManage.myver',
+    	data : {blog_id : '${BLOG.blog_id}'},
+    	dataType : 'json',
+    	error: function(xhr, status, error){
+       		alert("에러 발생");
+       		alert(status+" "+error);
+     	},
+    	success : function(data){
+       	console.log(data);
+       	if(data == 'no_login'){
+       		alert("로그인 필요");
+       		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+       	}else{ // 로그인 성공
+       		// TODO
+       		const html = '<div class="col-md-9">'
+					+ '<form id="categoryFrm">'
+						'<h1>게시글</h1>'
+						'<div>'
+							<select>
+								<option>전체</option><option>제목</option><option>내용</option>
+							</select>
+							<input type="text">
+							<input type="button" value="검색">
+							<select>
+								<c:forEach var="category" items="${CATEGORYS_FOR_OBJECT}">
+									<option value="${category.blog_category_no}">${category.category_name}</option>
+								</c:forEach>
+							</select>
+							<input type="button" value="삭제">
+						</div>
+						<table>
+							<tr>
+								<td><input type="checkbox"></td>
+								<td>카테고리</td>
+								<td>제목</td>
+								<td>작성일</td>
+							</tr>
+							<c:if test="${!empty OBJECTS}">
+							<c:forEach var="object" items="${OBJECTS}">
+								<tr>
+									<td><input type="checkbox"></td>
+									<td>${object.category_name}</td>
+									<td>
+										<a href="${pageContext.request.contextPath}/blog/${BLOG.blog_nick}/${object.blog_object_no}">${object.title}</a>
+										<br/>${object.content}
+									</td>
+									<td>
+										${object.date}
+									</td>
+								</tr>
+							</c:forEach>
+							</c:if>
+						</table>
+					</form>
+				</div>';
+	   		$('#content').html(html);
+	   		
+	   		// TODO
+	  		const tmpl = '<li>'
+					+ '{{if parent_category_no != 0}}--'
+					+ '{{else}}<a class="">${category.category_name}</a>'
+					+ 	'{{if is_public == 1}}<img src="${pageContext.request.contextPath}/resources/img/icons/lock.png">{{/if}}'
+					+ '{{/if}}'
+					+ '</li>';
+			$("#여기").empty();
+	   		$.tmpl(tmpl, data).appendTo("#여기");
+       	}
+       }
+   });
 }
 function newPageCommentManage(){
 	alert('newPageCommentManage()');
-	// TODO
+	$.ajax({
+    	type : 'GET',
+    	url : '${pageContext.request.contextPath}/blog.admin/commentManage.myver',
+    	data : {blog_id : '${BLOG.blog_id}'},
+    	dataType : 'json',
+    	error: function(xhr, status, error){
+       		alert("에러 발생");
+       		alert(status+" "+error);
+     	},
+    	success : function(data){
+       	console.log(data);
+       	if(data == 'no_login'){
+       		alert("로그인 필요");
+       		// ★★★★ 처리해야함 ★★★★★★★★★★★★★★★★★★★★★★★★★
+       	}else{ // 로그인 성공
+       		// TODO
+       		const html = '<div class="col-md-9">'
+					<form id="categoryFrm">
+						<h1>댓글</h1>
+						<div>
+							<input type="text">
+							<input type="button" value="ID 검색">
+							<input type="button" value="전체보기">
+							<input type="button" value="삭제">
+						</div>
+						<table>
+							<tr>
+								<td><input type="checkbox"></td>
+								<td>작성자</td>
+								<td>내용</td>
+								<td>작성일</td>
+							</tr>
+							<c:forEach var="comment" items="${COMMENTS}">
+								<tr>
+									<td><input type="checkbox"></td>
+									<td>${comment.nick}<br/>(${comment.id})</td>
+									<td>
+										<a href="${pageContext.request.contextPath}/blog/${comment.nick}/${comment.blog_object_no}">${comment.title}</a>
+										<br/>${comment.comment}
+									</td>
+									<td>${comment.date}</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</form>
+				'</div>';
+	   		$('#content').html(html);
+	   		
+	   		// TODO
+	  		const tmpl = '<tr class="{{if isBothNeighbor}}following-both-neighbor{{else}}following-neighbor{{/if}}">'
+						+	'<td class=""><input type="checkbox" name="following-check" value="{{= neighbor_member_no}}" class="following-check"/></td>'
+						+	'<td class="col">{{if isBothNeighbor}}서로{{/if}}이웃</td>'
+						+	'<td class="col text-start">{{= blog_nick}} | <a href="${pageContext.request.contextPath}/blog/{{= blog_id}}">{{= blog_title}}</a></td>'
+						+	'<td class="">{{= date}}</td>'
+						+'</tr>';
+			$("#myNeighborManageTbody").empty();
+	   		$.tmpl(tmpl, data).appendTo("#myNeighborManageTbody");
+       	}
+       }
+   });
 }
 </script>
 </html>
